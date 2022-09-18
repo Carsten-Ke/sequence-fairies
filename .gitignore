@@ -1,6 +1,11 @@
 # CMAKE build folder
+build
 
-/build
+# CMAKE semantig version file
+/src/cmake_generated/project_version.h
+
+# vscode
+.vscode
 
 # Prerequisites
 *.d

@@ -1,0 +1,7 @@
+#ifndef PROJECT_CONFIG_H
+#define PROJECT_CONFIG_H
+
+// define your version_libinterface
+#define PROJECT_VERSION "@PROJECT_VERSION@"
+
+#endif // PROJECT_CONFIG_H
