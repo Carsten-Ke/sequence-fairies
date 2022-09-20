@@ -11,20 +11,26 @@
 
 // C++
 #include <cstdlib>
-#include <filesystem>
+#include <functional>
 #include <iostream>
+#include <map>
+#include <regex>
 #include <string>
 
 // Boost
+#include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 
-//BSDL header
+// BSDL header
+#include "../libs/BioSeqDataLib/src/sequence/SequenceSet.hpp"
+#include "../libs/BioSeqDataLib/src/sequence/SeqSetIOManager.hpp"
 
 
 #include "cmake_generated/project_version.h"
 #include "isoformCleaner.hpp"
+#include "identifyName.hpp"
 
-namespace fs = std::filesystem;
+namespace fs = boost::filesystem;
 namespace po = boost::program_options;
 
 
@@ -36,13 +42,13 @@ int main (int argc, char *argv[])
 	bool summary;
 	po::options_description general("General options");
 	general.add_options()
-	("help,h", "Produces this help message")
-	("in,i", po::value<fs::path>(&sequenceFile)->required()->multitoken()->value_name("FILE"), "The sequence file")
-    ("out,o", po::value<fs::path>(&outFile)->value_name("FILE"), "The output file")
-    ("split-char,s", po::value<char>(&splitChar)->value_name("CHAR")->default_value('-'), "The character used for splitting")
-	("summary", po::value<bool>(&summary)->default_value(false)->zero_tokens(), "Displays a summary of the result")
+		("help,h", "Produces this help message")
+		("in,i", po::value<fs::path>(&sequenceFile)->required()->multitoken()->value_name("FILE"), "The sequence file")
+		("out,o", po::value<fs::path>(&outFile)->value_name("FILE"), "The output file")
+		("split-char,s", po::value<char>(&splitChar)->value_name("CHAR")->default_value('-'), "The character used for splitting")
+		("summary", po::value<bool>(&summary)->default_value(false)->zero_tokens(), "Displays a summary of the result")
 	;
-	
+
 	std::string regex, preset;
 	bool searchComment, searchName;
 	po::options_description regexOpts("Regex options");
@@ -56,7 +62,7 @@ int main (int argc, char *argv[])
     std::string project_version(std::string(PROJECT_VERSION));
 	po::options_description visibleOpts("isoformCleaner " + project_version + " (C) 2019-2022  Carsten Kemena\nThis program comes with ABSOLUTELY NO WARRANTY;\n\nAllowed options are displayed below");
 	visibleOpts.add(general).add(regexOpts);
-	
+
 	try
 	{
 		po::variables_map vm;
@@ -76,6 +82,59 @@ int main (int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
+ 	BSDL::SequenceSet<BSDL::Sequence<> > seqSet;
+	BSDL::SeqSetIOManager<BSDL::Sequence<> > seqSetIO;
+	seqSetIO.loadDefaultInputStrategies();
+	seqSetIO.loadDefaultOutputStrategies();
+
+    try
+	{
+        seqSet = seqSetIO.read(sequenceFile);
+	}
+	catch(std::ios_base::failure &exception)
+	{
+		std::cerr << exception.what() << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	IsoformCleaner isocleaner;
+	if (!preset.empty())
+	{
+		std::map<std::string, std::string> presetRegex = {{"flybase","parent=(FBgn[^ ,]+,)"}, {"gene"," gene[:=]\\s*([\\S]+)[\\s]*"}};
+		regex = presetRegex[preset];
+		if (regex.empty())
+		{
+			std::cerr << "Error: Preset '" << preset << "' is unknown!\n";
+			exit(EXIT_FAILURE);
+		}
+	}
+
+	if (regex.empty())
+	{
+		std::function<std::pair<std::string, bool>(BSDL::Sequence<>)> nameFunc =  std::bind(splitCharIdentifier, std::placeholders::_1, splitChar);
+		isocleaner.setGeneNameIdentifcator(nameFunc);
+	}
+	else
+	{
+		const std::regex e(regex);
+		std::function<std::pair<std::string, bool>(BSDL::Sequence<>)> nameFunc =  std::bind(regexIdentifier, std::placeholders::_1, e, searchComment, searchName);
+		isocleaner.setGeneNameIdentifcator(nameFunc);
+	}
+
+	auto outSet = isocleaner.clean(seqSet);
+
+	try
+	{
+		if (outFile.empty())
+			seqSetIO.write(outSet, "fasta", "");
+		else
+			seqSetIO.write(outSet, "fasta", outFile);
+	}
+	catch (std::ios_base::failure &exception)
+	{
+		std::cout << exception.what() << std::endl;
+		exit(EXIT_FAILURE);
+	}
 
     return EXIT_SUCCESS;
 }
