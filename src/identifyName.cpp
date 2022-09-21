@@ -10,7 +10,6 @@
  */
 
 #include <utility>
-#include <regex>
 
 #include "identifyName.hpp"
 

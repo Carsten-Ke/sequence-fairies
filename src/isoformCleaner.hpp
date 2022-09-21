@@ -21,42 +21,56 @@
 namespace BSDL = BioSeqDataLib;
  
 /**
- * @brief 
+ * @brief Class to remove isoforms from a SequenceSet.
  * 
  */
 class IsoformCleaner
 {
 
 private:
-    /**
-     * @brief 
-     * 
-     */
+
     struct Isoform
     {
-        Isoform(size_t n, int val, bool v=3) : seqId(n), value(val)
+        Isoform(size_t n, size_t val) : seqId(n), value(val)
         {}
         size_t seqId;
-        int value;
+        size_t value;
     };
-    std::function<std::pair<std::string, bool>(BSDL::Sequence<>)> geneNameIdenification_;
 
+    std::function<std::pair<std::string, bool>(BSDL::Sequence<>)> geneNameIdenification_;
     std::map<std::string, Isoform> isoformMap_;
+    size_t warningCounter_;
 
     void identifyIsoforms_(const BSDL::SequenceSet<BSDL::Sequence<> > &seqSet);
     BSDL::SequenceSet<BSDL::Sequence<> > createNewSeqSet_(BSDL::SequenceSet<BSDL::Sequence<> > &seqSet);
 
+    
 
 public:
 
-    IsoformCleaner()
+    /**
+     * @brief Construct a new IsoformCleaner object
+     * 
+     */
+    IsoformCleaner() : warningCounter_(0)
     {
     }
 
     /**
-     * @brief Set the Gene Name Identifcator object
+     * @brief Returns the number of warnings
      * 
-     * @param geneNameID 
+     * @return size_t 
+     */
+    size_t
+    warnings()
+    {
+        return warningCounter_;
+    }
+
+    /**
+     * @brief Set the Gene Name Identifcator function
+     * 
+     * @param geneNameID The function to use for geneName identification
      */
     void setGeneNameIdentifcator(std::function<std::pair<std::string, bool>(BSDL::Sequence<>)> geneNameID)
     {
@@ -64,10 +78,10 @@ public:
     }
 
     /**
-     * @brief 
+     * @brief Cleans a sequence set from isoforms
      * 
-     * @param seqSet 
-     * @return BSDL::SequenceSet<BSDL::Sequence<> > 
+     * @param seqSet The SequenceSet to clean
+     * @return BSDL::SequenceSet<BSDL::Sequence<> >  Returns a cleaned sequence Set
      */
     BSDL::SequenceSet<BSDL::Sequence<> >
     clean(BSDL::SequenceSet<BSDL::Sequence<> > &seqSet);

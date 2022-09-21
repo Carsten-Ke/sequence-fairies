@@ -1,7 +1,7 @@
 /**
  * @file IdentifyName.hpp
  * @author Carsten Kemena (c.kemena@wwu.de)
- * @brief 
+ * @brief Collection of name extracting functions
  * @version 0.1
  * @date 2022-09-20
  * 
@@ -13,7 +13,7 @@
 #ifndef IDENTIFYNAME_HPP_
 #define IDENTIFYNAME_HPP_
 
-
+#include <regex>
 #include <string>
 
 #include "../libs/BioSeqDataLib/src/sequence/Sequence.hpp"

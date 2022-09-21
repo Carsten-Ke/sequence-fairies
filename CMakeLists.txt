@@ -1,15 +1,22 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(sequence-fairies VERSION 0.1.0 LANGUAGES CXX)
 
-include(CTest)
-enable_testing()
-
-
 ### FIND BOOST LIBRARY COMPONENTS
+
+
+if (WITH_UNIT_TEST)
+FIND_PACKAGE(Boost 1.70 COMPONENTS log log_setup system program_options iostreams filesystem unit_test_framework REQUIRED)
+else (WITH_UNIT_TEST)
 FIND_PACKAGE(Boost 1.70 COMPONENTS log log_setup system program_options iostreams filesystem REQUIRED)
+endif(WITH_UNIT_TEST)
+
+
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
 ADD_DEFINITIONS( "-DHAS_BOOST" )
+
+
+set(CMAKE_CXX_FLAGS "-std=c++17 -Wall -Wextra -Wunused -pedantic")
 
 message(${PROJECT_SOURCE_DIR})
 configure_file("${PROJECT_SOURCE_DIR}/src/cmake_generated/project_version.h.in" 
@@ -31,6 +38,19 @@ ADD_EXECUTABLE(${isoformCleaner_exe} ${isoformCleaner_src})
 target_link_libraries(${isoformCleaner_exe}
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES}
 )
+
+
+
+if (WITH_UNIT_TEST)
+    include(CTest)
+    enable_testing()
+	add_subdirectory (tests)
+	enable_testing ()
+	add_test (NAME isoformCleanerTest COMMAND isoformCleaner-Test)
+endif ()
+
+
+
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

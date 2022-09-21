@@ -6,6 +6,7 @@ void
 IsoformCleaner::identifyIsoforms_(const BSDL::SequenceSet<BSDL::Sequence<> > &seqSet)
 {
     isoformMap_.clear();
+    warningCounter_ = 0;
     size_t nSeqs = seqSet.size();
     for (size_t i=0; i<nSeqs; ++i)
     {
@@ -13,7 +14,8 @@ IsoformCleaner::identifyIsoforms_(const BSDL::SequenceSet<BSDL::Sequence<> > &se
         auto const result = geneNameIdenification_(seq);
         if (!result.second)
         {
-            std::cerr << "Sequence "  << seq.name() << " retained because no isoform scheme matched\n" << std::endl;
+            std::cerr << "Warning! Sequence '" << seq.name() << "' retained because no isoform scheme matched\n";
+            ++ warningCounter_;
         }
         auto it = isoformMap_.find(result.first);
         if (it == isoformMap_.end())
@@ -31,12 +33,16 @@ IsoformCleaner::identifyIsoforms_(const BSDL::SequenceSet<BSDL::Sequence<> > &se
     }
 }
 
+
+
 BSDL::SequenceSet<BSDL::Sequence<> > 
 IsoformCleaner::createNewSeqSet_(BSDL::SequenceSet<BSDL::Sequence<> > &seqSet)
 {
     BSDL::SequenceSet<BSDL::Sequence<> > outSet;
-	for (auto &isoform : isoformMap_)
+	for (const auto &isoform : isoformMap_)
+    {
 		outSet.emplace_back(std::move(seqSet[isoform.second.seqId]));
+    }
     return outSet;
 }
 
@@ -45,6 +51,6 @@ BSDL::SequenceSet<BSDL::Sequence<> >
 IsoformCleaner::clean(BSDL::SequenceSet<BSDL::Sequence<> > &seqSet)
 {
     identifyIsoforms_(seqSet);
-    return std::move(createNewSeqSet_(seqSet));
+    return createNewSeqSet_(seqSet);
 }
 

@@ -121,8 +121,9 @@ int main (int argc, char *argv[])
 		isocleaner.setGeneNameIdentifcator(nameFunc);
 	}
 
+	size_t nSeqsInput = seqSet.size();
 	auto outSet = isocleaner.clean(seqSet);
-
+	size_t nSeqsOutput = outSet.size();
 	try
 	{
 		if (outFile.empty())
@@ -134,6 +135,14 @@ int main (int argc, char *argv[])
 	{
 		std::cout << exception.what() << std::endl;
 		exit(EXIT_FAILURE);
+	}
+
+	if (summary)
+	{
+		std::cout << "# seqs in input: " << nSeqsInput << "\n";
+		std::cout << "# seqs in output: " << nSeqsOutput << "\n";
+		std::cout << "# seqs removed: " << (nSeqsInput - nSeqsOutput) << "\n";
+		std::cout << "# warnings: " << isocleaner.warnings() << "\n";
 	}
 
     return EXIT_SUCCESS;
