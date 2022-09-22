@@ -31,19 +31,31 @@ BOOST_AUTO_TEST_CASE( splitChar_fail_Test )
     BOOST_CHECK_EQUAL(result.first, "seq1-1");
 }
 
-BOOST_AUTO_TEST_CASE( regex_Test )
+BOOST_AUTO_TEST_CASE( regex_Test)
 {
-    //regexIdentifier(const BSDL::Sequence<> &seq, const std::regex regEx, bool searchComment, bool searchName)
+    std::regex e(" gene[:=]\\s*([\\S]+)[\\s]*");
+    BioSeqDataLib::Sequence<> seq("ENSSSCP00000002286.4", "ATCTG", "X", "pep primary_assembly:Sscrofa11.1:AEMK02000555.1:34878:35168:1 gene:ENSSSCG00000035087.2 tra");
+    auto result = regexIdentifier(seq, e, false, false);
+    BOOST_CHECK_EQUAL(result.second, true);
+    BOOST_CHECK_EQUAL(result.first, "ENSSSCG00000035087.2");
 }
 
 BOOST_AUTO_TEST_CASE( regex_Test_comment)
 {
-    //regexIdentifier(const BSDL::Sequence<> &seq, const std::regex regEx, bool searchComment, bool searchName)
+    std::regex e(" gene[:=]\\s*([\\S]+)[\\s]*");
+    BioSeqDataLib::Sequence<> seq("ENSSSCP00000002286.4", "ATCTG", "X", "pep primary_assembly:Sscrofa11.1:AEMK02000555.1:34878:35168:1 gene:ENSSSCG00000035087.2 tra");
+    auto result = regexIdentifier(seq, e, true, false);
+    BOOST_CHECK_EQUAL(result.second, true);
+    BOOST_CHECK_EQUAL(result.first, "ENSSSCG00000035087.2");
 }
 
 BOOST_AUTO_TEST_CASE( regex_Test_name)
 {
-    //regexIdentifier(const BSDL::Sequence<> &seq, const std::regex regEx, bool searchComment, bool searchName)
+    std::regex e(" gene[:=]\\s*([\\S]+)[\\s]*");
+    BioSeqDataLib::Sequence<> seq("ENSSSCP00000002286.4", "ATCTG", "X", "pep primary_assembly:Sscrofa11.1:AEMK02000555.1:34878:35168:1 gene:ENSSSCG00000035087.2 tra");
+    auto result = regexIdentifier(seq, e, false, true);
+    BOOST_CHECK_EQUAL(result.second, false);
+    BOOST_CHECK_EQUAL(result.first, "ENSSSCP00000002286.4");
 }
 
 
