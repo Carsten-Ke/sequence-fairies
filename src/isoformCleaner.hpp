@@ -39,7 +39,10 @@ private:
 
     std::function<std::pair<std::string, bool>(BSDL::Sequence<>)> geneNameIdenification_;
     std::map<std::string, Isoform> isoformMap_;
+
     size_t warningCounter_;
+    size_t nSeqsBeforeCleaning_;
+    size_t nSeqsAfterCleaning_;
 
     void identifyIsoforms_(const BSDL::SequenceSet<BSDL::Sequence<> > &seqSet);
     BSDL::SequenceSet<BSDL::Sequence<> > createNewSeqSet_(BSDL::SequenceSet<BSDL::Sequence<> > &seqSet);
@@ -52,7 +55,7 @@ public:
      * @brief Construct a new IsoformCleaner object
      * 
      */
-    IsoformCleaner() : warningCounter_(0)
+    IsoformCleaner() : warningCounter_(0), nSeqsBeforeCleaning_(0), nSeqsAfterCleaning_(0)
     {
     }
 
@@ -65,6 +68,40 @@ public:
     warnings()
     {
         return warningCounter_;
+    }
+
+    /**
+     * @brief Returns the number of sequences before cleaning
+     * 
+     * @return size_t 
+     */
+    size_t
+    nSeqsBeforeCleaning()
+    {
+        return nSeqsBeforeCleaning_;
+    }
+
+
+    /**
+     * @brief returns the number of sequences after cleaning
+     * 
+     * @return size_t 
+     */
+    size_t
+    nSeqsAfterCleaning()
+    {
+        return nSeqsAfterCleaning_;
+    }
+
+    /**
+     * @brief Returns the number of sequences removed
+     * 
+     * @return size_t 
+     */
+    size_t
+    nSeqsRemoved()
+    {
+        return nSeqsBeforeCleaning_ - nSeqsAfterCleaning_;
     }
 
     /**

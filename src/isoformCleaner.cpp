@@ -38,11 +38,13 @@ IsoformCleaner::identifyIsoforms_(const BSDL::SequenceSet<BSDL::Sequence<> > &se
 BSDL::SequenceSet<BSDL::Sequence<> > 
 IsoformCleaner::createNewSeqSet_(BSDL::SequenceSet<BSDL::Sequence<> > &seqSet)
 {
+    nSeqsBeforeCleaning_ = seqSet.size();
     BSDL::SequenceSet<BSDL::Sequence<> > outSet;
 	for (const auto &isoform : isoformMap_)
     {
 		outSet.emplace_back(std::move(seqSet[isoform.second.seqId]));
     }
+    nSeqsAfterCleaning_ = outSet.size();
     return outSet;
 }
 
