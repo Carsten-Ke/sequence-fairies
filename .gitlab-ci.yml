@@ -1,16 +1,3 @@
-# This file is a template, and might need editing before it works on your project.
-# You can copy and paste this template into a new `.gitlab-ci.yml` file.
-# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
-#
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/C++.gitlab-ci.yml
-
-# use the official gcc image, based on debian
-# can use versions as well, like gcc:5.2
-# see https://hub.docker.com/_/gcc/
-
 stages:
   - build
   - test
@@ -20,10 +7,7 @@ build tests and executable:
   stage: build
   only: 
     - main
-  # instead of calling g++ directly you can also use some build toolkit like make
-  # install the necessary build tools when needed
-  # before_script:
-  #   - apt update && apt -y install make autoconf
+
   script:
     - git submodule init
     - git submodule update
@@ -37,11 +21,6 @@ build tests and executable:
       - $CI_PROJECT_DIR/build
     expire_in: 1 day
 
-      # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
-      # cache:
-      #   paths:
-      #     - "*.o"
-
 # run tests using the binary built before
 test programs:
   stage: test
@@ -52,8 +31,9 @@ test programs:
   script:
       - cd build
       - make test
+      - cd ../tests/integrationTests
+      - ./run_all_tests.sh
       - gcovr -f ../src/
-        #- cd ../tests/integrationTests
-        #- ./run_all_tests.sh
-    
+  coverage: '/\d*\.*\d+%/'
+
         

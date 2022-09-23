@@ -16,7 +16,36 @@ link_directories(${Boost_LIBRARY_DIRS})
 ADD_DEFINITIONS( "-DHAS_BOOST" )
 
 
+SET(CMAKE_CXX_FLAGS_COVERAGE
+    "-g -O0 --coverage -fprofile-arcs -ftest-coverage -fno-inline -fno-inline-small-functions -fno-default-inline"
+    CACHE STRING "Flags used by the C++ compiler during coverage builds."
+    FORCE )
+SET(CMAKE_CXX_FLAGS_PROFILE
+    "-O3 -pg"
+    CACHE STRING "Flags used by the C++ compiler during coverage builds."
+    FORCE )
+SET(CMAKE_EXE_LINKER_FLAGS_COVERAGE
+    "--coverage"
+    CACHE STRING "Flags used for linking binaries during coverage builds."
+    FORCE )
+SET(CMAKE_SHARED_LINKER_FLAGS_COVERAGE
+    "--coverage"
+    CACHE STRING "Flags used by the shared libraries linker during coverage builds."
+    FORCE )
+MARK_AS_ADVANCED(
+    CMAKE_CXX_FLAGS_COVERAGE
+    #CMAKE_C_FLAGS_COVERAGE
+    CMAKE_EXE_LINKER_FLAGS_COVERAGE
+    CMAKE_SHARED_LINKER_FLAGS_COVERAGE )
+
+
 set(CMAKE_CXX_FLAGS "-std=c++17 -Wall -Wextra -Wunused -pedantic")
+
+if( NOT CMAKE_BUILD_TYPE )
+  set( CMAKE_BUILD_TYPE Release CACHE STRING
+       "Choose the type of build, options are: Debug Coverage Release RelWithDebInfo MinSizeRel." FORCE )
+endif()
+
 
 message(${PROJECT_SOURCE_DIR})
 configure_file("${PROJECT_SOURCE_DIR}/src/cmake_generated/project_version.h.in" 
