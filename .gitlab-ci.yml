@@ -16,7 +16,7 @@ stages:
   - test
 
 
-build:
+build tests and executable:
   stage: build
   only: 
     - master
@@ -43,7 +43,7 @@ build:
       #     - "*.o"
 
 # run tests using the binary built before
-test:
+test programs:
   stage: test
   only:
       - master
