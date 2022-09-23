@@ -33,7 +33,7 @@ test programs:
       - make test
       - cd ../tests/integrationTests
       - ./run_all_tests.sh
-      - gcovr -f ../src/
+      - gcovr -f ../../src/
   coverage: '/\d*\.*\d+%/'
 
         
