@@ -52,7 +52,6 @@ test programs:
   script:
       - cd build
       - make test
-      - cd ../../build
       - gcovr -f ../src/
         #- cd ../tests/integrationTests
         #- ./run_all_tests.sh
