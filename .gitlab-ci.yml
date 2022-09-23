@@ -18,13 +18,15 @@ build:
   # before_script:
   #   - apt update && apt -y install make autoconf
   script:
+    - submodule init
+    - submodule update
     - mkdir build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Coverage .. -DWITH_UNIT_TEST=1 ..
     - make -j 2
 
   artifacts:
     paths:
-      - isoformCleaner
+      - build/soformCleaner
       # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
       # cache:
       #   paths:
