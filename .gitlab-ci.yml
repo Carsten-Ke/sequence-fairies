@@ -19,7 +19,7 @@ stages:
 build tests and executable:
   stage: build
   only: 
-    - master
+    - main
   # instead of calling g++ directly you can also use some build toolkit like make
   # install the necessary build tools when needed
   # before_script:
@@ -46,7 +46,7 @@ build tests and executable:
 test programs:
   stage: test
   only:
-      - master
+      - main
   dependencies:
     - build tests and executable 
   script:
