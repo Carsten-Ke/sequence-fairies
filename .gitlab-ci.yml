@@ -50,6 +50,7 @@ test programs:
   dependencies:
     - build tests and executable 
   script:
+      - cd build
       - make test
       - cd ../../build
       - gcovr -f ../src/
