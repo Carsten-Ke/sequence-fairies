@@ -28,7 +28,7 @@ build tests and executable:
     - git submodule init
     - git submodule update
     - mkdir build && cd build
-    - cmake -DCMAKE_BUILD_TYPE=Coverage .. -DWITH_UNIT_TEST=1 ..
+    - cmake -DCMAKE_BUILD_TYPE=Coverage -DWITH_UNIT_TEST=1 ..
     - make -j 2
 
   artifacts:
@@ -48,7 +48,7 @@ test programs:
   only:
       - master
   dependencies:
-    - build
+    - build tests and executable 
   script:
       - make test
       - cd ../../build
