@@ -18,8 +18,8 @@ build:
   # before_script:
   #   - apt update && apt -y install make autoconf
   script:
-    - submodule init
-    - submodule update
+    - git submodule init
+    - git submodule update
     - mkdir build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Coverage .. -DWITH_UNIT_TEST=1 ..
     - make -j 2
