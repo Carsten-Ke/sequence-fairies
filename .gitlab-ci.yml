@@ -1,49 +1,37 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 stages:
-- build
-- test
+  - build
+  - test
+
 build tests and executable:
   stage: build
-  only:
-  - main
+  only: 
+    - main
+
   script:
-  - git submodule init
-  - git submodule update
-  - mkdir build && cd build
-  - cmake -DCMAKE_BUILD_TYPE=Coverage -DWITH_UNIT_TEST=1 ..
-  - make -j 2
+    - git submodule init
+    - git submodule update
+    - mkdir build && cd build
+    - cmake -DCMAKE_BUILD_TYPE=Coverage -DWITH_UNIT_TEST=1 ..
+    - make -j 2
+
   artifacts:
-    name: sast
+    name: "$CI_JOB_NAME"
     paths:
-      - gl-sast-report.json
-    reports:
-      sast: gl-sast-report.json
-    when: always
+      - $CI_PROJECT_DIR/build
     expire_in: 1 day
+
+# run tests using the binary built before
 test programs:
   stage: test
   only:
-  - main
+      - main
   dependencies:
-  - build tests and executable
+    - build tests and executable 
   script:
-  - cd build
-  - make test
-  - cd ../tests/integrationTests
-  - "./run_all_tests.sh"
-  - cd ../../build
-  - gcovr -f ../src/
-  coverage: "/\\d*\\.*\\d+%/"
-sast:
-  variables:
-    SAST_EXCLUDED_ANALYZERS: bandit, brakeman, eslint, gosec, kubesec, nodejs-scan,
-      phpcs-security-audit, pmd-apex, security-code-scan, semgrep, sobelow, spotbugs
-  stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
+      - cd build
+      - make test
+      - cd ../tests/integrationTests
+      - ./run_all_tests.sh
+      - cd ../../build
+      - gcovr -f ../src/
+  coverage: '/\d*\.*\d+%/'
