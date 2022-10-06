@@ -19,9 +19,12 @@ build tests and executable:
   - cmake -DCMAKE_BUILD_TYPE=Coverage -DWITH_UNIT_TEST=1 ..
   - make -j 2
   artifacts:
-    name: "$CI_JOB_NAME"
+    name: sast
     paths:
-    - "$CI_PROJECT_DIR/build"
+      - gl-sast-report.json
+    reports:
+      sast: gl-sast-report.json
+    when: always
     expire_in: 1 day
 test programs:
   stage: test
