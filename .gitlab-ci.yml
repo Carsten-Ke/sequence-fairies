@@ -2,9 +2,14 @@ stages:
   - build
   - test
 
+include:
+  - template: Code-Quality.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
 
 build tests and executable:
   stage: build
+  tags:
+    - 'dw-builder' 
   only: 
     - main
 
@@ -24,6 +29,8 @@ build tests and executable:
 # run tests using the binary built before
 test programs:
   stage: test
+  tags:
+    - 'dw-builder' 
   only:
       - main
   dependencies:
@@ -37,4 +44,21 @@ test programs:
       - gcovr -f ../src/
   coverage: '/\d*\.*\d+%/'
 
-        
+code_quality:
+  services:
+  tags:
+    - 'docker-in-docker'
+  artifacts:
+    paths: [gl-code-quality-report.json]
+
+code_quality_html:
+  extends: code_quality
+  variables:
+    REPORT_FORMAT: html
+  artifacts:
+    paths: [gl-code-quality-report.html]
+
+sast:
+  tags:
+    - "docker"
+  stage: test
