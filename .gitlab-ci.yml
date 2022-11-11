@@ -2,6 +2,9 @@ stages:
   - build
   - test
 
+services:
+  - docker:20.10.21-dind
+
 include:
   - template: Code-Quality.gitlab-ci.yml
   - template: Security/SAST.gitlab-ci.yml
@@ -47,7 +50,7 @@ test programs:
 code_quality:
   services:
   tags:
-    - 'quality-check'
+    - 'dind'
   artifacts:
     paths: [gl-code-quality-report.json]
 
