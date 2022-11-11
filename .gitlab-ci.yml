@@ -47,7 +47,7 @@ test programs:
 code_quality:
   services:
   tags:
-    - 'docker-in-docker'
+    - 'quality-check'
   artifacts:
     paths: [gl-code-quality-report.json]
 
