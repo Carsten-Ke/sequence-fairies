@@ -28,7 +28,7 @@ namespace BSDL = BioSeqDataLib;
  * @param splitChar 
  * @return std::pair<std::string, bool> 
  */
-std::pair<std::string, bool>  splitCharIdentifier(const BSDL::Sequence<> &seq, char splitChar);
+std::pair<std::string, bool>  splitCharIdentifier(const BSDL::Sequence &seq, char splitChar);
 
 /**
  * @brief 
@@ -39,6 +39,6 @@ std::pair<std::string, bool>  splitCharIdentifier(const BSDL::Sequence<> &seq, c
  * @param searchName 
  * @return std::pair<std::string, bool> 
  */
-std::pair<std::string, bool>  regexIdentifier(const BSDL::Sequence<> &seq, const std::regex regEx, bool searchComment, bool searchName);
+std::pair<std::string, bool>  regexIdentifier(const BSDL::Sequence &seq, const std::regex regEx, bool searchComment, bool searchName);
 
 #endif

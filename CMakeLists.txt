@@ -39,7 +39,7 @@ MARK_AS_ADVANCED(
     CMAKE_SHARED_LINKER_FLAGS_COVERAGE )
 
 
-set(CMAKE_CXX_FLAGS "-std=c++17 -Wall -Wextra -Wunused -pedantic")
+set(CMAKE_CXX_FLAGS "-std=c++20 -Wall -Wextra -Wunused -pedantic")
 
 if( NOT CMAKE_BUILD_TYPE )
   set( CMAKE_BUILD_TYPE Release CACHE STRING
@@ -58,7 +58,7 @@ set (BSDL_src ${BSDL_PATH}utility/Input.cpp ${BSDL_PATH}utility/Output.cpp ${BSD
 ${BSDL_PATH}domain/PfamDomain.cpp ${BSDL_PATH}domain/DomainExt.cpp ${BSDL_PATH}domain/SFDomain.cpp
 ${BSDL_PATH}domain/DomainArrangement.cpp ${BSDL_PATH}domain/DomainArrangementSet.cpp ${BSDL_PATH}utility/Settings.cpp
 ${BSDL_PATH}utility/DSM.cpp ${BSDL_PATH}utility/stringHelpers.cpp ${BSDL_PATH}utility/algorithm.cpp 
-${BSDL_PATH}bio/GeneticCode.cpp ${BSDL_PATH}bio/Alphabet.cpp
+${BSDL_PATH}bio/GeneticCode.cpp ${BSDL_PATH}bio/Alphabet.cpp ${BSDL_PATH}/sequence/Sequence.cpp 
 )
 
 SET(isoformCleaner_src ${PROJECT_SOURCE_DIR}/src/identifyName.cpp ${PROJECT_SOURCE_DIR}/src/isoformCleaner.cpp ${PROJECT_SOURCE_DIR}/src/isoformCleanerMain.cpp ${BSDL_src})

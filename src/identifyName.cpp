@@ -16,7 +16,7 @@
 namespace BSDL = BioSeqDataLib;
 
 std::pair<std::string, bool>
-splitCharIdentifier(const BSDL::Sequence<> &seq, char splitChar)
+splitCharIdentifier(const BSDL::Sequence &seq, char splitChar)
 {
 	std::string seqName = seq.name();
 	size_t pos = seqName.rfind(splitChar);
@@ -29,7 +29,7 @@ splitCharIdentifier(const BSDL::Sequence<> &seq, char splitChar)
 }
 
 std::pair<std::string, bool>
-regexIdentifier(const BSDL::Sequence<> &seq, const std::regex regEx, bool searchComment, bool searchName)
+regexIdentifier(const BSDL::Sequence &seq, const std::regex regEx, bool searchComment, bool searchName)
 {
 	std::smatch what;
 	const std::string seqName = seq.name();

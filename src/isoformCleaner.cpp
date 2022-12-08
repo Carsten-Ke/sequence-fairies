@@ -3,7 +3,7 @@
 #include <map>
 
 void 
-IsoformCleaner::identifyIsoforms_(const BSDL::SequenceSet<BSDL::Sequence<> > &seqSet)
+IsoformCleaner::identifyIsoforms_(const BSDL::SequenceSet &seqSet)
 {
     isoformMap_.clear();
     warningCounter_ = 0;
@@ -35,11 +35,11 @@ IsoformCleaner::identifyIsoforms_(const BSDL::SequenceSet<BSDL::Sequence<> > &se
 
 
 
-BSDL::SequenceSet<BSDL::Sequence<> > 
-IsoformCleaner::createNewSeqSet_(BSDL::SequenceSet<BSDL::Sequence<> > &seqSet)
+BSDL::SequenceSet 
+IsoformCleaner::createNewSeqSet_(BSDL::SequenceSet &seqSet)
 {
     nSeqsBeforeCleaning_ = seqSet.size();
-    BSDL::SequenceSet<BSDL::Sequence<> > outSet;
+    BSDL::SequenceSet outSet;
 	for (const auto &isoform : isoformMap_)
     {
 		outSet.emplace_back(std::move(seqSet[isoform.second.seqId]));
@@ -49,8 +49,8 @@ IsoformCleaner::createNewSeqSet_(BSDL::SequenceSet<BSDL::Sequence<> > &seqSet)
 }
 
 
-BSDL::SequenceSet<BSDL::Sequence<> >
-IsoformCleaner::clean(BSDL::SequenceSet<BSDL::Sequence<> > &seqSet)
+BSDL::SequenceSet
+IsoformCleaner::clean(BSDL::SequenceSet &seqSet)
 {
     identifyIsoforms_(seqSet);
     return createNewSeqSet_(seqSet);

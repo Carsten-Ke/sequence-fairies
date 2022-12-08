@@ -37,15 +37,15 @@ private:
         size_t value;
     };
 
-    std::function<std::pair<std::string, bool>(BSDL::Sequence<>)> geneNameIdenification_;
+    std::function<std::pair<std::string, bool>(BSDL::Sequence)> geneNameIdenification_;
     std::map<std::string, Isoform> isoformMap_;
 
     size_t warningCounter_;
     size_t nSeqsBeforeCleaning_;
     size_t nSeqsAfterCleaning_;
 
-    void identifyIsoforms_(const BSDL::SequenceSet<BSDL::Sequence<> > &seqSet);
-    BSDL::SequenceSet<BSDL::Sequence<> > createNewSeqSet_(BSDL::SequenceSet<BSDL::Sequence<> > &seqSet);
+    void identifyIsoforms_(const BSDL::SequenceSet &seqSet);
+    BSDL::SequenceSet createNewSeqSet_(BSDL::SequenceSet &seqSet);
 
     
 
@@ -109,7 +109,7 @@ public:
      * 
      * @param geneNameID The function to use for geneName identification
      */
-    void setGeneNameIdentifcator(std::function<std::pair<std::string, bool>(BSDL::Sequence<>)> geneNameID)
+    void setGeneNameIdentifcator(std::function<std::pair<std::string, bool>(BSDL::Sequence)> geneNameID)
     {
         geneNameIdenification_ = geneNameID;
     }
@@ -118,10 +118,10 @@ public:
      * @brief Cleans a sequence set from isoforms
      * 
      * @param seqSet The SequenceSet to clean
-     * @return BSDL::SequenceSet<BSDL::Sequence<> >  Returns a cleaned sequence Set
+     * @return BSDL::SequenceSet  Returns a cleaned sequence Set
      */
-    BSDL::SequenceSet<BSDL::Sequence<> >
-    clean(BSDL::SequenceSet<BSDL::Sequence<> > &seqSet);
+    BSDL::SequenceSet
+    clean(BSDL::SequenceSet &seqSet);
 
 
 };

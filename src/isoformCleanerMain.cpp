@@ -30,7 +30,7 @@
 #include "isoformCleaner.hpp"
 #include "identifyName.hpp"
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 namespace po = boost::program_options;
 
 
@@ -82,8 +82,8 @@ int main (int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
- 	BSDL::SequenceSet<BSDL::Sequence<> > seqSet;
-	BSDL::SeqSetIOManager<BSDL::Sequence<> > seqSetIO;
+ 	BSDL::SequenceSet seqSet;
+	BSDL::SeqSetIOManager seqSetIO;
 	seqSetIO.loadDefaultInputStrategies();
 	seqSetIO.loadDefaultOutputStrategies();
 
@@ -111,13 +111,13 @@ int main (int argc, char *argv[])
 
 	if (regex.empty())
 	{
-		std::function<std::pair<std::string, bool>(BSDL::Sequence<>)> nameFunc =  std::bind(splitCharIdentifier, std::placeholders::_1, splitChar);
+		std::function<std::pair<std::string, bool>(BSDL::Sequence)> nameFunc =  std::bind(splitCharIdentifier, std::placeholders::_1, splitChar);
 		isocleaner.setGeneNameIdentifcator(nameFunc);
 	}
 	else
 	{
 		const std::regex e(regex);
-		std::function<std::pair<std::string, bool>(BSDL::Sequence<>)> nameFunc =  std::bind(regexIdentifier, std::placeholders::_1, e, searchComment, searchName);
+		std::function<std::pair<std::string, bool>(BSDL::Sequence)> nameFunc =  std::bind(regexIdentifier, std::placeholders::_1, e, searchComment, searchName);
 		isocleaner.setGeneNameIdentifcator(nameFunc);
 	}
 
