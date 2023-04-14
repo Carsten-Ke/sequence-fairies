@@ -1,32 +1,40 @@
+{% set version = "1.0.0" %}
+
 package:
   name: sequence-fairies
-  version: "1.0.0"
+  version: {{ version }}
 
 source:
   path: ../  # this can be changed to git-url
 
 build:
-  number: 0
+  number: 1
   binary_relocation: true
   script:
     - cmake -H. -Bbuild_conda -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${PREFIX}         # [not win]
-    - cmake -H. -Bbuild_conda -G "%CMAKE_GENERATOR%" -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%" # [win]
+#    - cmake -H. -Bbuild_conda -G "%CMAKE_GENERATOR%" -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%" # [win]
     - cmake --build build_conda --target install
 
 requirements:
   build:
     - cmake >=3.15
+    - make
     - {{ compiler('cxx') }}
-    - boost ==1.70
+  host:
+    - boost-cpp
     - zlib
   run:
-    - boost ==1.70
+    - boost-cpp
     - zlib
   
 
 about:
   home: https://domainworld.uni-muenster.de/
-  license: MIT
+  
+  license_file: LICENSE
   summary: "Summary in here ..."
 
 
+test:
+  commands:
+    - isoformCleaner --help

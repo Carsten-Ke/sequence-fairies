@@ -5,9 +5,9 @@ project(sequence-fairies VERSION 0.1.0 LANGUAGES CXX)
 
 
 if (WITH_UNIT_TEST)
-FIND_PACKAGE(Boost 1.70 COMPONENTS log log_setup system program_options iostreams filesystem unit_test_framework REQUIRED)
+FIND_PACKAGE(Boost 1.70 COMPONENTS log log_setup system program_options iostreams unit_test_framework REQUIRED)
 else (WITH_UNIT_TEST)
-FIND_PACKAGE(Boost 1.70 COMPONENTS log log_setup system program_options iostreams filesystem REQUIRED)
+FIND_PACKAGE(Boost 1.70 COMPONENTS log log_setup system program_options iostreams REQUIRED)
 endif(WITH_UNIT_TEST)
 
 find_package(ZLIB REQUIRED)
@@ -57,10 +57,18 @@ configure_file("${PROJECT_SOURCE_DIR}/src/cmake_generated/project_version.h.in"
 #include_directories(${CMAKE_CURRENT_BINARY_DIR})
 set (BSDL_PATH ${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib/src/)
 set (BSDL_src ${BSDL_PATH}utility/Input.cpp ${BSDL_PATH}utility/Output.cpp ${BSDL_PATH}domain/Domain.cpp
-${BSDL_PATH}domain/PfamDomain.cpp ${BSDL_PATH}domain/DomainExt.cpp ${BSDL_PATH}domain/SFDomain.cpp
-${BSDL_PATH}domain/DomainArrangement.cpp ${BSDL_PATH}domain/DomainArrangementSet.cpp ${BSDL_PATH}utility/Settings.cpp
-${BSDL_PATH}utility/DSM.cpp ${BSDL_PATH}utility/stringHelpers.cpp ${BSDL_PATH}utility/algorithm.cpp 
-${BSDL_PATH}bio/GeneticCode.cpp ${BSDL_PATH}bio/Alphabet.cpp ${BSDL_PATH}/sequence/Sequence.cpp 
+${BSDL_PATH}domain/PfamDomain.cpp ${BSDL_PATH}domain/DomainExt.cpp
+${BSDL_PATH}domain/DomainArrangement.cpp ${BSDL_PATH}domain/DomainArrangement_util.cpp ${BSDL_PATH}domain/DomainArrangementSet.cpp ${BSDL_PATH}utility/Settings.cpp
+${BSDL_PATH}utility/DSM.cpp ${BSDL_PATH}utility/stringHelpers.cpp 
+${BSDL_PATH}/sequence/IOStrategies/ClustalReader.cpp
+${BSDL_PATH}/sequence/IOStrategies/FASTAReader.cpp
+${BSDL_PATH}/sequence/IOStrategies/FASTAWriter.cpp
+${BSDL_PATH}/sequence/IOStrategies/IndexingFASTAReader.cpp
+${BSDL_PATH}/sequence/IOStrategies/MSFReader.cpp
+${BSDL_PATH}/sequence/IOStrategies/PhylipReader.cpp
+${BSDL_PATH}/sequence/IOStrategies/StockholmReader.cpp
+${BSDL_PATH}bio/GeneticCode.cpp ${BSDL_PATH}bio/Alphabet.cpp ${BSDL_PATH}/sequence/Sequence.cpp
+${BSDL_PATH}utility/WeightedInterval_util.cpp
 )
 
 SET(isoformCleaner_src ${PROJECT_SOURCE_DIR}/src/identifyName.cpp ${PROJECT_SOURCE_DIR}/src/isoformCleaner.cpp ${PROJECT_SOURCE_DIR}/src/isoformCleanerMain.cpp ${BSDL_src})
