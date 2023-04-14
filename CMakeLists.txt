@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.15.0)
 project(sequence-fairies VERSION 0.1.0 LANGUAGES CXX)
 
 ### FIND BOOST LIBRARY COMPONENTS
@@ -10,6 +10,8 @@ else (WITH_UNIT_TEST)
 FIND_PACKAGE(Boost 1.70 COMPONENTS log log_setup system program_options iostreams filesystem REQUIRED)
 endif(WITH_UNIT_TEST)
 
+find_package(ZLIB REQUIRED)
+find_package(BZip2 REQUIRED)
 
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
@@ -65,7 +67,7 @@ SET(isoformCleaner_src ${PROJECT_SOURCE_DIR}/src/identifyName.cpp ${PROJECT_SOUR
 SET(isoformCleaner_exe isoformCleaner )
 ADD_EXECUTABLE(${isoformCleaner_exe} ${isoformCleaner_src})
 target_link_libraries(${isoformCleaner_exe}
-	${Boost_LIBRARIES} ${ZLIB_LIBRARIES}
+	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
 
@@ -78,10 +80,9 @@ if (WITH_UNIT_TEST)
 	add_test (NAME isoformCleanerTest COMMAND isoformCleaner-Test)
 endif ()
 
-
-
-
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-include(CPack)
-
+install(
+  TARGETS
+    isoformCleaner
+  DESTINATION
+    bin
+  )

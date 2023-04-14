@@ -1,0 +1,32 @@
+package:
+  name: sequence-fairies
+  version: "1.0.0"
+
+source:
+  path: ../  # this can be changed to git-url
+
+build:
+  number: 0
+  binary_relocation: true
+  script:
+    - cmake -H. -Bbuild_conda -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${PREFIX}         # [not win]
+    - cmake -H. -Bbuild_conda -G "%CMAKE_GENERATOR%" -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%" # [win]
+    - cmake --build build_conda --target install
+
+requirements:
+  build:
+    - cmake >=3.15
+    - {{ compiler('cxx') }}
+    - boost ==1.70
+    - zlib
+  run:
+    - boost ==1.70
+    - zlib
+  
+
+about:
+  home: https://domainworld.uni-muenster.de/
+  license: MIT
+  summary: "Summary in here ..."
+
+
