@@ -18,6 +18,28 @@ link_directories(${Boost_LIBRARY_DIRS})
 ADD_DEFINITIONS( "-DHAS_BOOST" )
 
 
+
+find_package(Git QUIET)
+if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
+# Update submodules as needed
+    option(GIT_SUBMODULE "Check submodules during build" ON)
+    if(GIT_SUBMODULE)
+        message(STATUS "Submodule update")
+        execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
+                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                        RESULT_VARIABLE GIT_SUBMOD_RESULT)
+        if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+            message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
+        endif()
+    endif()
+endif()
+
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib/CMakeLists.txt")
+    message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
+endif()
+
+
+
 SET(CMAKE_CXX_FLAGS_COVERAGE
     "-g -O0 --coverage -fprofile-arcs -ftest-coverage -fno-inline -fno-inline-small-functions -fno-default-inline"
     CACHE STRING "Flags used by the C++ compiler during coverage builds."
@@ -56,22 +78,37 @@ configure_file("${PROJECT_SOURCE_DIR}/src/cmake_generated/project_version.h.in"
 
 #include_directories(${CMAKE_CURRENT_BINARY_DIR})
 set (BSDL_PATH ${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib/src/)
-set (BSDL_src ${BSDL_PATH}utility/Input.cpp ${BSDL_PATH}utility/Output.cpp ${BSDL_PATH}domain/Domain.cpp
-${BSDL_PATH}domain/PfamDomain.cpp ${BSDL_PATH}domain/DomainExt.cpp
-${BSDL_PATH}domain/DomainArrangement.cpp ${BSDL_PATH}domain/DomainArrangement_util.cpp ${BSDL_PATH}domain/DomainArrangementSet.cpp ${BSDL_PATH}utility/Settings.cpp
-${BSDL_PATH}utility/DSM.cpp ${BSDL_PATH}utility/stringHelpers.cpp 
-${BSDL_PATH}/sequence/IOStrategies/ClustalReader.cpp
-${BSDL_PATH}/sequence/IOStrategies/FASTAReader.cpp
-${BSDL_PATH}/sequence/IOStrategies/FASTAWriter.cpp
-${BSDL_PATH}/sequence/IOStrategies/IndexingFASTAReader.cpp
-${BSDL_PATH}/sequence/IOStrategies/MSFReader.cpp
-${BSDL_PATH}/sequence/IOStrategies/PhylipReader.cpp
-${BSDL_PATH}/sequence/IOStrategies/StockholmReader.cpp
-${BSDL_PATH}bio/GeneticCode.cpp ${BSDL_PATH}bio/Alphabet.cpp ${BSDL_PATH}/sequence/Sequence.cpp
-${BSDL_PATH}utility/WeightedInterval_util.cpp
+set (BSDL_src ${BSDL_PATH}utility/Input.cpp 
+    ${BSDL_PATH}utility/Output.cpp
+    ${BSDL_PATH}domain/Domain.cpp
+    ${BSDL_PATH}domain/PfamDomain.cpp
+    ${BSDL_PATH}domain/DomainExt.cpp
+    ${BSDL_PATH}domain/DomainArrangement.cpp 
+    ${BSDL_PATH}domain/DomainArrangement_util.cpp 
+    ${BSDL_PATH}domain/DomainArrangementSet.cpp 
+    ${BSDL_PATH}utility/Settings.cpp
+    ${BSDL_PATH}utility/DSM.cpp 
+    ${BSDL_PATH}utility/stringHelpers.cpp 
+    ${BSDL_PATH}/sequence/IOStrategies/ClustalReader.cpp
+    ${BSDL_PATH}/sequence/IOStrategies/FASTAReader.cpp
+    ${BSDL_PATH}/sequence/IOStrategies/FASTAWriter.cpp
+    ${BSDL_PATH}/sequence/IOStrategies/IndexingFASTAReader.cpp
+    ${BSDL_PATH}/sequence/IOStrategies/MSFReader.cpp
+    ${BSDL_PATH}/sequence/IOStrategies/PhylipReader.cpp
+    ${BSDL_PATH}/sequence/IOStrategies/StockholmReader.cpp
+    ${BSDL_PATH}bio/GeneticCode.cpp
+    ${BSDL_PATH}bio/Alphabet.cpp
+    ${BSDL_PATH}/sequence/Sequence.cpp
+    ${BSDL_PATH}utility/WeightedInterval_util.cpp
 )
 
-SET(isoformCleaner_src ${PROJECT_SOURCE_DIR}/src/identifyName.cpp ${PROJECT_SOURCE_DIR}/src/isoformCleaner.cpp ${PROJECT_SOURCE_DIR}/src/isoformCleanerMain.cpp ${BSDL_src})
+SET(isoformCleaner_src 
+    ${PROJECT_SOURCE_DIR}/src/identifyName.cpp 
+    ${PROJECT_SOURCE_DIR}/src/isoformCleaner.cpp 
+    ${PROJECT_SOURCE_DIR}/src/isoformCleanerMain.cpp ${BSDL_src}
+)
+
+
 SET(isoformCleaner_exe isoformCleaner )
 ADD_EXECUTABLE(${isoformCleaner_exe} ${isoformCleaner_src})
 target_link_libraries(${isoformCleaner_exe}
