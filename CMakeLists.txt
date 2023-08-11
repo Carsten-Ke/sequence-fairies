@@ -116,6 +116,19 @@ target_link_libraries(${isoformCleaner_exe}
 )
 
 
+SET(concatenator_src 
+    ${PROJECT_SOURCE_DIR}/src/concatenator.cpp 
+    ${PROJECT_SOURCE_DIR}/src/concatenatorMain.cpp ${BSDL_src}
+)
+
+
+SET(concatenator_exe concatenator)
+ADD_EXECUTABLE(${concatenator_exe} ${concatenator_src})
+target_link_libraries(${concatenator_exe}
+	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
+)
+
+
 
 if (WITH_UNIT_TEST)
     include(CTest)
@@ -128,6 +141,7 @@ endif ()
 install(
   TARGETS
     isoformCleaner
+    concatenator
   DESTINATION
     bin
   )

@@ -17,19 +17,21 @@ Requirements
 ------------
 
 We try to keep the dependencies as little as possible. Current dependencies are:
+- cmake
 - boost (http://www.boost.org)
 - compiler with c++17 support
+- zlib
+- libbz2
 
-You will also need the BioSeqDataLib (https://zivgitlab.uni-muenster.de/domain-world/BioSeqDataLib), but this one can simply be aquired using the git submodule system.
+
+You will also need the BioSeqDataLib (https://zivgitlab.uni-muenster.de/domain-world/BioSeqDataLib), but this one can simply be aquired using the git submodule system when running cmake.
 
 Download
 --------
 
 ```bash
 git clone https://zivgitlab.uni-muenster.de/domain-world/sequence-fairies.git
-cd  dw-helper
-git submodule init
-git submodule update
+cd  sequence-fairies
 ```
 
 
@@ -37,11 +39,10 @@ Installation
 ------------
 
 
-Change into the dw-helper directory and run the following commands:
+Change into the sequence-fairies directory and run the commands listed below. It will automatically download the necessary submodules, so an internet connection and git are necessary.
 
 ```bash
-mkdir build
-cd build
+mkdir build && cd build
 cmake ..
 make
 ```

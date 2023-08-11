@@ -70,5 +70,5 @@ code_quality_html:
 
 sast:
   tags:
-    - "docker"
+    - "dind"
   stage: test
