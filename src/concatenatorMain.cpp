@@ -87,8 +87,7 @@ main (int argc, char *argv[])
 	}
 	catch (boost::program_options::error &e)
 	{
-		std::cerr << "An error occurred parsing the command line: \n";
-		std::cerr << e.what() << "\n";
+		std::cerr << "An error occurred parsing the command line: " << e.what() << std::endl;
 		std::cerr << "Please use -h/--help for more information.\n";
 		return EXIT_FAILURE;
 	}
@@ -121,6 +120,11 @@ main (int argc, char *argv[])
 		}
 	}
 	catch(std::ios_base::failure &exception)
+	{
+		std::cerr << exception.what() << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	catch(BioSeqDataLib::FormatException &exception)
 	{
 		std::cerr << exception.what() << std::endl;
 		exit(EXIT_FAILURE);

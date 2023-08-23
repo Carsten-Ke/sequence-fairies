@@ -47,11 +47,11 @@
 
 @test "error messages" {
     run ../../build/isoformCleaner -i data/isoformCleaner/regex.fasta -o regexFail.fa -p flybase
-	[[ ${lines[0]} =~ "Warning! Sequence '1' retained because no isoform scheme matched" ]]
-	[[ ${lines[1]} =~ "Warning! Sequence '2' retained because no isoform scheme matched" ]]
-	[[ ${lines[2]} =~ "Warning! Sequence '3' retained because no isoform scheme matched" ]]
-	[[ ${lines[3]} =~ "Warning! Sequence '4' retained because no isoform scheme matched" ]]
-	[[ ${lines[4]} =~ "Warning! Sequence '5' retained because no isoform scheme matched" ]]
+	[[ ${lines[0]} = "Warning! Sequence '1' retained because no isoform scheme matched" ]]
+	[[ ${lines[1]} = "Warning! Sequence '2' retained because no isoform scheme matched" ]]
+	[[ ${lines[2]} = "Warning! Sequence '3' retained because no isoform scheme matched" ]]
+	[[ ${lines[3]} = "Warning! Sequence '4' retained because no isoform scheme matched" ]]
+	[[ ${lines[4]} = "Warning! Sequence '5' retained because no isoform scheme matched" ]]
 	[ $status == 0 ]
 	
 	run diff regexFail.fa data/isoformCleaner/regex.fasta
