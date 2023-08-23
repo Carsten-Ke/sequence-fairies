@@ -1,4 +1,5 @@
 #!/usr/bin/env bats
+bats_require_minimum_version 1.5.0
 
 @test "simple_concatenation" {
     run ../../build/concatenator -i data/concatenator/aln1.fa data/concatenator/aln2.fa
@@ -21,16 +22,17 @@
 @test "simple messages and errors" {
     run -0 ../../build/concatenator -h
 
-
-    run ../../build/concatenator --doesnotexist
+    run -1 ../../build/concatenator --doesnotexist
     [[ ${lines[0]} = "An error occurred parsing the command line: unrecognised option '--doesnotexist'" ]]
 	[[ ${lines[1]} = "Please use -h/--help for more information." ]]
-    [ $status == 1 ]
 
-    run ../../build/concatenator -i notexisting1 notexisting2
+    run -1 ../../build/concatenator -i notexisting1 notexisting2
     [ "$output" = "Error opening file 'notexisting1': No such file or directory: iostream error" ]
 
-    run ../../build/concatenator -i data/format.txt
+    run -1 ../../build/concatenator -i data/format.txt
     [ "$output" = "Error: Format of file 'data/format.txt' could not be identified or is not supported." ]
+
+    run -1 ../../build/concatenator -i data/concatenator/aln1.fa data/concatenator/aln2.fa -o doesnotexist/x.fa
+    [ "$output" = "Error opening file 'doesnotexist/x.fa': No such file or directory: iostream error" ]
 }
 

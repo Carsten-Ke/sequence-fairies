@@ -63,6 +63,8 @@
 	[ $status != 0 ]
 	[ "$output" == "Error: Preset 'doesnotexit' is unknown!" ]
 
+	
+
 }
 
 @test "help messages" {
