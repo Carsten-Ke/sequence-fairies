@@ -49,7 +49,8 @@ exactLength(size_t length, const BSDL::Sequence &seq);
 
 
 bool
-parseExtractionLine(const std::vector<std::string> &extractLine, std::vector<std::string> &names, std::map<std::string, size_t> &order, Targets &targets, std::string delimiter);
+parseExtractionLine(const std::vector<std::string> &extractLine, std::vector<std::string> &names, 
+    std::map<std::string, size_t> &order, Targets &targets, bool extractSegments, std::string delimiter);
 
 
 void

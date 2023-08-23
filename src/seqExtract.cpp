@@ -56,7 +56,7 @@ exactLength(size_t length, const BSDL::Sequence &seq)
 
 
 bool
-parseExtractionLine(const std::vector<std::string> &extractLine, std::vector<std::string> &names, std::map<std::string, size_t> &order, Targets &targets, std::string delimiter)
+parseExtractionLine(const std::vector<std::string> &extractLine, std::vector<std::string> &names, std::map<std::string, size_t> &order, Targets &targets, bool extractSegments, std::string delimiter)
 {
 	bool subsection = false;
 	std::map<std::string, Targets>::iterator it;
@@ -66,7 +66,7 @@ parseExtractionLine(const std::vector<std::string> &extractLine, std::vector<std
 	for (auto elem : extractLine)
 	{
 		std::vector< std::pair<size_t, size_t> > positions;
-		if (elem.find(delimiter) == std::string::npos)
+		if (!extractSegments) //(elem.find(delimiter) == std::string::npos)
 		{
 			nameSet.insert(elem);
 			if (order.count(elem) == 0)

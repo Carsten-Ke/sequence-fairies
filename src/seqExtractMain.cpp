@@ -93,11 +93,10 @@ main(int argc, char *argv[])
 	po::options_description extractOpts("Extract options");
 	extractOpts.add_options()
 		("extract,e", po::value<vector<string> >(&extractLine)->multitoken(), "The sequence(s) to extract")
-        ("get-names-from-fasta", po::value<fs::path>(&fastaNamesFile)->value_name("FILE"), "Obtain sequences names from fasta")
+        ("get-names-from-fasta,g", po::value<fs::path>(&fastaNamesFile)->value_name("FILE"), "Obtain sequences names from fasta")
 		("names-file,N", po::value<fs::path>(&namesFile)->value_name("FILE"), "File with extraction lines to use")
 		("delim-extract,d", po::value<char>(&delimiterExtract)->default_value('\t', "Tab"), "The delimiter to use in the extraction file")
 		("column,C", po::value<size_t>(&column)->default_value(1), "The column in the extraction file to use")
-		("delim-pos,D", po::value<char>(&delimiterPos)->default_value(':'), "The delimiter to use to separate name from positions")
 		//("regex,E", po::value<bool>(&re)->default_value(false)->zero_tokens(), "Interpret extract line as regex")
 		//("part,p", po::value<string>(&place)->default_value("name"), "The place to look for regex")
 		("remove,r", po::value<bool>(&remove)->default_value(false)->zero_tokens(), "Remove the given sequences")
@@ -107,6 +106,12 @@ main(int argc, char *argv[])
 		("ignore-missing,m", po::value<bool>(&ignoreMissing)->default_value(false)->zero_tokens(), "Ignore missing sequences")
 	;
 
+    bool extractSegments;
+    po::options_description segOpts("Segment options");
+	segOpts.add_options()
+        ("extractSegments,S", po::value<bool>(&extractSegments)->zero_tokens()->default_value(false), "Extract segments of a sequence")
+        ("delim-pos,D", po::value<char>(&delimiterPos)->default_value(':'), "The delimiter to use to separate name from positions")
+    ;
 	bool doRevComp, doTranslate;
 	string translationTable;
 	po::options_description modifyOpts("Modifying options");
@@ -118,7 +123,7 @@ main(int argc, char *argv[])
 
 
 	po::options_description all("seqExtract " + project_version + " (C) 2021  Carsten Kemena\nThis program comes with ABSOLUTELY NO WARRANTY;\n\nAllowed options are displayed below");
-	all.add(generalOpts).add(outputOpts).add(extractOpts).add(modifyOpts);
+	all.add(generalOpts).add(outputOpts).add(extractOpts).add(segOpts).add(modifyOpts);
 
 	po::variables_map vm;
 
@@ -189,16 +194,16 @@ main(int argc, char *argv[])
     string delims = "";
     delims.push_back(delimiterPos);
 	bool subsection = false;
-	try
-	{
-		subsection = parseExtractionLine(extractLine, nameSet, order, positions, delims);
-	}
-	catch(std::exception &e)
-	{
-		cerr << "An error occured when parsing the extract arguments! Is there possibly a problem with the delimiter used for subsection extraction or was no '-' used?\n";
-		exit(EXIT_FAILURE);
-	}
-	
+    try
+    {
+        subsection = parseExtractionLine(extractLine, nameSet, order, positions, extractSegments, delims);
+    }
+    catch(std::exception &e)
+    {
+        cerr << "An error occured when parsing the extract arguments! Is there possibly a problem with the delimiter used for subsection extraction or was no '-' used?\n";
+        exit(EXIT_FAILURE);
+    }
+
 
 	BSDL::SequenceSet set;
 	BSDL::SeqSetIOManager seqSetIO;

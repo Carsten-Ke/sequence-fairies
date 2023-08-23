@@ -56,7 +56,7 @@
 
 
 @test "sub section extraction" {
-	result="$(../../build/seqExtract -i data/seqExtract/test.fa -e seq2:1-1 seq9:3-5,8-11 seq9:12-14)"
+	result="$(../../build/seqExtract -i data/seqExtract/test.fa -e seq2:1-1 seq9:3-5,8-11 seq9:12-14 -S)"
 	val=$'>seq2:1-1\nA\n>seq9:3-5,8-11\nGTAARAI\n>seq9:12-14\nGAR'
 	[ "$result" == "$val" ]
 }
@@ -149,7 +149,7 @@
 	run $program -i data/test.fa -o /trinate
 	[ "$status" -eq 1 ]
 
-	run $program -i data/seqExtract/test.fa -e seq2:2
+	run $program -i data/seqExtract/test.fa -S -e seq2:2
 	[ "$status" -eq 1 ]
 	[ "$output" = $'An error occured when parsing the extract arguments! Is there possibly a problem with the delimiter used for subsection extraction or was no \'-\' used?' ]
 
