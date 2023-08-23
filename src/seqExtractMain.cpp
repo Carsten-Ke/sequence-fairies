@@ -51,6 +51,32 @@ namespace BSDL = BioSeqDataLib;
 
 using namespace std;
 
+
+void
+check_4_duplicated_names(const BSDL::SequenceSet &seqSet)
+{
+	std::map<std::string, int> extracted_names;
+	for (auto &seq : seqSet)
+	{
+		auto it = extracted_names.find(seq.name());
+		if (it == extracted_names.end())
+		{
+			extracted_names.emplace(make_pair(seq.name(), 1));
+		}
+		else
+		{
+			++(it->second);
+		}
+	}
+	for (const auto &elem : extracted_names)
+	{
+		if (elem.second > 1)
+		{
+			cerr << "WARNING! Sequence '" << elem.first << "' occurs " << elem.second << " times!\n"; 
+		}
+	}
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -100,7 +126,7 @@ main(int argc, char *argv[])
 		//("regex,E", po::value<bool>(&re)->default_value(false)->zero_tokens(), "Interpret extract line as regex")
 		//("part,p", po::value<string>(&place)->default_value("name"), "The place to look for regex")
 		("remove,r", po::value<bool>(&remove)->default_value(false)->zero_tokens(), "Remove the given sequences")
-		("num-seqs,n", po::value<size_t>(&numSeqs)->default_value(0), "The number of sequences to extract")
+		("num-seqs,n", po::value<size_t>(&numSeqs)->default_value(0), "The number of randomly choosen sequences to extract")
 		("seed,s", po::value<string>(&seed), "Seed for random extract function")
 		("length,L", po::value<vector<string> >(&lengthStrings)->multitoken(), "Length based extraction")
 		("ignore-missing,m", po::value<bool>(&ignoreMissing)->default_value(false)->zero_tokens(), "Ignore missing sequences")
@@ -200,7 +226,7 @@ main(int argc, char *argv[])
     }
     catch(std::exception &e)
     {
-        cerr << "An error occured when parsing the extract arguments! Is there possibly a problem with the delimiter used for subsection extraction or was no '-' used?\n";
+        cerr << "An error occurred when parsing the extract arguments! Is there possibly a problem with the delimiter used for subsection extraction or was no '-' used?\n";
         exit(EXIT_FAILURE);
     }
 
@@ -336,7 +362,9 @@ main(int argc, char *argv[])
 				seq.comment("");
 			}
 		}
-		
+
+		check_4_duplicated_names(newSet);
+
 		seqSetIO.write(newSet, "fasta", outFile, mode);//		newSet.write(outFile, removeComments, mode);
 	}
 	catch (std::exception &e)
@@ -359,6 +387,9 @@ main(int argc, char *argv[])
 		if (foundProblem)
 			return 1;
 	}
+
+	// check for multiple occurrence of names
+
 
 	return EXIT_SUCCESS;
 }

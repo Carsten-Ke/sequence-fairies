@@ -15,9 +15,6 @@
 	run ../../build/seqExtract -C 2 -N data/seqExtract/namesFile.txt -i data/seqExtract/test.fa -d " "
 	[ "$output" = $'>seq1 se\nA\n>seq3 se3\nAAA\n>seq4\nAAAA' ]
 
-    run ../../build/seqExtract --get-names-from-fasta data/seqExtract/names.fasta -i data/seqExtract/test.fa
-    [ "$output" = $'>seq1 se\nA\n>seq3 se3\nAAA\n>seq4\nAAAA' ]
-
 	run ../../build/seqExtract -i data/seqExtract/test.fa -e seq5 seq1 --extract-order
 	[ "$output" = $'>seq5\nAAAAA\n>seq1 se\nA' ]
 
@@ -38,8 +35,6 @@
 
 	#run ../../build/seqExtract -E -e "^se3$" -p comment -i data/seqExtract/test.fa --remove-comments
 	#[ "$output" = $'>seq3\nAAA' ]
-
-
 }
 
 @test "multi file extraction" {
@@ -54,6 +49,22 @@
 	[ "$output" = $'>seqA\nA\n>seq1 se\nA' ]
 }
 
+@test "fasta file extraction" {
+    run ../../build/seqExtract --get-names-from-fasta data/seqExtract/names.fasta -i data/seqExtract/test.fa
+    [ "$output" = $'>seq1 se\nA\n>seq3 se3\nAAA\n>seq4\nAAAA' ]
+
+	run ../../build/seqExtract -i data/seqExtract/proteome1.fa data/seqExtract/proteome2.fa -g data/seqExtract/names2.fasta
+	[ "${lines[0]}" = "WARNING! Sequence 'seq3' occurs 2 times!" ]
+	[ "${lines[1]}" = ">seq3" ]
+	[ "${lines[2]}" = "ACGTACGT" ]
+	[ "${lines[3]}" = ">seq2" ]
+	[ "${lines[4]}" = "ACGTACGT" ]
+	[ "${lines[5]}" = ">seq1" ]
+	[ "${lines[6]}" = "acgt" ]
+	[ "${lines[7]}" = ">seq3" ]
+	[ "${lines[8]}" = "acgt" ]
+
+}
 
 @test "sub section extraction" {
 	result="$(../../build/seqExtract -i data/seqExtract/test.fa -e seq2:1-1 seq9:3-5,8-11 seq9:12-14 -S)"
@@ -151,6 +162,7 @@
 
 	run $program -i data/seqExtract/test.fa -S -e seq2:2
 	[ "$status" -eq 1 ]
-	[ "$output" = $'An error occured when parsing the extract arguments! Is there possibly a problem with the delimiter used for subsection extraction or was no \'-\' used?' ]
+	[ "$output" = $'An error occurred when parsing the extract arguments! Is there possibly a problem with the delimiter used for subsection extraction or was no \'-\' used?' ]
 
 }
+

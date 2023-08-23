@@ -19,12 +19,12 @@ Requirements
 We try to keep the dependencies as little as possible. Current dependencies are:
 - cmake
 - boost (http://www.boost.org)
-- compiler with c++17 support
+- compiler with c++20 support
 - zlib
 - libbz2
 
 
-You will also need the BioSeqDataLib (https://zivgitlab.uni-muenster.de/domain-world/BioSeqDataLib), but this one can simply be aquired using the git submodule system when running cmake.
+You will also need the BioSeqDataLib (https://zivgitlab.uni-muenster.de/domain-world/BioSeqDataLib), but this one can simply be acquired using the git submodule system when running cmake.
 
 Download
 --------
