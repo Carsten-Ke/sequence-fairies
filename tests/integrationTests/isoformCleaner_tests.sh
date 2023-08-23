@@ -1,15 +1,18 @@
 #!/usr/bin/env bats
+bats_require_minimum_version 1.5.0
 
 @test "split-cleaning" {
-    run ../../build/isoformCleaner -i data/isoformCleaner/splitChar.fasta -o splitChar.fa
-	[ $status == 0 ]
-	
+    run -0 ../../build/isoformCleaner -i data/isoformCleaner/splitChar.fasta -o splitChar.fa --summary
+	[[ ${lines[0]} = "# seqs in input: 8" ]]
+    [[ ${lines[1]} = "# seqs in output: 4" ]]
+    [[ ${lines[2]} = "# seqs removed: 4" ]]
+    [[ ${lines[3]} = "# warnings: 0" ]]
+
 	run diff splitChar.fa data/isoformCleaner/splitChar_result.fasta
 	[ $status == 0 ]
 	
-	run ../../build/isoformCleaner -i data/isoformCleaner/splitChar_fail.fasta -o splitChar_fail.fa
+	run -0 ../../build/isoformCleaner -i data/isoformCleaner/splitChar_fail.fasta -o splitChar_fail.fa
     [ "$output" == "Warning! Sequence 'seq3' retained because no isoform scheme matched" ]
-	[ $status == 0 ]
 	
     run diff splitChar_fail.fa data/isoformCleaner/splitChar_fail_result.fasta
 	[ $status == 0 ]
@@ -42,6 +45,9 @@
     run ../../build/isoformCleaner -i xxx -o splitChar.fa
     [ "$output" == "Error opening file 'xxx': No such file or directory: iostream error" ]
 	[ $status != 0 ]
+
+	run ../../build/isoformCleaner -i data/isoformCleaner/regex.fasta -r "gene[:=]\\s*([\\S]+)[\\s]*" -o doesnotexist/x.fa
+    [ "$output" = "Error opening file 'doesnotexist/x.fa': No such file or directory: iostream error" ]
 }
 
 
@@ -59,11 +65,12 @@
 
 	rm regexFail.fa
 
-	run ../../build/isoformCleaner -i data/isoformCleaner/regex.fasta -o regexFail.fa -p doesnotexit
-	[ $status != 0 ]
+	run -1 ../../build/isoformCleaner -i data/isoformCleaner/regex.fasta -o regexFail.fa -p doesnotexit
 	[ "$output" == "Error: Preset 'doesnotexit' is unknown!" ]
 
-	
+	run -1 ../../build/isoformCleaner --doesnotexist
+    [[ ${lines[0]} = "An error occurred parsing the command line: unrecognised option '--doesnotexist'" ]]
+	[[ ${lines[1]} = "Please use -h/--help for more information." ]]
 
 }
 

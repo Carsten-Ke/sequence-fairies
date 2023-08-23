@@ -76,8 +76,7 @@ int main (int argc, char *argv[])
 	}
 	catch (boost::program_options::error &e)
 	{
-		std::cerr << "An error occurred parsing the commandline: \n";
-		std::cerr << e.what() << "\n";
+		std::cerr << "An error occurred parsing the command line: " << e.what() << "\n";
 		std::cerr << "Please use -h/--help for more information.\n";
 		return EXIT_FAILURE;
 	}
