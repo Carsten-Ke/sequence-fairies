@@ -11,6 +11,7 @@
 
 // C++
 #include <cstdlib>
+#include <filesystem>
 #include <functional>
 #include <iostream>
 #include <map>
@@ -18,7 +19,6 @@
 #include <string>
 
 // Boost
-#include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 
 // BSDL header

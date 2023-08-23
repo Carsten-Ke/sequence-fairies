@@ -102,6 +102,24 @@ set (BSDL_src ${BSDL_PATH}utility/Input.cpp
     ${BSDL_PATH}utility/WeightedInterval_util.cpp
 )
 
+######## SEQEXTRACT #############
+
+SET(seqExtract_src 
+    ${PROJECT_SOURCE_DIR}/src/identifyName.cpp 
+    ${PROJECT_SOURCE_DIR}/src/seqExtract.cpp 
+    ${PROJECT_SOURCE_DIR}/src/seqExtractMain.cpp ${BSDL_src}
+)
+
+
+SET(seqExtract_exe seqExtract )
+ADD_EXECUTABLE(${seqExtract_exe} ${seqExtract_src})
+target_link_libraries(${seqExtract_exe}
+	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
+)
+
+
+######## ISOFORMCLEANER #############
+
 SET(isoformCleaner_src 
     ${PROJECT_SOURCE_DIR}/src/identifyName.cpp 
     ${PROJECT_SOURCE_DIR}/src/isoformCleaner.cpp 
@@ -115,6 +133,7 @@ target_link_libraries(${isoformCleaner_exe}
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
+######## CONCATENATOR #############
 
 SET(concatenator_src 
     ${PROJECT_SOURCE_DIR}/src/concatenator.cpp 
@@ -140,6 +159,7 @@ endif ()
 
 install(
   TARGETS
+    seqExtract
     isoformCleaner
     concatenator
   DESTINATION

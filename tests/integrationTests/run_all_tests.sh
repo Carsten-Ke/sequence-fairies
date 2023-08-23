@@ -9,11 +9,11 @@ echo "Test-2: isoformCleaner"
 echo "Test-3: concatenator"
 ./concatenator_tests.sh
 
-#echo "Test-3: seqCheck"
+#echo "Test-4: seqCheck"
 #./seqCheck_tests.sh
 
-#echo "Test-4: seqExtract"
-#./seqExract_tests.sh  
+echo "Test-5: seqExtract"
+./seqExract_tests.sh  
 
-#echo "Test-5: dsmReader"
+#echo "Test-6: dsmReader"
 #./dsmReader.sh
