@@ -61,12 +61,14 @@ main (int argc, char *argv[])
 	fs::path input_directory;
     fs::path outFile;
 	std::string ending;
+	bool fillGaps;
 	po::options_description general("General options");
 	general.add_options()
 		("help,h", "Produces this help message")
 		("in,i", po::value<std::vector<fs::path> >(&sequence_files)->multitoken()->value_name("FILE"), "The alignment files")
 		("directory,d", po::value<fs::path>(&input_directory)->value_name("DIRECTORY"), "The directory with the alignment files")
-		("ending,e", po::value<std::string>(&ending)->value_name("STRING")->default_value(".fa"), "The directory with the alignment files")
+		("ending,e", po::value<std::string>(&ending)->value_name("STRING")->default_value(".fa"), "File ending to be used")
+		("fill-gaps,f", po::value<bool>(&fillGaps)->default_value(false)->zero_tokens(), "Fill missing sequence with gaps")
 		("out,o", po::value<fs::path>(&outFile)->value_name("FILE")->default_value(""), "The output file")
 	;
 
@@ -116,7 +118,7 @@ main (int argc, char *argv[])
 		for (size_t i = 1; i < nFiles; ++i)
 		{
         	BioSeqDataLib::SequenceSet seqSet = seqSetIO.read(sequence_files[i]);
-			concatenate(outSet, seqSet);
+			concatenate(outSet, seqSet, fillGaps);
 		}
 	}
 	catch(std::ios_base::failure &exception)
@@ -129,22 +131,28 @@ main (int argc, char *argv[])
 		std::cerr << exception.what() << std::endl;
 		exit(EXIT_FAILURE);
 	}
-
+	catch(std::runtime_error &exception)
+	{
+		std::cerr << exception.what() << std::endl;
+		exit(EXIT_FAILURE);
+	}
 
 	try
 	{
 		if (outFile.empty())
+		{
 			seqSetIO.write(outSet, "fasta", "");
+		}
 		else
+		{
 			seqSetIO.write(outSet, "fasta", outFile);
+		}
 	}
 	catch (std::ios_base::failure &exception)
 	{
 		std::cout << exception.what() << std::endl;
 		exit(EXIT_FAILURE);
 	}
-
-
 
     return EXIT_SUCCESS;
 }

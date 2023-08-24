@@ -2,47 +2,87 @@
 
 #include <set>
 
-bool 
-checkSequenceOccurrence(const BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::SequenceSet &seqSet2)
+void
+checkSequenceOccurrence(const BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::SequenceSet &seqSet2, bool fillGaps)
 {
-    if (seqSet1.size() != seqSet2.size())
-    {
-        return false;
-    }
-    std::set<std::string> names;
+    std::map<std::string, int> names;
     for (auto &seq : seqSet1)
     {
-        names.insert(seq.name());
+        names.emplace(seq.name(), 1);
     }
 
-    auto itEnd = names.end();
     for (auto &seq : seqSet2)
     {
-        if (names.find(seq.name()) == itEnd)
+        auto it=names.find(seq.name());
+        if (it != names.end())
         {
-            return false;
+            ++(it->second);
+        }
+        else
+        {
+            names.emplace(seq.name(), 1);
         }
     }
-    return true;
+    for (auto &elem : names)
+    {
+        if (elem.second > 2)
+        {
+            throw std::runtime_error("ERROR! Duplicates of sequence '" + elem.first + "' found!");
+        }
+        if ((!fillGaps) && (elem.second < 2))
+        {
+            throw std::runtime_error("ERROR! Sequence '" + elem.first + "' not contained.");
+        }
+    }
 }
 
-void concatenate(BioSeqDataLib::SequenceSet &seqSet1, BioSeqDataLib::SequenceSet &seqSet2)
+void concatenate(BioSeqDataLib::SequenceSet &seqSet1, BioSeqDataLib::SequenceSet &seqSet2, bool fillGaps)
 {
-    if (!checkSequenceOccurrence(seqSet1, seqSet2))
-    {
-        throw std::runtime_error("ERROR! Sequences don't match");
-    }
+    checkSequenceOccurrence(seqSet1, seqSet2, fillGaps);
 
     std::map<std::string, int> names;
-    size_t id = -1;
-    for (auto &seq : seqSet2)
+    int id = -1;
+    for (auto &seq : seqSet1)
     {
         names.insert(std::make_pair(seq.name(), ++id));
     }
 
-    for (auto &seq : seqSet1)
+    size_t max_size = 0;
+    size_t old_length = seqSet1[0].size();
+    for (auto &seq : seqSet2)
     {
-        seq.append(seqSet2[names[seq.name()]].seq());
+        auto it = names.find(seq.name());
+        if (it != names.end())
+        {
+            seqSet1[it->second].append(seq.seq());
+            if (seqSet1[it->second].length() > max_size)
+            {
+                max_size = seqSet1[it->second].length();
+            } 
+        }
+        else
+        {
+            if ((seq.length() + old_length) > max_size)
+            {
+                max_size = seq.size() + old_length;
+            }
+            seqSet1.emplace_back(BioSeqDataLib::Sequence(seq.name(), std::string(old_length, '-'), "", ""));
+            seqSet1.back().append(seq.seq());
+        }
     }
+
+    if (fillGaps)
+    {
+        for (auto &seq : seqSet1)
+        {
+            if (seq.length() < max_size)
+            {
+                seq.append(std::string(max_size - seq.length(), '-'));
+            }
+        }
+    }
+
+    
+
 
 }

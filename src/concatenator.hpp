@@ -24,8 +24,21 @@
  */
 #include "../libs/BioSeqDataLib/src/sequence/SequenceSet.hpp"
 
+/**
+ * @brief Checks if for each sequence a corresponding sequence exists
+ * 
+ * @param seqSet1 
+ * @param seqSet2 
+ * @return true 
+ * @return false 
+ */
+void
+checkSequenceOccurrence(const BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::SequenceSet &seqSet2, bool fillGaps);
 
-bool
-checkSequenceOccurrence(const BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::SequenceSet &seqSet2);
-
-void concatenate(BioSeqDataLib::SequenceSet &seqSet1, BioSeqDataLib::SequenceSet &seqSet2);
+/**
+ * @brief Function to concatenate two sequences or alignments
+ * 
+ * @param seqSet1 The first sequence set
+ * @param seqSet2 The second sequence set that will be added to the first
+ */
+void concatenate(BioSeqDataLib::SequenceSet &seqSet1, BioSeqDataLib::SequenceSet &seqSet2, bool fillGaps);

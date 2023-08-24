@@ -47,7 +47,7 @@ private:
     void identifyIsoforms_(const BSDL::SequenceSet &seqSet);
     BSDL::SequenceSet createNewSeqSet_(BSDL::SequenceSet &seqSet);
 
-    
+
 
 public:
 
