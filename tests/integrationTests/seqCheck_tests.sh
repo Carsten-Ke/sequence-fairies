@@ -1,4 +1,6 @@
 #!/usr/bin/env bats
+bats_require_minimum_version 1.5.0
+
 
 @test "stop1-cleaning" {
     run ../../build/seqCheck --fix-end --remove-stop -i ./data/seqCheck/input.fasta --set-alphabet DNA -o stop1.fasta
@@ -42,4 +44,26 @@
 	[ $status == 0 ]
 
 	rm fix-keep.fasta
+}
+
+
+@test "simple messages and errors" {
+    run -0 ../../build/seqCheck -h
+
+    run -1 ../../build/seqCheck --doesnotexist
+    [[ ${lines[0]} = "An error occurred parsing the command line: unrecognised option '--doesnotexist'" ]]
+	[[ ${lines[1]} = "Please use -h/--help for more information." ]]
+
+    run -1 ../../build/seqCheck -i x --rename-duplicates --remove-duplicates
+    [ "$output" = "Error! The options remove-duplicates and rename-duplicates are mutually exclusive!" ]
+
+    run -1 ../../build/seqCheck -i x --fix-and-keep --fix-and-remove
+    [ "$output" = "Error! The options fix-and-keep and fix-and-remove are mutually exclusive!" ]
+
+	run -1 ../../build/seqCheck -i x --replace-char --remove-alpha
+    [ "$output" = "Error! The options replace-char and remove-alpha are mutually exclusive!" ]
+
+	run -1 ../../build/seqCheck -i x --remove-stop-genes --replace-stop
+    [ "$output" = "Error! The options remove-stop-genes and replaceStop are mutually exclusive!" ]
+ 
 }

@@ -64,7 +64,7 @@ main(int argc, char *argv[])
         ("out,o", po::value<fs::path>(&outFile)->value_name("FILE"), "The fasta output file")
 		("report,r", po::value<fs::path>(&reportFile)->value_name("FILE"), "The file to store the report in")
         ("check-all,A", po::value<bool>(&checkAll)->default_value(false)->zero_tokens(), "run all checks")
-		("fix-and-keep", po::value<bool>(&fixAndKeep)->default_value(false)->zero_tokens(), "Fix all problems without removing a sequnence")
+		("fix-and-keep", po::value<bool>(&fixAndKeep)->default_value(false)->zero_tokens(), "Fix all problems without removing a sequence")
 		("fix-and-remove", po::value<bool>(&fixAndRemove)->default_value(false)->zero_tokens(), "Fix all Problems by removing sequences (except stop at ends)")
     ;
 	
@@ -78,7 +78,7 @@ main(int argc, char *argv[])
 		("fix-ending", po::value<bool>(&fixEnd)->default_value(false)->zero_tokens(), "Removes all stops at the end of a sequence")
 		("remove-stop-genes", po::value<bool>(&removePseudogenes)->zero_tokens()->default_value(false), "Remove all genes with stops")
         ("stop-char", po::value<string>(&stopChars)->default_value(".*"), "The stop chars to use")
-        ("replace-stop", po::value<bool>(&replaceStopChar)->zero_tokens()->default_value(false), "Replace in sequence stops with ambigious char")
+        ("replace-stop", po::value<bool>(&replaceStopChar)->zero_tokens()->default_value(false), "Replace in sequence stops with ambiguous char")
 	;
 
     bool checkAlphabet, removeAlpha, replaceAlphaChar;
@@ -99,7 +99,7 @@ main(int argc, char *argv[])
         ("remove-duplicates", po::value<bool>(&removeDuplicates)->default_value(false)->zero_tokens(), "Removes duplicates")
     ;
 
-	po::options_description visibleOpts("seqCheck " + project_version + " (C) 2021  Carsten Kemena\nThis program comes with ABSOLUTELY NO WARRANTY;\n\nAllowed options are displayed below.");
+	po::options_description visibleOpts("seqCheck " + project_version + " (C) 2021-2023  Carsten Kemena\nThis program comes with ABSOLUTELY NO WARRANTY;\n\nAllowed options are displayed below.");
 	visibleOpts.add(general).add(stopOpts).add(alphabetOpts).add(duplicateOpts);
 	
 	po::variables_map vm;
@@ -115,8 +115,7 @@ main(int argc, char *argv[])
 	}
 	catch (boost::program_options::error &e)
 	{
-		cerr << "An error occurred parsing the commandline: \n";
-		cerr << e.what() << "\n";
+		cerr << "An error occurred parsing the command line: " << e.what() << "\n";
 		cerr << "Please use -h/--help for more information.\n";
 		return EXIT_FAILURE;
 	}
