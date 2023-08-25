@@ -79,6 +79,8 @@ pages:
   script:
   - cd docs
   - make gitlab-pages
+  tags:
+    - 'dw-builder' 
   artifacts:
     paths:
     - public
