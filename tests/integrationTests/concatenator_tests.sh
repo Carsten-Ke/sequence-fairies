@@ -42,8 +42,6 @@ bats_require_minimum_version 1.5.0
     rm concat_aln.fasta
 }
 
-
-
 @test "simple messages and errors" {
     run -0 ../../build/concatenator -h
 

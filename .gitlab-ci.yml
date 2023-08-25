@@ -72,3 +72,14 @@ sast:
   tags:
     - "dind"
   stage: test
+
+pages:
+  stage: deploy
+  script:
+  - cd docs
+  - make gitlab-pages
+  artifacts:
+    paths:
+    - public
+  only:
+  - master
