@@ -1,6 +1,7 @@
 stages:
   - build
   - test
+  - production
 
 build tests and executable:
   stage: build
@@ -74,7 +75,7 @@ sast:
   stage: test
 
 pages:
-  stage: deploy
+  stage: production
   script:
   - cd docs
   - make gitlab-pages
