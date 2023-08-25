@@ -38,12 +38,21 @@ bats_require_minimum_version 1.5.0
 
 @test "fix-keep" {
     run ../../build/seqCheck --fix-and-keep -i ./data/seqCheck/input.fasta --set-alphabet DNA -o fix-keep.fasta
-	[ $status == 0 ]
-	
 	run diff fix-keep.fasta ./data/seqCheck/fix-keep-result.fasta
 	[ $status == 0 ]
 
 	rm fix-keep.fasta
+}
+
+@test "replace-char" {
+	run -0 ../../build/seqCheck -i ./data/seqCheck/nt.fa --replace-char --set-alphabet DNA
+	[ ${lines[0]} = ">seq1" ]
+	[ ${lines[1]} = "ACGCTCATCTN" ]
+
+	run -0 ../../build/seqCheck -i ./data/seqCheck/aa.fa --replace-char
+	[ ${lines[0]} = ">seq1" ]
+	[ ${lines[1]} = "AAXT" ]
+
 }
 
 
@@ -53,6 +62,9 @@ bats_require_minimum_version 1.5.0
     run -1 ../../build/seqCheck --doesnotexist
     [[ ${lines[0]} = "An error occurred parsing the command line: unrecognised option '--doesnotexist'" ]]
 	[[ ${lines[1]} = "Please use -h/--help for more information." ]]
+
+	run -1 ../../build/seqCheck -i x
+    [ "$output" = "Error opening file 'x': No such file or directory: iostream error" ]
 
     run -1 ../../build/seqCheck -i x --rename-duplicates --remove-duplicates
     [ "$output" = "Error! The options remove-duplicates and rename-duplicates are mutually exclusive!" ]
