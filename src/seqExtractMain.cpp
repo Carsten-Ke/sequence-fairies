@@ -199,9 +199,13 @@ main(int argc, char *argv[])
 
 	std::ios_base::openmode mode;
 	if (append)
+	{
 		mode = std::ios_base::app;
+	}
 	else
+	{
 		mode = std::ios_base::out;
+	}
 
 	/*short placeN;
 	if (place == "name")

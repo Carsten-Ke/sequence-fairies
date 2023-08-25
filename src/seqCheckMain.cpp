@@ -199,7 +199,7 @@ main(int argc, char *argv[])
 
     std::set<size_t> seqs2delete;
 
-	// detect sequence type
+	// set sequence type
 	BSDL::Alphabet::AType atype;
 	std::map<std::string, BSDL::Alphabet::AType> string2type = {
 		{"protein", BSDL::Alphabet::AType::AminoAcid},
