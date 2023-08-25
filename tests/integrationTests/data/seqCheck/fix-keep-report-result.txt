@@ -1,0 +1,24 @@
+--- SUMMARY ---
+# sequences: 7
+# sequences with problems: 5
+# sequences fixed:         2
+# sequences removed:       3
+
+
+--- DETAILS ---
+
+singleStopEnd - FIXED
+- stopCodons
+
+severalStopEnd - FIXED
+- stopCodons
+
+middleStop - REMOVED
+- stopCodons
+
+duplicate - REMOVED
+- duplicate
+
+badchar - REMOVED
+- symbols: P
+

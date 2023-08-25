@@ -147,6 +147,38 @@ target_link_libraries(${concatenator_exe}
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
+######## SEQCHECK #############
+
+SET(seqCheck_src 
+    ${PROJECT_SOURCE_DIR}/src/seqCheck.cpp 
+    ${PROJECT_SOURCE_DIR}/src/seqCheckMain.cpp ${BSDL_src}
+)
+
+
+SET(seqCheck_exe seqCheck)
+ADD_EXECUTABLE(${seqCheck_exe} ${seqCheck_src})
+target_link_libraries(${seqCheck_exe}
+	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
+)
+
+
+######## domainExtract #############
+
+SET(extractDomains_src 
+    ${PROJECT_SOURCE_DIR}/src/extractDomains.cpp 
+    ${PROJECT_SOURCE_DIR}/src/extractDomainsMain.cpp ${BSDL_src}
+)
+
+
+SET(extractDomains_exe extractDomains)
+ADD_EXECUTABLE(${extractDomains_exe} ${extractDomains_src})
+target_link_libraries(${extractDomains_exe}
+	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
+)
+
+
+
+######## TESTING #############
 
 
 if (WITH_UNIT_TEST)
@@ -157,11 +189,15 @@ if (WITH_UNIT_TEST)
 	add_test (NAME isoformCleanerTest COMMAND isoformCleaner-Test)
 endif ()
 
+
+
 install(
   TARGETS
-    seqExtract
-    isoformCleaner
     concatenator
+    extractDomains
+    isoformCleaner
+    seqCheck
+    seqExtract
   DESTINATION
     bin
   )

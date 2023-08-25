@@ -1,6 +1,6 @@
 # Sequence-Fairies
 
-DW-Helper (DomainWorld-Helper) contains several programs that can help with your domain analyses.
+Sequence-Fairies contains several programs that can help with your analyses.
 
 ## Programs
 

@@ -1,0 +1,12 @@
+>noStop
+acgt
+>singleStopEnd
+acgt
+>severalStopEnd
+acgt
+>duplicate
+actg
+>duplicate
+actga
+>badchar
+actPga
