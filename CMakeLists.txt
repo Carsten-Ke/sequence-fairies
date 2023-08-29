@@ -187,6 +187,7 @@ if (WITH_UNIT_TEST)
 	add_subdirectory (tests)
 	enable_testing ()
 	add_test (NAME isoformCleanerTest COMMAND isoformCleaner-Test)
+    add_test (NAME concatenatorTest COMMAND concatenator-Test)
 endif ()
 
 

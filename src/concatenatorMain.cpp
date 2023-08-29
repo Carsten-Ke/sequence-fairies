@@ -61,14 +61,18 @@ main (int argc, char *argv[])
 	fs::path input_directory;
     fs::path outFile;
 	std::string ending;
-	bool fillGaps;
+	bool lenient;
+	std::string delimiter;
+	std::vector<std::string> patterns;
 	po::options_description general("General options");
 	general.add_options()
 		("help,h", "Produces this help message")
 		("in,i", po::value<std::vector<fs::path> >(&sequence_files)->multitoken()->value_name("FILE"), "The alignment files")
 		("directory,d", po::value<fs::path>(&input_directory)->value_name("DIRECTORY"), "The directory with the alignment files")
 		("ending,e", po::value<std::string>(&ending)->value_name("STRING")->default_value(".fa"), "File ending to be used")
-		("fill-gaps,f", po::value<bool>(&fillGaps)->default_value(false)->zero_tokens(), "Fill missing sequence with gaps")
+		("lenient,l", po::value<bool>(&lenient)->default_value(false)->zero_tokens(), "Allows for missing sequences which will be replaced with gaps")
+		("pattern,p", po::value<std::vector<std::string> >(&patterns)->multitoken(), "The pattern to use for matching")
+		("delimiter,D", po::value<std::string> (&delimiter)->default_value(""), "Delimiter to use")
 		("out,o", po::value<fs::path>(&outFile)->value_name("FILE")->default_value(""), "The output file")
 	;
 
@@ -92,6 +96,10 @@ main (int argc, char *argv[])
 		std::cerr << "An error occurred parsing the command line: " << e.what() << std::endl;
 		std::cerr << "Please use -h/--help for more information.\n";
 		return EXIT_FAILURE;
+	}
+	if (delimiter.empty())
+	{
+		delimiter.push_back('\r');
 	}
 
 	BioSeqDataLib::SeqSetIOManager seqSetIO;
@@ -118,7 +126,8 @@ main (int argc, char *argv[])
 		for (size_t i = 1; i < nFiles; ++i)
 		{
         	BioSeqDataLib::SequenceSet seqSet = seqSetIO.read(sequence_files[i]);
-			concatenate(outSet, seqSet, fillGaps);
+			auto mapping = createMatches(outSet, seqSet, lenient, delimiter);
+			concatenate(outSet, seqSet, mapping);
 		}
 	}
 	catch(std::ios_base::failure &exception)

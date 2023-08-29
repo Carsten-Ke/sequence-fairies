@@ -10,7 +10,7 @@ bats_require_minimum_version 1.5.0
 }
 
 @test "fill_gaps" {
-    run -0 ../../build/concatenator -i data/concatenator/aln1.fa data/concatenator/aln3.fasta -f
+    run -0 ../../build/concatenator -i data/concatenator/aln1.fa data/concatenator/aln3.fasta -l
     [ ${lines[0]} = ">A" ]
     [ ${lines[1]} = "aaaaaaaaa" ]
     [ ${lines[2]} = ">C" ]
@@ -18,7 +18,7 @@ bats_require_minimum_version 1.5.0
     [ ${lines[4]} = ">G" ]
     [ ${lines[5]} = "---gggggg" ]
 
-    run -0 ../../build/concatenator -i data/concatenator/aln3.fasta data/concatenator/aln1.fa -f
+    run -0 ../../build/concatenator -i data/concatenator/aln3.fasta data/concatenator/aln1.fa -l
     [ ${lines[0]} = ">A" ]
     [ ${lines[1]} = "aaaaaaaaa" ]
     [ ${lines[2]} = ">G" ]
@@ -27,10 +27,10 @@ bats_require_minimum_version 1.5.0
     [ ${lines[5]} = "ccccccccc" ]
 
     run -1 ../../build/concatenator -i data/concatenator/aln3.fasta data/concatenator/aln1.fa
-    [[  "$output" = "ERROR! Sequence 'G' not contained." ]]
+    [[  "$output" = "ERROR! Sequence 'G' not contained in file: data/concatenator/aln1.fa" ]]
 
      run -1 ../../build/concatenator -i data/concatenator/aln1.fa data/concatenator/aln3.fasta
-    [[  "$output" = "ERROR! Sequence 'G' not contained." ]]
+    [[  "$output" = "ERROR! Sequence 'G' not contained in file: data/concatenator/aln1.fa" ]]
 }
 
 @test "simple_directory_concatenation" {
@@ -59,6 +59,6 @@ bats_require_minimum_version 1.5.0
     [ "$output" = "Error opening file 'doesnotexist/x.fa': No such file or directory: iostream error" ]
 
     run -1 ../../build/concatenator -i data/concatenator/aln1.fa data/concatenator/aln4.fasta
-    [ "$output" = "ERROR! Duplicates of sequence 'A' found!" ]
+    [ "$output" = "ERROR! Duplicated sequence name 'A' in file 'data/concatenator/aln4.fasta' found!" ]
 }
 

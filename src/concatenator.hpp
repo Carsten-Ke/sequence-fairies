@@ -1,7 +1,7 @@
 /**
  * @file concatenator.hpp
  * @author Carsten Kemena (c.kemena@uni-muenster.de)
- * @brief 
+ * @brief Contains the concatenator functions
  * @version 1.0
  * @date 2023-08-11
  * 
@@ -22,23 +22,17 @@
  * You should have received a copy of the GNU General Public License
  * along with BioSeqDataLib.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "../libs/BioSeqDataLib/src/sequence/SequenceSet.hpp"
 
-/**
- * @brief Checks if for each sequence a corresponding sequence exists
- * 
- * @param seqSet1 
- * @param seqSet2 
- * @return true 
- * @return false 
- */
-void
-checkSequenceOccurrence(const BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::SequenceSet &seqSet2, bool fillGaps);
 
-/**
- * @brief Function to concatenate two sequences or alignments
- * 
- * @param seqSet1 The first sequence set
- * @param seqSet2 The second sequence set that will be added to the first
- */
-void concatenate(BioSeqDataLib::SequenceSet &seqSet1, BioSeqDataLib::SequenceSet &seqSet2, bool fillGaps);
+
+std::map<std::string, int>
+createNamesIndex(const BioSeqDataLib::SequenceSet &seqSet, std::string delimiter);
+
+
+std::set<std::pair<int, int> >
+createMatches(const BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::SequenceSet &seqSet2, bool lenient, std::string delimiter);
+
+
+void concatenate(BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::SequenceSet &seqSet2, const std::set<std::pair<int, int> > &matches);
