@@ -6,7 +6,18 @@ concatenator
 
 Concatenates alignments into a single alignment!
 
+=========
+Use cases
+=========
 
+* A typical case is to concatenate alignments of 1-1 orthologs to create a large alignment that will be used to reconstruct
+a species phylogeny
+
+=======
+Options
+=======
+
+In this section you can find a number of options that can be used.
 
 General options
 ---------------

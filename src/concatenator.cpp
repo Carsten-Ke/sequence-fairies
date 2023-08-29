@@ -24,7 +24,51 @@
  */
 #include "concatenator.hpp"
 
+#include <algorithm>
 #include <set>
+
+void
+throw_duplicate(const std::string &seqName, const std::filesystem::path &fileName)
+{
+    throw std::runtime_error("Error! Duplicated sequence name '" + seqName + "' in file '" + fileName.string() + "' found!");
+}
+
+std::map<std::string, int>
+createNamesIndex(const BioSeqDataLib::SequenceSet &seqSet, const std::vector<std::string> &patterns)
+{
+    std::map<std::string, int> namesIndex;
+    std::map<std::string, int> occurences;
+    std::set<int> indices;
+    int id = -1;
+    for (auto &seq : seqSet)
+    {
+        ++id;
+        int counter = 0;
+        for (auto &pattern : patterns)
+        {
+            auto position = seq.name().find(pattern);
+            if (position != std::string::npos)
+            {
+                ++occurences[pattern];
+                namesIndex[pattern] = id;
+                ++counter;
+            }
+        }
+        if (counter > 1)
+        {
+            throw std::runtime_error("Error! Patterns match same sequence in file '" + seqSet.file().string());
+        }
+    }
+    for (auto &elem : occurences)
+    {
+        if (elem.second > 1)
+        {
+            throw_duplicate(elem.first, seqSet.file());
+        }
+    }
+
+    return namesIndex;
+}
 
 std::map<std::string, int>
 createNamesIndex(const BioSeqDataLib::SequenceSet &seqSet, std::string delimiter)
@@ -36,7 +80,7 @@ createNamesIndex(const BioSeqDataLib::SequenceSet &seqSet, std::string delimiter
         auto elem = namesIndex.emplace(seq.name().substr(0, seq.name().find(delimiter)), ++id);
         if (!elem.second)
         {
-            throw std::runtime_error("ERROR! Duplicated sequence name '" + seq.name() + "' in file '" + seqSet.file().string() + "' found!");
+           throw_duplicate(seq.name(), seqSet.file());
         }
     }
 
@@ -45,12 +89,8 @@ createNamesIndex(const BioSeqDataLib::SequenceSet &seqSet, std::string delimiter
 
 
 std::set<std::pair<int, int> >
-createMatches(const BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::SequenceSet &seqSet2, bool lenient, std::string delimiter)
+createMatches(const std::map<std::string, int> &names1, const fs::path &seqFile1, const std::map<std::string, int> &names2, const fs::path &seqFile2, bool lenient)
 {
-
-    auto names1 = createNamesIndex(seqSet1, delimiter);
-    auto names2 = createNamesIndex(seqSet2, delimiter);
-
     std::set<std::pair<int, int> > pairing;
     for (auto &elem : names1)
     {
@@ -67,7 +107,7 @@ createMatches(const BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::Se
             }
             else
             {
-                throw std::runtime_error("ERROR! Sequence '" + elem.first + "' not contained in file: " + seqSet2.file().string());
+                throw std::runtime_error("Error! Sequence '" + elem.first + "' not contained in file: " + seqFile2.string());
             }
         }
     }
@@ -82,7 +122,7 @@ createMatches(const BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::Se
             }
             else
             {
-                throw std::runtime_error("ERROR! Sequence '" + elem.first + "' not contained in file: " + seqSet1.file().string());
+                throw std::runtime_error("Error! Sequence '" + elem.first + "' not contained in file: " + seqFile1.string());
             }
         }
     }
@@ -90,45 +130,6 @@ createMatches(const BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::Se
     return pairing;
 }
 
-
-
-
-
-/*
-void
-checkSequenceOccurrence(const BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::SequenceSet &seqSet2, bool fillGaps)
-{
-    std::map<std::string, int> names;
-    for (auto &seq : seqSet1)
-    {
-        names.emplace(seq.name(), 1);
-    }
-
-    for (auto &seq : seqSet2)
-    {
-        auto it=names.find(seq.name());
-        if (it != names.end())
-        {
-            ++(it->second);
-        }
-        else
-        {
-            names.emplace(seq.name(), 1);
-        }
-    }
-    for (auto &elem : names)
-    {
-        if (elem.second > 2)
-        {
-            throw std::runtime_error("ERROR! Duplicates of sequence '" + elem.first + "' found!");
-        }
-        if ((!fillGaps) && (elem.second < 2))
-        {
-            throw std::runtime_error("ERROR! Sequence '" + elem.first + "' not contained.");
-        }
-    }
-}
-*/
 
 void concatenate(BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::SequenceSet &seqSet2, const std::set<std::pair<int, int> > &matches)
 {
@@ -162,56 +163,3 @@ void concatenate(BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::Seque
         }
     }
 }
-
-/*
-void concatenate(BioSeqDataLib::SequenceSet &seqSet1, BioSeqDataLib::SequenceSet &seqSet2, bool fillGaps)
-{
-    checkSequenceOccurrence(seqSet1, seqSet2, fillGaps);
-
-    std::map<std::string, int> names;
-    int id = -1;
-    for (auto &seq : seqSet1)
-    {
-        names.insert(std::make_pair(seq.name(), ++id));
-    }
-
-    size_t max_size = 0;
-    size_t old_length = seqSet1[0].size();
-    for (auto &seq : seqSet2)
-    {
-        auto it = names.find(seq.name());
-        if (it != names.end())
-        {
-            seqSet1[it->second].append(seq.seq());
-            if (seqSet1[it->second].length() > max_size)
-            {
-                max_size = seqSet1[it->second].length();
-            } 
-        }
-        else
-        {
-            if ((seq.length() + old_length) > max_size)
-            {
-                max_size = seq.size() + old_length;
-            }
-            seqSet1.emplace_back(BioSeqDataLib::Sequence(seq.name(), std::string(old_length, '-'), "", ""));
-            seqSet1.back().append(seq.seq());
-        }
-    }
-
-    if (fillGaps)
-    {
-        for (auto &seq : seqSet1)
-        {
-            if (seq.length() < max_size)
-            {
-                seq.append(std::string(max_size - seq.length(), '-'));
-            }
-        }
-    }
-
-    
-
-
-}
-*/

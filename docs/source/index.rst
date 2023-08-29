@@ -17,12 +17,12 @@ Welcome to Sequence-Fairies's documentation!
    :maxdepth: 1
    :caption: Programs
    
-   content/dsmReader.rst
+
+   content/concatenator.rst
    content/extractDomains.rst
    content/isoformCleaner.rst
    content/seqCheck.rst
    content/seqExtract.rst
-   content/concatenator.rst
 
 
 .. toctree::

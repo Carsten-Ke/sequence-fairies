@@ -26,13 +26,44 @@
 #include "../libs/BioSeqDataLib/src/sequence/SequenceSet.hpp"
 
 
-
+/**
+ * @brief Create a Names Index object
+ * 
+ * @param seqSet 
+ * @param delimiter 
+ * @return std::map<std::string, int> 
+ */
 std::map<std::string, int>
 createNamesIndex(const BioSeqDataLib::SequenceSet &seqSet, std::string delimiter);
 
+/**
+ * @brief Create a Names Index object
+ * 
+ * @param seqSet 
+ * @param patterns 
+ * @return std::map<std::string, int> 
+ */
+std::map<std::string, int>
+createNamesIndex(const BioSeqDataLib::SequenceSet &seqSet, const std::vector<std::string> &patterns);
 
+/**
+ * @brief Create a Matches object
+ * 
+ * @param names1 
+ * @param seqFile1 
+ * @param names2 
+ * @param seqFile2 
+ * @param lenient 
+ * @return std::set<std::pair<int, int> > 
+ */
 std::set<std::pair<int, int> >
-createMatches(const BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::SequenceSet &seqSet2, bool lenient, std::string delimiter);
+createMatches(const std::map<std::string, int> &names1, const fs::path &seqFile1, const std::map<std::string, int> &names2, const fs::path &seqFile2, bool lenient);
 
-
+/**
+ * @brief 
+ * 
+ * @param seqSet1 
+ * @param seqSet2 
+ * @param matches 
+ */
 void concatenate(BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::SequenceSet &seqSet2, const std::set<std::pair<int, int> > &matches);

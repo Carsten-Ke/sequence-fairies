@@ -72,7 +72,7 @@ main (int argc, char *argv[])
 		("ending,e", po::value<std::string>(&ending)->value_name("STRING")->default_value(".fa"), "File ending to be used")
 		("lenient,l", po::value<bool>(&lenient)->default_value(false)->zero_tokens(), "Allows for missing sequences which will be replaced with gaps")
 		("pattern,p", po::value<std::vector<std::string> >(&patterns)->multitoken(), "The pattern to use for matching")
-		("delimiter,D", po::value<std::string> (&delimiter)->default_value(""), "Delimiter to use")
+		("delimiter,D", po::value<std::string> (&delimiter)->default_value(""), "Delimiter to use, default take whole sequence name")
 		("out,o", po::value<fs::path>(&outFile)->value_name("FILE")->default_value(""), "The output file")
 	;
 
@@ -97,7 +97,7 @@ main (int argc, char *argv[])
 		std::cerr << "Please use -h/--help for more information.\n";
 		return EXIT_FAILURE;
 	}
-	if (delimiter.empty())
+	if (delimiter.empty() && patterns.empty())
 	{
 		delimiter.push_back('\r');
 	}
@@ -120,13 +120,46 @@ main (int argc, char *argv[])
 	auto nFiles = sequence_files.size();
 	BioSeqDataLib::SequenceSet outSet;
 
+	if ((!patterns.empty()) && (!delimiter.empty()))
+	{
+		std::cerr << "Error! The pattern and the delimiter parameter are mutually exclusive!" << std::endl;
+		return EXIT_FAILURE;
+	}
+
+	// check if patterns are uniq
+	if (!patterns.empty())
+	{
+		std::set<std::string> uniq;
+		for (auto &pattern : patterns)
+		{
+			uniq.emplace(pattern);
+		}
+		if (uniq.size() < patterns.size())
+		{
+			std::cerr << "Error! Pattern list contains duplicated entry(s)!" << std::endl;
+			return EXIT_FAILURE;
+		}
+	}
+
     try
 	{
 		outSet = seqSetIO.read(sequence_files[0]);
 		for (size_t i = 1; i < nFiles; ++i)
 		{
+			std::map<std::string, int> names1, names2;
         	BioSeqDataLib::SequenceSet seqSet = seqSetIO.read(sequence_files[i]);
-			auto mapping = createMatches(outSet, seqSet, lenient, delimiter);
+			if (patterns.empty())
+    		{
+       			names1 = createNamesIndex(outSet, delimiter);
+       			names2 = createNamesIndex(seqSet, delimiter);
+    		}
+    		else
+    		{
+        		names1 = createNamesIndex(outSet, patterns);
+        		names2 = createNamesIndex(seqSet, patterns);
+    		}
+
+			auto mapping = createMatches(names1, outSet.file(), names2, seqSet.file(), lenient);
 			concatenate(outSet, seqSet, mapping);
 		}
 	}
