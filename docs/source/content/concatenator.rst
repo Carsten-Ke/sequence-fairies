@@ -10,8 +10,7 @@ Concatenates alignments into a single alignment!
 Use cases
 =========
 
-* A typical case is to concatenate alignments of 1-1 orthologs to create a large alignment that will be used to reconstruct
-a species phylogeny
+* A typical case is to concatenate alignments of 1-1 orthologs to create a large alignment that will be used to reconstruct a species phylogeny
 
 =======
 Options
@@ -42,9 +41,17 @@ General options
     
    The file ending to use together with the :option:`--directory` option. (*default: .fa*)
 
-.. option:: -f, --fill-gaps
+.. option:: -l, --lenient
 
     If a sequence is missing the it will be filled with gaps.
+
+.. option:: -p <STRINGS>, --pattern <STRINGS>
+
+    For each sequence to concatenate a pattern is provided that is found in the sequence name
+
+.. option:: -D CHAR, --delimiter CHAR
+   
+   Delimiter to use, if none is provided the whole sequence name is used
 
 .. option:: -o, --out <FILE>
 

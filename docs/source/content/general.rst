@@ -14,7 +14,7 @@ Programs
 
 Currently the following programs are included:
 
-* :ref:`dsmReader` - A program to extract domain similarity values from a DomainSimilarityMatrix (DSM)
+* :ref:`concatenator` - A program to concatenate alignments
 * :ref:`extractDomains` - Can extract the domain sequences from proteins sequences
 * :ref:`seqCheck` -    Can remove stop codons from protein sequence sets.
 * :ref:`isoformCleaner <isoformCleaner>` - Removes isoforms from a sequence set and keeps only the longest one.
