@@ -1,0 +1,34 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Sequence-Fairies
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Carsten
+    family-names: Kemena
+    email: c.kemena@uni-muenster.de
+    affiliation: University Münster
+    orcid: 'https://orcid.org/0000-0002-2416-9842'
+repository-code: >-
+  https://zivgitlab.uni-muenster.de/domain-world/sequence-fairies
+abstract: >-
+  A software suite that contains a couple of small programs
+  to help with sequence data:
+
+  - extraction of (sub)sequences
+
+  - cleaning of isoforms
+
+  - cleaning of stop codons and other problem causing
+  characters
+
+  - concatenation of alignments
+keywords:
+  - Bioinformatics
+  - protein sequences
+  - isoforms
+license: GPL-3.0
