@@ -24,13 +24,13 @@ jobs:
     
     # install dependencies
     - name: boost
-      run: sudo apt-get update && sudo apt-get install -yq libboost-all-dev
+      run: sudo apt-get update && sudo apt-get install -yq libboost-filesystem-dev libboost-iostreams-dev libboost-program-options-dev libboost-test-dev libboost-system-dev libboost-log-dev
 
     - name: bats
       run: |
         wget https://github.com/bats-core/bats-core/archive/refs/tags/v1.10.0.tar.gz
         tar xf v1.10.0.tar.gz
-        sudo bash ./bats-core-1.10.0/install.sh
+        sudo bash ./bats-core-1.10.0/install.sh /usr/local
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
