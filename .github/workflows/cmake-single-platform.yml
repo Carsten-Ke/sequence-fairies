@@ -25,6 +25,12 @@ jobs:
     # install dependencies
     - name: boost
       run: sudo apt-get update && sudo apt-get install -yq libboost-all-dev
+
+    - name: bats
+      run: |
+        wget https://github.com/bats-core/bats-core/archive/refs/tags/v1.10.0.tar.gz
+        tar xf v1.10.0.tar.gz
+        sudo bash ./bats-core-1.10.0/install.sh
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
@@ -34,9 +40,14 @@ jobs:
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-    - name: Test
+    - name: Unit-Test
       working-directory: ${{github.workspace}}/build
       # Execute tests defined by the CMake configuration.
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest -C ${{env.BUILD_TYPE}}
+
+    - name: Integration-Test
+      working-directory: ${{github.workspace}}/tests/integrationTests
+      run: ./run_all_tests.sh
+      
 
