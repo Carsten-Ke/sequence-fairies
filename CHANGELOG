@@ -1,1 +1,19 @@
+0.9.0
+=====
 
+Initial release
+
+
+0.9.1
+=====
+
+concatenator
+------------
+
+bugfixes:
+- missing gaps in lenient mode in some cases
+- sequence names were sometimes the original names in the first alignment instead of only the matching parts
+
+improvements:
+- better documentation
+- added examples

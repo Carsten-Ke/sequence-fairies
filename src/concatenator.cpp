@@ -151,8 +151,8 @@ void concatenate(BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::Seque
         }
         if (seq->length() > max_size)
         {
-            max_size = seqSet1.back().length();
-        } 
+            max_size = seq->length();
+        }
     }
 
     for (auto &seq : seqSet1)

@@ -41,10 +41,10 @@ bats_require_minimum_version 1.5.0
     run -0 ../../build/concatenator -i data/concatenator/aln3.fasta data/concatenator/aln1.fa -l
     [ ${lines[0]} = ">A" ]
     [ ${lines[1]} = "aaaaaaaaa" ]
-    [ ${lines[2]} = ">G" ]
-    [ ${lines[3]} = "gggggg---" ]
-    [ ${lines[4]} = ">C" ]
-    [ ${lines[5]} = "ccccccccc" ]
+    [ ${lines[2]} = ">C" ]
+    [ ${lines[3]} = "ccccccccc" ]
+    [ ${lines[4]} = ">G" ]
+    [ ${lines[5]} = "gggggg---" ]
 
     run -1 ../../build/concatenator -i data/concatenator/aln3.fasta data/concatenator/aln1.fa
     [[  "$output" = "Error! Sequence 'G' not contained in file: data/concatenator/aln1.fa" ]]
@@ -80,5 +80,14 @@ bats_require_minimum_version 1.5.0
 
     run -1 ../../build/concatenator -i data/concatenator/aln1.fa data/concatenator/aln4.fasta
     [ "$output" = "Error! Duplicated sequence name 'A' in file 'data/concatenator/aln4.fasta' found!" ]
+
+    run -1 ../../build/concatenator
+    [ "$output" = "Error! No input files provided!" ]
+
+    run -1 ../../build/concatenator -d data/concatenator/ -e .x
+    [ "$output" = "Error! No input files found matching your criteria!" ]
+
+    run -1  ../../build/concatenator -d x
+    [ "$output" = "Error! 'x' is not a directory!" ]
 }
 
