@@ -7,13 +7,11 @@ Initial release
 0.9.1
 =====
 
-concatenator
-------------
-
 bugfixes:
-- missing gaps in lenient mode in some cases
-- sequence names were sometimes the original names in the first alignment instead of only the matching parts
+- [concatenator] missing gaps in lenient mode in some cases
+- [concatenator] sequence names were sometimes the original names in the first alignment instead of only the matching parts
 
 improvements:
-- better documentation
-- added examples
+- [concatenator] better documentation
+- [concatenator] added examples
+- [general] Changed CMake to download BioSeqDataLib even if sequence-fairies is not a git repository itself

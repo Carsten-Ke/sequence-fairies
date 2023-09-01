@@ -12,12 +12,10 @@ DW-Helper (v1.1.0) is a small program suite containaing different applications t
 Programs
 ===============
 
-Currently the following programs are included:
-
 * :ref:`concatenator` - A program to concatenate alignments
 * :ref:`extractDomains` - Can extract the domain sequences from proteins sequences
 * :ref:`seqCheck` - Cleans your data set. For example it can remove stop codons from protein sequences
-* :ref:`isoformCleaner <isoformCleaner>` - Removes isoforms from a sequence set and keeps only the longest one.
+* :ref:`isoformCleaner` - Removes isoforms from a sequence set and keeps only the longest one.
 * :ref:`seqExtract` -   Program to extract sequences and sequence segments
 
 

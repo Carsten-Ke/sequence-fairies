@@ -19,26 +19,20 @@ ADD_DEFINITIONS( "-DHAS_BOOST" )
 
 
 
-find_package(Git QUIET)
-if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
-# Update submodules as needed
-    option(GIT_SUBMODULE "Check submodules during build" ON)
-    if(GIT_SUBMODULE)
-        message(STATUS "Submodule update")
-        execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
-                        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                        RESULT_VARIABLE GIT_SUBMOD_RESULT)
-        if(NOT GIT_SUBMOD_RESULT EQUAL "0")
-            message(FATAL_ERROR "git submodule update --init --recursive failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
-        endif()
-    endif()
+include(FetchContent)
+FetchContent_Declare(
+  BioSeqDataLib
+  GIT_REPOSITORY https://zivgitlab.uni-muenster.de/domain-world/BioSeqDataLib.git
+  GIT_TAG        9fc59488048ada25e0dbb9f4bfbbed609fe0ebf9
+  SOURCE_DIR     ${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib
+)
+
+message("Downloading BioSeqDataLib")
+FetchContent_GetProperties(BioSeqDataLib)
+if(NOT BioSeqDataLib_POPULATED)
+    FetchContent_Populate(BioSeqDataLib)
 endif()
-
-if(NOT EXISTS "${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib/CMakeLists.txt")
-    message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
-endif()
-
-
+message("Done")
 
 SET(CMAKE_CXX_FLAGS_COVERAGE
     "-g -O0 --coverage -fprofile-arcs -ftest-coverage -fno-inline -fno-inline-small-functions -fno-default-inline"
@@ -71,7 +65,6 @@ if( NOT CMAKE_BUILD_TYPE )
 endif()
 
 
-message(${PROJECT_SOURCE_DIR})
 configure_file("${PROJECT_SOURCE_DIR}/src/cmake_generated/project_version.h.in" 
                "${PROJECT_SOURCE_DIR}/src/cmake_generated/project_version.h"
 )

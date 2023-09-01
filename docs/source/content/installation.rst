@@ -12,7 +12,7 @@ We try to keep the dependencies as few as possible. Current dependencies are:
 
  * BioSeqDataLib (https://zivgitlab.uni-muenster.de/domain-world/BioSeqDataLib.git) (can be added as git submodule)
  * boost (http://www.boost.org)
- * compiler with c++11 and OpenMP support
+ * compiler with c++20 and OpenMP support
 
 --------
 Download
@@ -28,32 +28,22 @@ The easiest way to download the most recent version of DW-Helper is to use ``git
 
 .. code-block:: bash
 
-    git clone https://zivgitlab.uni-muenster.de/domain-world/dw-helper.git
-    cd dw-helper
-    git submodule init
-    git submodule update
+    git clone https://zivgitlab.uni-muenster.de/domain-world/sequence-fairies.git
+    cd  sequence-fairies
 
-
-If you want to update to a newer version you can simply run the following command:
-
-.. code-block:: bash
-
-  git pull
-  git submodule update --recursive --remote
-
-Do not forget to recompile the program after this step.
 
 ------------
 Installation
 ------------
 
-The executables of dw-helper can be compiled using the following command inside the root directory of the project.
+The executables of dw-helper can be compiled using the following command inside the root directory of the project. It will automatically download the necessary
+submodules.
 
 .. code-block:: bash
  
-  mkdir build
-  cd build
+  mkdir build && cd build
   cmake ..
   make
 
-This command creates the executables within the build directory.
+
+This command creates the executables within the build directory. You can copy them to any place.
