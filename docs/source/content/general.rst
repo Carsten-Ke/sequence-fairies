@@ -16,14 +16,21 @@ Currently the following programs are included:
 
 * :ref:`concatenator` - A program to concatenate alignments
 * :ref:`extractDomains` - Can extract the domain sequences from proteins sequences
-* :ref:`seqCheck` -    Can remove stop codons from protein sequence sets.
+* :ref:`seqCheck` - Cleans your data set. For example it can remove stop codons from protein sequences
 * :ref:`isoformCleaner <isoformCleaner>` - Removes isoforms from a sequence set and keeps only the longest one.
 * :ref:`seqExtract` -   Program to extract sequences and sequence segments
+
+
+.. image:: ../images/graphicalOverview.png
+  :width: 100%
+  :alt: Graphical representation of the program
+
+
 
 ===============
 Contact
 ===============
 
-If you have any problems, questions or suggestions concerning this program please contact us: domainWorld@uni-muenster.de
+If you have any problems, questions or suggestions concerning this programs please contact us: domainWorld@uni-muenster.de
 
 

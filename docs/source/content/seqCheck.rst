@@ -7,14 +7,21 @@ seqCheck
 
 
 Unfortunately sometimes protein sequences sets may contain stop characters (usually '*' or '.'). In many programs those chars will cause problems. stopCleaner can help you with this. The default settings
-will simply remove stopc chars at the end of a sequence. But there are other options that allow you to take care of stop chars in the middle of sequences as well.
+will simply remove stop chars at the end of a sequence. But there are other options that allow you to take care of stop chars in the middle of sequences as well.
+
+
+
+.. image:: ../images/seqCheck.png
+  :width: 100%
+  :alt: Graphical representation of the program
+
 
 .. warning::
 
-    This program allows you to fastly clean a sequence file so that issues that can cause problems are solved. However, you sould have a look at what caused the issues to appear in the first place.
+    This program allows you to fastly clean a sequence file so that issues that can cause problems are solved. However, you should have a look at what caused the issues to appear in the first place.
     
 
-If you decide to correct the problems, the following order is applied:
+If you decide to correct all problems, the following order is applied:
 
 1. end stops
 2. all other stops

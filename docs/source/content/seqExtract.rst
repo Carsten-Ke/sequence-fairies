@@ -6,6 +6,11 @@ seqExtract
 
 seqExtract is a program to extract sequences or subsequences from a given set. For large sequence files it has the option to build a index of a file for faster future access.
 
+.. image:: ../images/seqExtract.png
+  :width: 100%
+  :alt: Graphical representation of the program
+
+
 ============
 Options
 ============

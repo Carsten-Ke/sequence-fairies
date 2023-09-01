@@ -6,15 +6,16 @@ concatenator
 
 Concatenates alignments into a single alignment!
 
+.. image:: ../images/aln.svg
+  :width: 100%
+  :alt: Graphical representation of the program
+
 =========
 Use cases
 =========
 
 * A typical case is to concatenate alignments of 1-1 orthologs to create a large alignment that will be used to reconstruct a species phylogeny
 
-.. image:: ../images/aln.svg
-  :width: 100%
-  :alt: Alternative text
 
 
 =======

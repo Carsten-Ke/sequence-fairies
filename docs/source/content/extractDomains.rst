@@ -7,7 +7,9 @@ extractDomains
 The purpose of this program is to extract the protein sequences of domains. The input is a domain annotation and the sequences from which to extract the domains.
 
 
-
+.. image:: ../images/extractDomains.png
+  :width: 100%
+  :alt: Graphical representation of the program
 
 =======
 Options

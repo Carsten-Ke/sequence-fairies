@@ -7,6 +7,10 @@ isoformCleaner
 Often proteomes contain annotated isoforms. While in general this is a good thing, is some cases that might cause problems (e.g. when estimating the quality of a proteome with DOGMA (https://domainworld.uni-muenster.de/programs/dogma/)). In such cases it is a common approach to only keep the longest isoform of a protein and remove the others from the set. Unfortunately, there is no
 general agreement on how to mark isoforms. However, this program tries to handle the most common ways.
 
+.. image:: ../images/isoforms.png
+  :width: 100%
+  :alt: Graphical representation of the program
+
 ============
 Options
 ============
