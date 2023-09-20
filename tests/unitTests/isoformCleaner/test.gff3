@@ -1,0 +1,16 @@
+#!genome-build example
+NW_019718022.1	example	gene	1	2000	.	+	.	ID=gene-1
+NW_019718022.1	example	mRNA	1	2000	.	+	.	ID=rna-1;Parent=gene-1
+NW_019718022.1	example	exon	1	10	.	+	.	ID=exon-XM_023848848.2-1;Parent=rna-1;
+NW_019718022.1	example	CDS	15	19	.	+	0	ID=cds-XP_023704616.1;Parent=rna-1;
+NW_019718022.1	example	CDS	25	30	.	+	0	ID=cds-XP_023704616.2;Parent=rna-1;
+NW_019718022.1	example	mRNA	1	2000	.	+	.	ID=rna-2;Parent=gene-1;
+NW_019718022.1	example	CDS	5	19	.	+	0	ID=cds-XP_023704616.3;Parent=rna-2;
+NW_019718022.1	example	CDS	25	30	.	+	0	ID=cds-XP_023704616.4;Parent=rna-2;
+NW_019718022.1	example	CDS	5	19	.	+	0	ID=cds-XP_023704616.3;Parent=rna-4;
+NW_019718022.1	example	CDS	25	30	.	+	0	ID=cds-XP_023704616.4;Parent=rna-4;
+NW_019718022.1	example	CDS	15	19	.	+	0	ID=cds-XP_023704616.1;Parent=rna-3;
+NW_019718022.1	example	CDS	25	30	.	+	0	ID=cds-XP_023704616.2;Parent=rna-3;
+NW_019718022.1	example	mRNA	1	2000	.	+	.	ID=rna-4;Parent=gene-2;
+NW_019718022.1	example	mRNA	1	2000	.	+	.	ID=rna-3;Parent=gene-2
+NW_019718022.1	example	gene	1	2000	.	+	.	ID=gene-2
