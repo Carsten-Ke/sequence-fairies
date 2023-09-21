@@ -23,7 +23,7 @@ include(FetchContent)
 FetchContent_Declare(
   BioSeqDataLib
   GIT_REPOSITORY https://zivgitlab.uni-muenster.de/domain-world/BioSeqDataLib.git
-  GIT_TAG        9fc59488048ada25e0dbb9f4bfbbed609fe0ebf9
+  GIT_TAG        69ab2ab5ad1012b4cefcdf76e3791201edeba6db
   SOURCE_DIR     ${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib
 )
 
@@ -73,6 +73,7 @@ configure_file("${PROJECT_SOURCE_DIR}/src/cmake_generated/project_version.h.in"
 set (BSDL_PATH ${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib/src/)
 set (BSDL_src ${BSDL_PATH}utility/Input.cpp 
     ${BSDL_PATH}utility/Output.cpp
+    ${BSDL_PATH}gff/GFFRecord.cpp
     ${BSDL_PATH}domain/Domain.cpp
     ${BSDL_PATH}domain/PfamDomain.cpp
     ${BSDL_PATH}domain/DomainExt.cpp

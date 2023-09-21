@@ -7,4 +7,6 @@
 #include <boost/test/unit_test.hpp>
 
 #include "identifyName_Test.hpp"
+#include "gff_Test.hpp"
 #include "isoformCleaner_Test.hpp"
+
