@@ -45,6 +45,30 @@ The general options influence the general behaviour of isoformCleaner:
     List the number of sequences in the input, the output and difference between the two.
 
 
+GFF options
+-----------
+
+The GFF options allows you to provide a GFF file. The structure of the GFF file needs to follow the offical format. It 
+requires entries for at least 3 levels (gene, mRNA and CDS). Given that in my experience naming those three levels might
+sometimes defer from this, you can change the naming using the level options. Upper- and lowercase doesn't 
+matter. 
+
+.. option:: -g <FILE>, --gffFILE <FILE>
+
+    The gff file that will be used to identify isoforms.
+
+.. option:: --level1 <AEG> 
+
+    Top level type (default: 'gene')
+
+.. option:: --level2 <AEG> 
+
+    Middle level type (default: 'mRNA')
+
+.. option:: --level3 <AEG> 
+
+    Low level type (default: 'CDS')
+
 
 Regex options
 -------------

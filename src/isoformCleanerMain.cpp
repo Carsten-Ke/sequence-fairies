@@ -54,7 +54,7 @@ int main (int argc, char *argv[])
 	std::string level1,level2,level3;
 	po::options_description gffOpts("GFF options");
 	gffOpts.add_options()
-		("gffFile,g", po::value<fs::path>(&gffFile)->default_value("")->value_name("FILE"), "A GFF file")
+		("gffFile,g", po::value<fs::path>(&gffFile)->value_name("FILE"), "A GFF file")
 		("level1", po::value<std::string>(&level1)->default_value("gene"), "Level 1 term")
 		("level2", po::value<std::string>(&level2)->default_value("mRNA"), "Level 2 term")	
 		("level3", po::value<std::string>(&level3)->default_value("CDS"), "Level 3 term")
