@@ -17,6 +17,7 @@
 
 #include "../libs/BioSeqDataLib/src/sequence/Sequence.hpp"
 #include "../libs/BioSeqDataLib/src/sequence/SequenceSet.hpp"
+#include "identifyName.hpp"
 
 namespace BSDL = BioSeqDataLib;
  
@@ -28,6 +29,7 @@ class IsoformCleaner
 {
 
 private:
+   
 
     struct Isoform
     {
@@ -37,7 +39,7 @@ private:
         size_t value;
     };
 
-    std::function<std::pair<std::string, bool>(BSDL::Sequence)> geneNameIdenification_;
+    std::function<std::pair<std::string, ISOFORM_STATUS>(BSDL::Sequence)> geneNameIdenification_;
     std::map<std::string, Isoform> isoformMap_;
 
     size_t warningCounter_;
@@ -109,7 +111,7 @@ public:
      * 
      * @param geneNameID The function to use for geneName identification
      */
-    void setGeneNameIdentifcator(std::function<std::pair<std::string, bool>(BSDL::Sequence)> geneNameID)
+    void setGeneNameIdentifcator(std::function<std::pair<std::string, ISOFORM_STATUS>(BSDL::Sequence)> geneNameID)
     {
         geneNameIdenification_ = geneNameID;
     }

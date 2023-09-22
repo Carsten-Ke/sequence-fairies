@@ -20,7 +20,7 @@ BOOST_AUTO_TEST_CASE( isoform_Test )
     seqSet.emplace_back("seq3", "ACGTCT", "B7", "test sequence");
 
     IsoformCleaner isocleaner;
-    std::function<std::pair<std::string, bool>(BSDL::Sequence)> nameFunc =  std::bind(splitCharIdentifier, std::placeholders::_1, '-');
+    std::function<std::pair<std::string, ISOFORM_STATUS>(BSDL::Sequence)> nameFunc =  std::bind(splitCharIdentifier, std::placeholders::_1, '-');
 	isocleaner.setGeneNameIdentifcator(nameFunc);
     auto cleanedSet = isocleaner.clean(seqSet);
 

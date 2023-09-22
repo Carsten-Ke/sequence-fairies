@@ -29,6 +29,7 @@
 #include "cmake_generated/project_version.h"
 #include "isoformCleaner.hpp"
 #include "identifyName.hpp"
+#include "GFFParser.hpp"
 
 namespace fs = std::filesystem;
 namespace po = boost::program_options;
@@ -49,6 +50,17 @@ int main (int argc, char *argv[])
 		("summary", po::value<bool>(&summary)->default_value(false)->zero_tokens(), "Displays a summary of the result")
 	;
 
+	fs::path gffFile;
+	std::string level1,level2,level3;
+	po::options_description gffOpts("GFF options");
+	gffOpts.add_options()
+		("gffFile", po::value<fs::path>(&gffFile)->default_value("")->value_name("FILE"), "A GFF file")
+		("level1", po::value<std::string>(&level1)->default_value("gene"), "Level 1 term")
+		("level2", po::value<std::string>(&level2)->default_value("mRNA"), "Level 2 term")	
+		("level3", po::value<std::string>(&level3)->default_value("CDS"), "Level 3 term")
+	;
+
+
 	std::string regex, preset;
 	bool searchComment, searchName;
 	po::options_description regexOpts("Regex options");
@@ -61,7 +73,7 @@ int main (int argc, char *argv[])
 
     std::string project_version(std::string(PROJECT_VERSION));
 	po::options_description visibleOpts("isoformCleaner " + project_version + " (C) 2019-2022  Carsten Kemena\nThis program comes with ABSOLUTELY NO WARRANTY;\n\nAllowed options are displayed below");
-	visibleOpts.add(general).add(regexOpts);
+	visibleOpts.add(general).add(gffOpts).add(regexOpts);
 
 	try
 	{
@@ -97,6 +109,14 @@ int main (int argc, char *argv[])
 	}
 
 	IsoformCleaner isocleaner;
+	std::set<std::string> names;
+	if (!gffFile.empty())
+	{
+		auto genes = readGFF(gffFile, level1, level2, level3);
+		names = longest(genes);
+	}
+	
+
 	if (!preset.empty())
 	{
 		std::map<std::string, std::string> presetRegex = {{"flybase","parent=(FBgn[^ ,]+,)"}, {"gene"," gene[:=]\\s*([\\S]+)[\\s]*"}};
@@ -108,15 +128,20 @@ int main (int argc, char *argv[])
 		}
 	}
 
-	if (regex.empty())
+	if (!gffFile.empty())
 	{
-		std::function<std::pair<std::string, bool>(BSDL::Sequence)> nameFunc =  std::bind(splitCharIdentifier, std::placeholders::_1, splitChar);
+		std::function<std::pair<std::string, ISOFORM_STATUS>(BSDL::Sequence)> nameFunc =  std::bind(nameIdentifier, std::placeholders::_1, names);
+		isocleaner.setGeneNameIdentifcator(nameFunc);
+	} 
+	else if (regex.empty())
+	{
+		std::function<std::pair<std::string, ISOFORM_STATUS>(BSDL::Sequence)> nameFunc =  std::bind(splitCharIdentifier, std::placeholders::_1, splitChar);
 		isocleaner.setGeneNameIdentifcator(nameFunc);
 	}
 	else
 	{
 		const std::regex e(regex);
-		std::function<std::pair<std::string, bool>(BSDL::Sequence)> nameFunc =  std::bind(regexIdentifier, std::placeholders::_1, e, searchComment, searchName);
+		std::function<std::pair<std::string, ISOFORM_STATUS>(BSDL::Sequence)> nameFunc =  std::bind(regexIdentifier, std::placeholders::_1, e, searchComment, searchName);
 		isocleaner.setGeneNameIdentifcator(nameFunc);
 	}
 

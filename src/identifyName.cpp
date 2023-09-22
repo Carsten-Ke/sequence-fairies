@@ -15,20 +15,20 @@
 
 namespace BSDL = BioSeqDataLib;
 
-std::pair<std::string, bool>
+std::pair<std::string, ISOFORM_STATUS>
 splitCharIdentifier(const BSDL::Sequence &seq, char splitChar)
 {
 	std::string seqName = seq.name();
 	size_t pos = seqName.rfind(splitChar);
-	bool splitFound = true;
+	ISOFORM_STATUS splitFound = ISOFORM_STATUS::MATCH;
 	if (pos == std::string::npos)
 	{
-		splitFound = false;
+		splitFound = ISOFORM_STATUS::NOMATCH;
 	}
-	return std::pair<std::string, bool>(seqName.substr(0, pos), splitFound);
+	return std::pair<std::string, ISOFORM_STATUS>(seqName.substr(0, pos), splitFound);
 }
 
-std::pair<std::string, bool>
+std::pair<std::string, ISOFORM_STATUS>
 regexIdentifier(const BSDL::Sequence &seq, const std::regex regEx, bool searchComment, bool searchName)
 {
 	std::smatch what;
@@ -43,9 +43,9 @@ regexIdentifier(const BSDL::Sequence &seq, const std::regex regEx, bool searchCo
 		else
 			target = seqName + " " + seq.comment();
 	}
-	bool found = regex_search(target, what, regEx);
+	ISOFORM_STATUS status = regex_search(target, what, regEx) ? ISOFORM_STATUS::MATCH : ISOFORM_STATUS::NOMATCH;
 	std::string geneName;
-	if (found)
+	if (status == ISOFORM_STATUS::MATCH)
 	{
 		geneName = what[1];
 	}
@@ -53,5 +53,14 @@ regexIdentifier(const BSDL::Sequence &seq, const std::regex regEx, bool searchCo
 	{
 		geneName = seqName;
 	}
-	return std::pair<std::string, bool>(geneName, found);
+	return std::pair<std::string, ISOFORM_STATUS>(geneName, status);
+}
+
+
+std::pair<std::string, ISOFORM_STATUS>
+nameIdentifier(const BSDL::Sequence &seq, const std::set<std::string> &names)
+{
+	std::string seqName = seq.name();
+	auto itEnd = names.end();
+	return std::pair<std::string, ISOFORM_STATUS>(seqName, (names.find(seqName) != itEnd) ? ISOFORM_STATUS::KEEP : ISOFORM_STATUS::REMOVE );
 }

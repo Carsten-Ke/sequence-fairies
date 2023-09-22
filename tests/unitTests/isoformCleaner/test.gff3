@@ -14,3 +14,21 @@ NW_019718022.1	example	CDS	25	30	.	+	0	ID=cds-XP_023704616.2;Parent=rna-3;
 NW_019718022.1	example	mRNA	1	2000	.	+	.	ID=rna-4;Parent=gene-2;
 NW_019718022.1	example	mRNA	1	2000	.	+	.	ID=rna-3;Parent=gene-2
 NW_019718022.1	example	gene	1	2000	.	+	.	ID=gene-2
+
+NW_019718022.1	example	gene	1	2000	.	+	.	ID=gene-3
+NW_019718022.1	example	mRNA	1	2000	.	+	.	ID=rna-5;Parent=gene-3
+NW_019718022.1	example	mRNA	1	2000	.	+	.	ID=rna-6;Parent=gene-3
+NW_019718022.1	example	mRNA	1	2000	.	+	.	ID=rna-7;Parent=gene-3
+NW_019718022.1	example	CDS	12	19	.	+	0	ID=cds-XP_023704616.1;Parent=rna-5;
+NW_019718022.1	example	CDS	15	19	.	+	0	ID=cds-XP_023704616.1;Parent=rna-6;
+NW_019718022.1	example	CDS	15	19	.	+	0	ID=cds-XP_023704616.1;Parent=rna-7;
+NW_019718022.1	example	CDS	25	40	.	+	0	ID=cds-XP_023704616.2;Parent=rna-5,rna-7;
+
+NW_019718022.1	example	CDS	12	19	.	+	0	ID=cds-XP_023704616.1;Parent=rna-8;
+NW_019718022.1	example	CDS	15	19	.	+	0	ID=cds-XP_023704616.1;Parent=rna-9;
+NW_019718022.1	example	CDS	15	19	.	+	0	ID=cds-XP_023704616.1;Parent=rna-10;
+NW_019718022.1	example	CDS	25	40	.	+	0	ID=cds-XP_023704616.2;Parent=rna-8,rna-10;
+NW_019718022.1	example	mRNA	1	2000	.	+	.	ID=rna-8;Parent=gene-4
+NW_019718022.1	example	mRNA	1	2000	.	+	.	ID=rna-9;Parent=gene-4
+NW_019718022.1	example	mRNA	1	2000	.	+	.	ID=rna-10;Parent=gene-4
+NW_019718022.1	example	gene	1	2000	.	+	.	ID=gene-4

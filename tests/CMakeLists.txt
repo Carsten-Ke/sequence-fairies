@@ -1,6 +1,6 @@
 
 SET(isoformCleanertests_src ./unitTests/isoformCleaner/isoformCleaner_tests.cpp ${BSDL_src} ../src/identifyName.cpp ../src/GFFParser.cpp 
-../src/isoformCleaner.cpp
+../src/isoformCleaner.cpp ../src/GFFParser.cpp
 )
 SET(isoformCleanertests_exe isoformCleaner-Test)
 ADD_EXECUTABLE(${isoformCleanertests_exe} ${isoformCleanertests_src})

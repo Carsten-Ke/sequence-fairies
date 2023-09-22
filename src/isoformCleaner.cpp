@@ -12,10 +12,14 @@ IsoformCleaner::identifyIsoforms_(const BSDL::SequenceSet &seqSet)
     {
         auto const seq = seqSet[i];
         auto const result = geneNameIdenification_(seq);
-        if (!result.second)
+        if (result.second == ISOFORM_STATUS::NOMATCH)
         {
             std::cerr << "Warning! Sequence '" << seq.name() << "' retained because no isoform scheme matched\n";
             ++ warningCounter_;
+        }
+        if (result.second == ISOFORM_STATUS::REMOVE)
+        {
+            continue;
         }
         auto it = isoformMap_.find(result.first);
         if (it == isoformMap_.end())

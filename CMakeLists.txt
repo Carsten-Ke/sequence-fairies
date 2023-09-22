@@ -115,6 +115,7 @@ target_link_libraries(${seqExtract_exe}
 ######## ISOFORMCLEANER #############
 
 SET(isoformCleaner_src 
+    ${PROJECT_SOURCE_DIR}/src/GFFParser.cpp
     ${PROJECT_SOURCE_DIR}/src/identifyName.cpp 
     ${PROJECT_SOURCE_DIR}/src/isoformCleaner.cpp 
     ${PROJECT_SOURCE_DIR}/src/isoformCleanerMain.cpp ${BSDL_src}
