@@ -40,6 +40,16 @@ bats_require_minimum_version 1.5.0
 	rm regex.fa
 }
 
+@test "gff-cleaning" {
+    run ../../build/isoformCleaner -i data/isoformCleaner/gff3.fasta -o gff.fa
+	[ $status == 0 ]
+	
+	run diff gff.fa data/isoformCleaner/gff3_result.fasta
+	[ $status == 0 ]
+	
+	rm gff.fa
+}
+
 
 @test "file-opening-errors" {
     run ../../build/isoformCleaner -i xxx -o splitChar.fa
