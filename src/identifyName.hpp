@@ -22,7 +22,7 @@
 
 namespace BSDL = BioSeqDataLib;
 
- enum class ISOFORM_STATUS{MATCH, NOMATCH, KEEP, REMOVE};
+enum class ISOFORM_STATUS{MATCH, NOMATCH, KEEP, REMOVE};
 
 /**
  * @brief 

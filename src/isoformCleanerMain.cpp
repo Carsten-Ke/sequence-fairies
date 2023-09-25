@@ -146,6 +146,13 @@ int main (int argc, char *argv[])
 	}
 
 	auto outSet = isocleaner.clean(seqSet);
+	if (outSet.size() < names.size())
+	{
+		std::cerr << "Error: GFF file contains entries not found in the sequence file!\n";
+		exit(EXIT_FAILURE);
+	}
+
+
 	try
 	{
 		if (outFile.empty())

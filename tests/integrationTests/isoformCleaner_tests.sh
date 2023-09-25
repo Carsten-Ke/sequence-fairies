@@ -41,13 +41,17 @@ bats_require_minimum_version 1.5.0
 }
 
 @test "gff-cleaning" {
-    run ../../build/isoformCleaner -i data/isoformCleaner/gff3.fasta -o gff.fa
+    run ../../build/isoformCleaner -i data/isoformCleaner/gff3.fasta -g data/isoformCleaner/gff3.gff3 -o gff.fa
 	[ $status == 0 ]
 	
 	run diff gff.fa data/isoformCleaner/gff3_result.fasta
 	[ $status == 0 ]
 	
 	rm gff.fa
+
+	run ! ../../build/isoformCleaner -i data/isoformCleaner/gff3.fasta -g data/isoformCleaner/missing.gff3
+	 [ "$output" == "Error: GFF file contains entries not found in the sequence file!" ]
+
 }
 
 
