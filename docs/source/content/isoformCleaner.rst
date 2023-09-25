@@ -53,6 +53,9 @@ requires entries for at least 3 levels (gene, mRNA and CDS). Given that in my ex
 sometimes defer from this, you can change the naming using the level options. Upper- and lowercase doesn't 
 matter. 
 
+I strongly recommend that the protein file was generated using the GFF file as I experienced often enougth that otherwise
+downloaded files don't agree with each other.
+
 .. option:: -g <FILE>, --gffFILE <FILE>
 
     The gff file that will be used to identify isoforms.
