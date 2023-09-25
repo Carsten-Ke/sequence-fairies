@@ -80,7 +80,8 @@ readGFF(const std::filesystem::path &fileName, std::string level1, std::string l
             }
             else
             {
-                std::cerr << "ERROR-2!\n";
+                std::cerr << "Error! No parent found for " << parent << "!\n";
+                exit(EXIT_FAILURE);
             }
         }
     }
@@ -93,10 +94,10 @@ readGFF(const std::filesystem::path &fileName, std::string level1, std::string l
             res->second->addTranscriptLength(elem.first, elem.second);
         } else
         {
-            std::cerr << "ERROR!-3 " << elem.first << "\n";
+            std::cerr << "Error! No parent found for " << elem.first << "!\n";
+            exit(EXIT_FAILURE);
         }
     }
-
     return genes;
 }
 
