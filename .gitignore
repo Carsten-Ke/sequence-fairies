@@ -4,6 +4,8 @@ build
 # CMAKE semantig version file
 /src/cmake_generated/project_version.h
 
+
+/libs
 # vscode
 .vscode
 
