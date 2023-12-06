@@ -24,7 +24,7 @@ We try to keep the dependencies as little as possible. Current dependencies are:
 - libbz2
 
 
-You will also need the BioSeqDataLib (https://zivgitlab.uni-muenster.de/domain-world/BioSeqDataLib), but this one can simply be acquired using the git submodule system when running cmake.
+You will also need the BioSeqDataLib (https://zivgitlab.uni-muenster.de/domain-world/BioSeqDataLib), but this will be downloaded automatically when you run cmake
 
 Download
 --------

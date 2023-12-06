@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15.0)
-project(sequence-fairies VERSION 0.9.1 LANGUAGES CXX)
+project(sequence-fairies VERSION 1.0.0 LANGUAGES CXX)
 
 ### FIND BOOST LIBRARY COMPONENTS
 
@@ -23,7 +23,7 @@ include(FetchContent)
 FetchContent_Declare(
   BioSeqDataLib
   GIT_REPOSITORY https://zivgitlab.uni-muenster.de/domain-world/BioSeqDataLib.git
-  GIT_TAG        69ab2ab5ad1012b4cefcdf76e3791201edeba6db
+  GIT_TAG        5b56e9b56e488898d2de387d13bdbe4aad5da8bd
   SOURCE_DIR     ${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib
 )
 
