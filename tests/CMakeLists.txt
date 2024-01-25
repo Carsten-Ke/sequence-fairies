@@ -14,3 +14,10 @@ ADD_EXECUTABLE(${concatenatortests_exe} ${concatenatortests_src})
 target_link_libraries(${concatenatortests_exe}
 	${Boost_LIBRARIES}
 )
+
+SET(gffStatisticstests_src ./unitTests/gffStatistics/gffStatistics_tests.cpp ${BSDL_src} ../src/SummaryStatistics.cpp)
+SET(gffStatisticstests_exe gffStatistics-Test)
+ADD_EXECUTABLE(${gffStatisticstests_exe} ${gffStatisticstests_src})
+target_link_libraries(${gffStatisticstests_exe}
+	${Boost_LIBRARIES}
+)

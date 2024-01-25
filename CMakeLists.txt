@@ -96,6 +96,22 @@ set (BSDL_src ${BSDL_PATH}utility/Input.cpp
     ${BSDL_PATH}utility/WeightedInterval_util.cpp
 )
 
+######## GFFSTASTICS #############
+
+SET(gffStatistics_src
+    ${PROJECT_SOURCE_DIR}/src/gffStatistics.cpp 
+    ${PROJECT_SOURCE_DIR}/src/SummaryStatistics.cpp 
+    ${PROJECT_SOURCE_DIR}/src/gffStatisticsMain.cpp ${BSDL_src}
+)
+
+
+SET(gffStatistics_exe gffStatistics)
+ADD_EXECUTABLE(${gffStatistics_exe} ${gffStatistics_src})
+target_link_libraries(${gffStatistics_exe}
+	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
+)
+
+
 ######## SEQEXTRACT #############
 
 SET(seqExtract_src 
@@ -183,6 +199,7 @@ if (WITH_UNIT_TEST)
 	enable_testing ()
 	add_test (NAME isoformCleanerTest COMMAND isoformCleaner-Test)
     add_test (NAME concatenatorTest COMMAND concatenator-Test)
+    add_test (NAME gffStatisticsTest COMMAND gffStatistics-Test)
 endif ()
 
 
