@@ -1,0 +1,23 @@
+##gff-version 3
+seq1	-	gene	1	100	.	-	.	ID=gene-1;
+seq1	-	mRNA	5	95	.	-	.	ID=mRNA-1-gene-1;
+seq1	-	exon	6	10	.	-	.	ID=exon-1-mRNA-1-gene-1;Parent=mRNA-1-gene-1;
+seq1	-	CDS	6	10	.	-	.	ID=CDS-1-mRNA-1-gene-1;Parent=mRNA-1-gene-1;
+seq1	-	exon	20	40	.	-	.	ID=exon-2-mRNA-1-gene-1;Parent=mRNA-1-gene-1;
+seq1	-	CDS	20	23	.	-	.	ID=CDS-2-mRNA-1-gene-1;Parent=mRNA-1-gene-1;
+seq1	-	mRNA	5	95	.	-	.	ID=mRNA-2-gene-1;
+seq1	-	exon	6	10	.	-	.	ID=exon-1-mRNA-2-gene-1;Parent=mRNA-2-gene-1;
+seq1	-	CDS	6	10	.	-	.	ID=CDS-1-mRNA-2-gene-1;Parent=mRNA-2-gene-1;
+seq1	-	exon	20	40	.	-	.	ID=exon-2-mRNA-2-gene-1;Parent=mRNA-2-gene-1
+seq1	-	CDS	20	23	.	-	.	ID=CDS-2-mRNA-2-gene-1;Parent=mRNA-2-gene-1;
+seq1	-	gene	1	100	.	-	.	ID=gene-2;
+seq1	-	mRNA	5	95	.	-	.	ID=mRNA-1-gene-2;
+seq1	-	exon	6	10	.	-	.	ID=exon-1-mRNA-1-gene-2;Parent=mRNA-1-gene-2;
+seq1	-	CDS	6	10	.	-	.	ID=CDS-1-mRNA-1-gene-2;Parent=mRNA-1-gene-2;
+seq1	-	exon	20	40	.	-	.	ID=exon-2-mRNA-1-gene-2;Parent=mRNA-1-gene-2;
+seq1	-	CDS	20	23	.	-	.	ID=CDS-2-mRNA-1-gene-2;Parent=mRNA-1-gene-2;
+seq1	-	mRNA	5	95	.	-	.	ID=mRNA-2-gene-2;
+seq1	-	exon	6	10	.	-	.	ID=exon-1-mRNA-2-gene-2;Parent=mRNA-2-gene-2;
+seq1	-	CDS	6	10	.	-	.	ID=CDS-1-mRNA-2-gene-2;Parent=mRNA-2-gene-2;
+seq1	-	exon	20	41	.	-	.	ID=exon-2-mRNA-2-gene-2;Parent=mRNA-2-gene-2
+seq1	-	CDS	20	26	.	-	.	ID=CDS-2-mRNA-2-gene-2;Parent=mRNA-2-gene-2;

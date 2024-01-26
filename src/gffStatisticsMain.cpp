@@ -82,13 +82,15 @@ int main (int argc, char *argv[])
 
     try
 	{
-        std::cout << "file\tnGenes\tavgGene\tmedianGene\tnExons\tavgExon\tmedianExon\tnProteins" << "\n";
+        std::cout << "file\tnGenes\tavgGene\tmedianGene\tnExons\tavgExon\tmedianExon\tnCDS\tavgCDS\tmedianCDS" << "\n";
         for (auto file : gffFiles)
         {
             auto stats = createGFFStatistics(file);
-            std::cout << file.string() << "\t" << stats.nGenes()  << "\t" << stats.averageGeneLength()  << "\t" <<
-             stats.medianGeneLength() << "\t" << stats.nExons()  << "\t" << stats.averageExonLength()  << "\t" <<
-             stats.medianExonLength() << "\t" << stats.nProteins() << "\n";
+            std::cout << file.string() << "\t" << 
+            stats.nGenes() << "\t" << stats.averageGeneLength()  << "\t" << stats.medianGeneLength() << "\t" << 
+            stats.nExons() << "\t" << stats.averageExonLength()  << "\t" << stats.medianExonLength() << "\t" << 
+            stats.nProteins() << "\t" << stats.averageProteinLength()  << "\t" << stats.medianProteinLength() 
+             << "\n";
             
         }
 	}
