@@ -93,6 +93,11 @@ size_t nGenes()
     return geneLengths.size();
 }
 
+std::vector<long> getProteinLengths()
+{
+	return proteinLengths;
+}
+
 private:
 
     double calculateAverage(const std::vector<long> &values);

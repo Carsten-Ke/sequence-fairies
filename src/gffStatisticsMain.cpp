@@ -27,6 +27,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include <functional>
+#include <iomanip>
 #include <iostream>
 #include <map>
 #include <regex>
@@ -36,10 +37,9 @@
 #include <boost/program_options.hpp>
 
 // BSDL header
-
+#include "../libs/BioSeqDataLib/src/utility/Output.hpp"
 
 #include "gffStatistics.hpp"
-
 #include "cmake_generated/project_version.h"
 
 
@@ -50,12 +50,13 @@ namespace po = boost::program_options;
 int main (int argc, char *argv[])
 {
 	std::vector<fs::path> gffFiles;
-    fs::path outFile;
+    fs::path prefix, itolFile;
 	po::options_description general("General options");
 	general.add_options()
 		("help,h", "Produces this help message")
 		("in,i", po::value<std::vector<fs::path> >(&gffFiles)->required()->multitoken()->value_name("FILE(S)"), "The sequence file")
-		("out,o", po::value<fs::path>(&outFile)->value_name("FILE"), "The output file")
+		("out,o", po::value<fs::path>(&prefix)->value_name("FILE")->required(), "The prefix for all output files")
+		("itol", po::value<fs::path>(%itolFile)->value_name("FILE"), "An iTOL datasets file")
 	;
 
     std::string project_version(std::string(PROJECT_VERSION));
@@ -82,17 +83,37 @@ int main (int argc, char *argv[])
 
     try
 	{
-        std::cout << "file\tnGenes\tavgGene\tmedianGene\tnExons\tavgExon\tmedianExon\tnCDS\tavgCDS\tmedianCDS" << "\n";
+
+	std::map<std::string, std::vector<long> > proteinLengths;
+        auto summaryName = std::filesystem::path(prefix.string() + "summary.txt");
+        BioSeqDataLib::Output out(summaryName);
+        out << "file\tnGenes\tavgGene\tmedianGene\tnExons\tavgExon\tmedianExon\tnCDS\tavgCDS\tmedianCDS" << "\n";
+        out << std::fixed << std::setprecision(2);
+	if (!itolFile.empty())
+	{
+		iFile.open
+	}
+
         for (auto file : gffFiles)
         {
             auto stats = createGFFStatistics(file);
-            std::cout << file.string() << "\t" << 
+            out << file.filename() << "\t" << 
             stats.nGenes() << "\t" << stats.averageGeneLength()  << "\t" << stats.medianGeneLength() << "\t" << 
             stats.nExons() << "\t" << stats.averageExonLength()  << "\t" << stats.medianExonLength() << "\t" << 
-            stats.nProteins() << "\t" << stats.averageProteinLength()  << "\t" << stats.medianProteinLength() 
-             << "\n";
-            
+            stats.nProteins() << "\t" << stats.averageProteinLength()  << "\t" << stats.medianProteinLength() << "\n";
+	    proteinLengths[file.filename()] = stats.getProteinLengths();
         }
+	auto protName = std::filesystem::path(prefix.string() + "proteinLengths.txt");
+	BioSeqDataLib::Output outF(protName);
+	for (auto elem : proteinLengths)
+	{
+		outF << elem.first; 
+		for (auto value : elem.second)
+		{
+		outF << " " << value / 3;
+		}
+		outF << "\n";	
+	}
 	}
 	catch(std::ios_base::failure &exception)
 	{
@@ -102,3 +123,4 @@ int main (int argc, char *argv[])
 
     return EXIT_SUCCESS;
 }
+
