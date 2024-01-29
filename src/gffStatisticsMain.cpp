@@ -56,7 +56,7 @@ int main (int argc, char *argv[])
 		("help,h", "Produces this help message")
 		("in,i", po::value<std::vector<fs::path> >(&gffFiles)->required()->multitoken()->value_name("FILE(S)"), "The sequence file")
 		("out,o", po::value<fs::path>(&prefix)->value_name("FILE")->required(), "The prefix for all output files")
-		("itol", po::value<fs::path>(%itolFile)->value_name("FILE"), "An iTOL datasets file")
+		("itol", po::value<fs::path>(&itolFile)->value_name("FILE"), "An iTOL datasets file")
 	;
 
     std::string project_version(std::string(PROJECT_VERSION));
@@ -83,17 +83,13 @@ int main (int argc, char *argv[])
 
     try
 	{
-
-	std::map<std::string, std::vector<long> > proteinLengths;
+		std::map<std::string, std::vector<long> > proteinLengths;
         auto summaryName = std::filesystem::path(prefix.string() + "summary.txt");
         BioSeqDataLib::Output out(summaryName);
         out << "file\tnGenes\tavgGene\tmedianGene\tnExons\tavgExon\tmedianExon\tnCDS\tavgCDS\tmedianCDS" << "\n";
         out << std::fixed << std::setprecision(2);
-	if (!itolFile.empty())
-	{
-		iFile.open
-	}
 
+		std::map<std::string, SummaryStatistics> allStats;
         for (auto file : gffFiles)
         {
             auto stats = createGFFStatistics(file);
@@ -101,19 +97,36 @@ int main (int argc, char *argv[])
             stats.nGenes() << "\t" << stats.averageGeneLength()  << "\t" << stats.medianGeneLength() << "\t" << 
             stats.nExons() << "\t" << stats.averageExonLength()  << "\t" << stats.medianExonLength() << "\t" << 
             stats.nProteins() << "\t" << stats.averageProteinLength()  << "\t" << stats.medianProteinLength() << "\n";
-	    proteinLengths[file.filename()] = stats.getProteinLengths();
+		    proteinLengths[file.filename()] = stats.getProteinLengths();
+			allStats.emplace(file.stem(), stats);
         }
-	auto protName = std::filesystem::path(prefix.string() + "proteinLengths.txt");
-	BioSeqDataLib::Output outF(protName);
-	for (auto elem : proteinLengths)
-	{
-		outF << elem.first; 
-		for (auto value : elem.second)
+		auto protName = std::filesystem::path(prefix.string() + "proteinLengths.txt");
+		BioSeqDataLib::Output outF(protName);
+		for (auto elem : proteinLengths)
 		{
-		outF << " " << value / 3;
+			outF << elem.first; 
+			for (auto value : elem.second)
+			{
+			outF << " " << value / 3;
+			}
+			outF << "\n";	
 		}
-		outF << "\n";	
-	}
+
+		if (!itolFile.empty())
+		{
+			BioSeqDataLib::Output itolF(itolFile);
+			itolF << "DATASET_SIMPLEBAR\n";
+			itolF << "SEPARATOR COMMA\n";
+			itolF << "DATASET_LABEL,GFFStatistics\n";
+			itolF << "COLOR,#375e97\n";
+			itolF << "FIELD_LABELS,Number of genes, number of proteins, avg. geneLength\n";
+			itolF <<"DATA\n";
+			for (auto elemPair : allStats)
+			{
+				auto &stat = elemPair.second;
+				itolF << elemPair.first << "," << stat.nGenes() << "," << stat.nProteins() << "," << stat.averageProteinLength() << ";\n";
+			}
+		}
 	}
 	catch(std::ios_base::failure &exception)
 	{
