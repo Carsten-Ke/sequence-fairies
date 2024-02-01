@@ -101,6 +101,7 @@ set (BSDL_src ${BSDL_PATH}utility/Input.cpp
 SET(gffStatistics_src
     ${PROJECT_SOURCE_DIR}/src/gffStatistics.cpp 
     ${PROJECT_SOURCE_DIR}/src/SummaryStatistics.cpp 
+    ${PROJECT_SOURCE_DIR}/src/ITOLWriter.cpp
     ${PROJECT_SOURCE_DIR}/src/gffStatisticsMain.cpp ${BSDL_src}
 )
 

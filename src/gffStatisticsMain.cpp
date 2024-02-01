@@ -40,6 +40,7 @@
 #include "../libs/BioSeqDataLib/src/utility/Output.hpp"
 
 #include "gffStatistics.hpp"
+#include "ITOLWriter.hpp"
 #include "cmake_generated/project_version.h"
 
 
@@ -50,13 +51,14 @@ namespace po = boost::program_options;
 int main (int argc, char *argv[])
 {
 	std::vector<fs::path> gffFiles;
-    fs::path prefix, itolFile;
+    fs::path outFolder;
+    bool createITOLOutput;
 	po::options_description general("General options");
 	general.add_options()
 		("help,h", "Produces this help message")
 		("in,i", po::value<std::vector<fs::path> >(&gffFiles)->required()->multitoken()->value_name("FILE(S)"), "The sequence file")
-		("out,o", po::value<fs::path>(&prefix)->value_name("FILE")->required(), "The prefix for all output files")
-		("itol", po::value<fs::path>(&itolFile)->value_name("FILE"), "An iTOL datasets file")
+		("out,o", po::value<fs::path>(&outFolder)->value_name("FOLDER")->required(), "A folder where all data will be saved in")
+		("iTOL", po::bool_switch(&createITOLOutput), "Create output for iTOL")
 	;
 
     std::string project_version(std::string(PROJECT_VERSION));
@@ -84,9 +86,9 @@ int main (int argc, char *argv[])
     try
 	{
 		std::map<std::string, std::vector<long> > proteinLengths;
-        auto summaryName = std::filesystem::path(prefix.string() + "summary.txt");
+        auto summaryName = outFolder / "summary.txt";
         BioSeqDataLib::Output out(summaryName);
-        out << "file\tnGenes\tavgGene\tmedianGene\tnExons\tavgExon\tmedianExon\tnCDS\tavgCDS\tmedianCDS" << "\n";
+        out << "file\tnGenes\tavgGene\tmedianGene\tnExons\tavgExon\tmedianExon\tnCDS\tavgCDS\tmedianCDS\tavgIntron\tmedianIntron" << "\n";
         out << std::fixed << std::setprecision(2);
 
 		std::map<std::string, SummaryStatistics> allStats;
@@ -96,36 +98,55 @@ int main (int argc, char *argv[])
             out << file.filename() << "\t" << 
             stats.nGenes() << "\t" << stats.averageGeneLength()  << "\t" << stats.medianGeneLength() << "\t" << 
             stats.nExons() << "\t" << stats.averageExonLength()  << "\t" << stats.medianExonLength() << "\t" << 
-            stats.nProteins() << "\t" << stats.averageProteinLength()  << "\t" << stats.medianProteinLength() << "\n";
+            stats.nProteins() << "\t" << stats.averageProteinLength()  << "\t" << stats.medianProteinLength() 
+			<< "\t" << stats.averageIntronLength()  << "\t" << stats.medianIntronLength() 
+			<< "\n";
+
 		    proteinLengths[file.filename()] = stats.getProteinLengths();
 			allStats.emplace(file.stem(), stats);
         }
-		auto protName = std::filesystem::path(prefix.string() + "proteinLengths.txt");
+		auto protName = std::filesystem::path(outFolder / "proteinLengths.txt");
 		BioSeqDataLib::Output outF(protName);
 		for (auto elem : proteinLengths)
 		{
 			outF << elem.first; 
 			for (auto value : elem.second)
 			{
-			outF << " " << value / 3;
+			    outF << " " << value / 3;
 			}
 			outF << "\n";	
 		}
 
-		if (!itolFile.empty())
+		if (createITOLOutput)
 		{
-			BioSeqDataLib::Output itolF(itolFile);
-			itolF << "DATASET_SIMPLEBAR\n";
-			itolF << "SEPARATOR COMMA\n";
-			itolF << "DATASET_LABEL,GFFStatistics\n";
-			itolF << "COLOR,#375e97\n";
-			itolF << "FIELD_LABELS,Number of genes, number of proteins, avg. geneLength\n";
-			itolF <<"DATA\n";
+            auto itolDir = outFolder / "iTOL";
+            std::filesystem::create_directories(itolDir);
+            std::map<std::string, std::vector<ITOLValueSet> > itolValues;
+            itolValues["nGenes"] = std::vector<ITOLValueSet>();
+            itolValues["nProteins"] = std::vector<ITOLValueSet>();
+            itolValues["avgProteinLength"] = std::vector<ITOLValueSet>();
+            itolValues["medianProteinLength"] = std::vector<ITOLValueSet>();
 			for (auto elemPair : allStats)
 			{
 				auto &stat = elemPair.second;
-				itolF << elemPair.first << "," << stat.nGenes() << "," << stat.nProteins() << "," << stat.averageProteinLength() << ";\n";
+                itolValues["nGenes"].emplace_back(elemPair.first, stat.nGenes(), "");
+                itolValues["nProteins"].emplace_back(elemPair.first, stat.nProteins(), "");
+                itolValues["avgProteinLength"].emplace_back(elemPair.first, stat.averageProteinLength(), "");
+                itolValues["medianProteinLength"].emplace_back(elemPair.first, stat.medianProteinLength(), "");
 			}
+
+            ITOLWriter itolW(itolDir / "geneNumber.txt", "# genes", "#2a4d69");
+            itolW.writeValues(itolValues["nGenes"]);
+            itolW.close();
+            ITOLWriter itolW2(itolDir / "proteinNumber.txt", "# proteins", "#4b86b4");
+            itolW2.writeValues(itolValues["nProteins"]);
+            itolW2.close();
+            ITOLWriter itolW3(itolDir / "avgProteinLength.txt", "avg protein length", "#abcbe3");
+            itolW3.writeValues(itolValues["avgProteinLength"]);
+            itolW3.close();
+            ITOLWriter itolW4(itolDir / "medianProteinLength.txt", "median protein length", "#e7eff6");
+            itolW4.writeValues(itolValues["medianProteinLength"]);
+            itolW4.close();
 		}
 	}
 	catch(std::ios_base::failure &exception)

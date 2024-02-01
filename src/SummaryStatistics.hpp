@@ -48,6 +48,11 @@ void addExonLength(long value)
     exonLengths.emplace_back(value);
 }
 
+void addIntronLength(long value)
+{
+    intronLengths.emplace_back(value);
+}
+
 double averageGeneLength()
 {
     return calculateAverage(geneLengths);
@@ -78,6 +83,16 @@ double medianProteinLength()
     return calculateMedian(proteinLengths);
 }
 
+double averageIntronLength()
+{
+    return calculateAverage(intronLengths);
+}
+
+double medianIntronLength()
+{
+    return calculateMedian(intronLengths);
+}
+
 size_t nProteins()
 {
     return proteinLengths.size();
@@ -98,6 +113,12 @@ std::vector<long> getProteinLengths()
 	return proteinLengths;
 }
 
+std::vector<long> getIntronLengths()
+{
+	return intronLengths;
+}
+
+
 private:
 
     double calculateAverage(const std::vector<long> &values);
@@ -106,6 +127,7 @@ private:
     std::vector<long> geneLengths;
     std::vector<long> proteinLengths;
     std::vector<long> exonLengths;
+    std::vector<long> intronLengths;
 
 };
 

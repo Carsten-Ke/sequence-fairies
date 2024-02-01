@@ -377,7 +377,7 @@ main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	if ((!ignoreMissing) && (!remove))// && (!re))
+	if ((!ignoreMissing) && (!remove))
 	{
 		bool foundProblem = false;
 		for (auto &name : nameSet)

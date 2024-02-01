@@ -6,7 +6,30 @@
 
 #include <vector>
 #include <ranges>
+#include <algorithm>
+#include <iostream>
 
+void
+calcIntronLengths(SummaryStatistics &stats, const std::string &mRNA, std::vector<BioSeqDataLib::GFFRecord> &gene)
+{
+    std::ranges::sort(gene);
+    std::string seqName = gene.front().seqID;
+    char phase = gene.front().phase;
+    for (const auto &exon : gene)
+    {
+        if ((exon.seqID != seqName) || (exon.phase != phase))
+        {
+            std::cerr << "Couldn't calculate intron size for mRNA: " << mRNA << "\n";
+            return;
+        }
+    }
+
+    for (size_t i=1; i<gene.size(); ++i)
+    {
+        auto intronLength = gene[i].positions.start() - gene[i-1].positions.end()-1;
+        stats.addIntronLength(intronLength);
+    }
+}
 
 SummaryStatistics
 createGFFStatistics(const std::filesystem::path &fileName)
@@ -15,6 +38,7 @@ createGFFStatistics(const std::filesystem::path &fileName)
     BioSeqDataLib::Input gffFile(fileName);
     std::string line;
     std::map<std::string, std::vector<BioSeqDataLib::Interval> > CDScollection;
+    std::map<std::string, std::vector<BioSeqDataLib::GFFRecord> > exonCollection;
     while (BioSeqDataLib::getline(gffFile, line))
     {
         if (line.empty() || (line[0] == '#'))
@@ -25,6 +49,10 @@ createGFFStatistics(const std::filesystem::path &fileName)
         if (record.type == "exon")
         {
             stats.addExonLength(record.length());
+            for (auto parent : record.parents)
+            {
+                exonCollection[parent].emplace_back(record);
+            }
         }
         else if (record.type == "gene")
         {
@@ -43,6 +71,11 @@ createGFFStatistics(const std::filesystem::path &fileName)
         }
     }
     
+    for (auto &mRNA : exonCollection)
+    {
+        calcIntronLengths(stats, mRNA.first, mRNA.second);
+    }
+    
     for (auto mRNA : CDScollection)
     {
         size_t length = 0;
@@ -53,6 +86,7 @@ createGFFStatistics(const std::filesystem::path &fileName)
         }
         stats.addProteinLength(length);
     }
+
 
     return stats;
 }
