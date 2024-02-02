@@ -27,7 +27,7 @@ calcIntronLengths(SummaryStatistics &stats, const std::string &mRNA, std::vector
     for (size_t i=1; i<gene.size(); ++i)
     {
         auto intronLength = gene[i].positions.start() - gene[i-1].positions.end()-1;
-        stats.addIntronLength(intronLength);
+        stats.addValue("intron", intronLength);
     }
 }
 
@@ -48,15 +48,15 @@ createGFFStatistics(const std::filesystem::path &fileName)
         BioSeqDataLib::GFFRecord record(line);
         if (record.type == "exon")
         {
-            stats.addExonLength(record.length());
+            stats.addValue("exon", record.length());
             for (auto parent : record.parents)
             {
-                exonCollection[parent].emplace_back(record);
+                exonCollection[parent].push_back(record);
             }
         }
         else if (record.type == "gene")
         {
-            stats.addGeneLength(record.length());
+            stats.addValue("gene", record.length());
         }
         else if (record.type == "CDS")
         {
@@ -84,7 +84,7 @@ createGFFStatistics(const std::filesystem::path &fileName)
         {
             length += CDS.length();
         }
-        stats.addProteinLength(length);
+        stats.addValue("protein", length);
     }
 
 

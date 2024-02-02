@@ -92,21 +92,23 @@ int main (int argc, char *argv[])
         out << std::fixed << std::setprecision(2);
 
 		std::map<std::string, SummaryStatistics> allStats;
+		std::vector<std::string> ids = {"gene", "cds", "exon", "intron"};
         for (auto file : gffFiles)
         {
-            auto stats = createGFFStatistics(file);
-            out << file.filename() << "\t" << 
-            stats.nGenes() << "\t" << stats.averageGeneLength()  << "\t" << stats.medianGeneLength() << "\t" << 
-            stats.nExons() << "\t" << stats.averageExonLength()  << "\t" << stats.medianExonLength() << "\t" << 
-            stats.nProteins() << "\t" << stats.averageProteinLength()  << "\t" << stats.medianProteinLength() 
-			<< "\t" << stats.averageIntronLength()  << "\t" << stats.medianIntronLength() 
-			<< "\n";
-
-		    proteinLengths[file.filename()] = stats.getProteinLengths();
+			auto stats = createGFFStatistics(file);
+            out << file.filename();
+			for (auto id : ids)
+			{
+				out << "\t" << stats.nValues(id) << "\t" << stats.average(id) << "\t" << stats.median(id);
+			}
+			out << "\n";
 			allStats.emplace(file.stem(), stats);
+			proteinLengths[file.filename()] = stats.getValues("protein");
         }
 		auto protName = std::filesystem::path(outFolder / "proteinLengths.txt");
+		
 		BioSeqDataLib::Output outF(protName);
+		
 		for (auto elem : proteinLengths)
 		{
 			outF << elem.first; 
@@ -129,10 +131,10 @@ int main (int argc, char *argv[])
 			for (auto elemPair : allStats)
 			{
 				auto &stat = elemPair.second;
-                itolValues["nGenes"].emplace_back(elemPair.first, stat.nGenes(), "");
-                itolValues["nProteins"].emplace_back(elemPair.first, stat.nProteins(), "");
-                itolValues["avgProteinLength"].emplace_back(elemPair.first, stat.averageProteinLength(), "");
-                itolValues["medianProteinLength"].emplace_back(elemPair.first, stat.medianProteinLength(), "");
+                itolValues["nGenes"].emplace_back(elemPair.first, stat.nValues("gene"), "");
+                itolValues["nProteins"].emplace_back(elemPair.first, stat.nValues("protein"), "");
+                itolValues["avgProteinLength"].emplace_back(elemPair.first, stat.average("protein"), "");
+                itolValues["medianProteinLength"].emplace_back(elemPair.first, stat.median("protein"), "");
 			}
 
             ITOLWriter itolW(itolDir / "geneNumber.txt", "# genes", "#2a4d69");

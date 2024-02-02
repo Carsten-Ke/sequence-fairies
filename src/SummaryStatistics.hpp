@@ -27,108 +27,52 @@
 #ifndef SUMMARYSTATISTICS_HPP_
 #define SUMMARYSTATISTICS_HPP_
 
+#include <map>
+#include <string>
 #include <vector>
+
 
 class SummaryStatistics
 {
 public:
-        
-void addProteinLength(long value)
-{
-    proteinLengths.emplace_back(value);
-}
 
-void addGeneLength(long value)
-{
-    geneLengths.emplace_back(value);
-}
+    
+    void
+    addValue(const std::string &id, long value)
+    {
+        values[id].emplace_back(value);
+    }
 
-void addExonLength(long value)
-{
-    exonLengths.emplace_back(value);
-}
+    size_t
+    nValues(const std::string &id) const
+    {
+        return values.at(id).size();
+    }
 
-void addIntronLength(long value)
-{
-    intronLengths.emplace_back(value);
-}
+    const std::vector<long>
+    getValues(const std::string &id) const
+    {
+        return values.at(id);
+    }
 
-double averageGeneLength()
-{
-    return calculateAverage(geneLengths);
-}
+    double
+    average(const std::string &id) const
+    {
+        return calculateAverage(values.at(id));
+    }
 
-double medianGeneLength()
-{
-    return calculateMedian(geneLengths);
-}
-
-double averageExonLength()
-{
-    return calculateAverage(exonLengths);
-}
-
-double medianExonLength()
-{
-    return calculateMedian(exonLengths);
-}
-
-double averageProteinLength()
-{
-    return calculateAverage(proteinLengths);
-}
-
-double medianProteinLength()
-{
-    return calculateMedian(proteinLengths);
-}
-
-double averageIntronLength()
-{
-    return calculateAverage(intronLengths);
-}
-
-double medianIntronLength()
-{
-    return calculateMedian(intronLengths);
-}
-
-size_t nProteins()
-{
-    return proteinLengths.size();
-}
-
-size_t nExons()
-{
-    return exonLengths.size();
-}
-
-size_t nGenes()
-{
-    return geneLengths.size();
-}
-
-std::vector<long> getProteinLengths()
-{
-	return proteinLengths;
-}
-
-std::vector<long> getIntronLengths()
-{
-	return intronLengths;
-}
-
+    double
+    median(const std::string &id)
+    {
+        return calculateMedian(values[id]);
+    }
 
 private:
 
-    double calculateAverage(const std::vector<long> &values);
+    double calculateAverage(const std::vector<long> &values) const;
     double calculateMedian(std::vector<long> &values);
 
-    std::vector<long> geneLengths;
-    std::vector<long> proteinLengths;
-    std::vector<long> exonLengths;
-    std::vector<long> intronLengths;
-
+    std::map<std::string, std::vector<long> > values;
 };
 
 #endif

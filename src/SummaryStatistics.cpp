@@ -29,7 +29,7 @@
 
 
 double
-SummaryStatistics::calculateAverage(const std::vector<long> &values)
+SummaryStatistics::calculateAverage(const std::vector<long> &values) const
 {
     if(values.empty())
     {
