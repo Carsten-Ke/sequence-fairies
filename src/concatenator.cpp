@@ -135,7 +135,7 @@ void concatenate(BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::Seque
 {
     auto currentLength = seqSet1[0].length();
     size_t max_size = 0;
-    BioSeqDataLib::Sequence *seq;
+    BioSeqDataLib::Sequence *seq = nullptr;
     for (auto &match : matches)
     {
         if (match.first == -1)
