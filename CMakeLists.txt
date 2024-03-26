@@ -1,29 +1,23 @@
 cmake_minimum_required(VERSION 3.15.0)
 project(sequence-fairies VERSION 1.0.0 LANGUAGES CXX)
 
+if(CMAKE_PROJECT_NAME STREQUAL BioSeqDataLib)
+  include(CTest)
+endif()
+
+
 ### FIND BOOST LIBRARY COMPONENTS
 
-
-if (WITH_UNIT_TEST)
-FIND_PACKAGE(Boost 1.70 COMPONENTS log log_setup system program_options iostreams unit_test_framework REQUIRED)
-else (WITH_UNIT_TEST)
-FIND_PACKAGE(Boost 1.70 COMPONENTS log log_setup system program_options iostreams REQUIRED)
-endif(WITH_UNIT_TEST)
+FIND_PACKAGE(Boost 1.74 COMPONENTS log log_setup system program_options iostreams unit_test_framework REQUIRED)
 
 find_package(ZLIB REQUIRED)
 find_package(BZip2 REQUIRED)
-
-INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIR})
-link_directories(${Boost_LIBRARY_DIRS})
-ADD_DEFINITIONS( "-DHAS_BOOST" )
-
-
 
 include(FetchContent)
 FetchContent_Declare(
   BioSeqDataLib
   GIT_REPOSITORY https://zivgitlab.uni-muenster.de/domain-world/BioSeqDataLib.git
-  GIT_TAG        5487139a72807c45c129559705a2a67f6944cc9a
+  GIT_TAG        bac1c000ecbdb7301dfc1907a92756009852e436
   SOURCE_DIR     ${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib
 )
 
@@ -56,9 +50,6 @@ MARK_AS_ADVANCED(
     CMAKE_EXE_LINKER_FLAGS_COVERAGE
     CMAKE_SHARED_LINKER_FLAGS_COVERAGE )
 
-
-set(CMAKE_CXX_FLAGS "-std=c++20 -Wall -Wextra -Wunused -pedantic")
-
 if( NOT CMAKE_BUILD_TYPE )
   set( CMAKE_BUILD_TYPE Release CACHE STRING
        "Choose the type of build, options are: Debug Coverage Release RelWithDebInfo MinSizeRel." FORCE )
@@ -69,7 +60,7 @@ configure_file("${PROJECT_SOURCE_DIR}/src/cmake_generated/project_version.h.in"
                "${PROJECT_SOURCE_DIR}/src/cmake_generated/project_version.h"
 )
 
-#include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
 set (BSDL_PATH ${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib/src/)
 set (BSDL_src ${BSDL_PATH}utility/Input.cpp 
     ${BSDL_PATH}utility/Output.cpp
@@ -108,6 +99,8 @@ SET(gffStatistics_src
 
 SET(gffStatistics_exe gffStatistics)
 ADD_EXECUTABLE(${gffStatistics_exe} ${gffStatistics_src})
+target_include_directories(${gffStatistics_exe} PUBLIC ${Boost_INCLUDE_DIR})
+target_compile_options(${gffStatistics_exe} PRIVATE -std=c++20 -Wall -Wextra -Wunused -pedantic)
 target_link_libraries(${gffStatistics_exe}
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
@@ -124,6 +117,8 @@ SET(seqExtract_src
 
 SET(seqExtract_exe seqExtract )
 ADD_EXECUTABLE(${seqExtract_exe} ${seqExtract_src})
+target_compile_options(${seqExtract_exe} PRIVATE -std=c++20 -Wall -Wextra -Wunused -pedantic)
+target_include_directories(${seqExtract_exe} PUBLIC ${Boost_INCLUDE_DIR})
 target_link_libraries(${seqExtract_exe}
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
@@ -141,6 +136,8 @@ SET(isoformCleaner_src
 
 SET(isoformCleaner_exe isoformCleaner )
 ADD_EXECUTABLE(${isoformCleaner_exe} ${isoformCleaner_src})
+target_compile_options(${isoformCleaner_exe} PRIVATE -std=c++20 -Wall -Wextra -Wunused -pedantic)
+target_include_directories(${isoformCleaner_exe} PUBLIC ${Boost_INCLUDE_DIR})
 target_link_libraries(${isoformCleaner_exe}
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
@@ -155,6 +152,8 @@ SET(concatenator_src
 
 SET(concatenator_exe concatenator)
 ADD_EXECUTABLE(${concatenator_exe} ${concatenator_src})
+target_compile_options(${concatenator_exe} PRIVATE -std=c++20 -Wall -Wextra -Wunused -pedantic)
+target_include_directories(${concatenator_exe} PUBLIC ${Boost_INCLUDE_DIR})
 target_link_libraries(${concatenator_exe}
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
@@ -169,6 +168,8 @@ SET(seqCheck_src
 
 SET(seqCheck_exe seqCheck)
 ADD_EXECUTABLE(${seqCheck_exe} ${seqCheck_src})
+target_compile_options(${seqCheck_exe} PRIVATE -std=c++20 -Wall -Wextra -Wunused -pedantic)
+target_include_directories(${seqCheck_exe} PUBLIC ${Boost_INCLUDE_DIR})
 target_link_libraries(${seqCheck_exe}
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
@@ -184,13 +185,21 @@ SET(extractDomains_src
 
 SET(extractDomains_exe extractDomains)
 ADD_EXECUTABLE(${extractDomains_exe} ${extractDomains_src})
+target_compile_options(${extractDomains_exe} PRIVATE -std=c++20 -Wall -Wextra -Wunused -pedantic)
+target_include_directories(${extractDomains_exe} PUBLIC ${Boost_INCLUDE_DIR})
 target_link_libraries(${extractDomains_exe}
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
 
-
 ######## TESTING #############
+
+
+if((CMAKE_PROJECT_NAME STREQUAL BioSeqDataLib OR MYPROJECT_BUILD_TESTING)
+   AND BUILD_TESTING)
+  enable_testing()
+  add_subdirectory(tests)
+endif()
 
 
 if (WITH_UNIT_TEST)
@@ -198,9 +207,6 @@ if (WITH_UNIT_TEST)
     enable_testing()
 	add_subdirectory (tests)
 	enable_testing ()
-	add_test (NAME isoformCleanerTest COMMAND isoformCleaner-Test)
-    add_test (NAME concatenatorTest COMMAND concatenator-Test)
-    add_test (NAME gffStatisticsTest COMMAND gffStatistics-Test)
 endif ()
 
 

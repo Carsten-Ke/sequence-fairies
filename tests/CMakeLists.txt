@@ -1,3 +1,6 @@
+add_test (NAME isoformCleanerTest COMMAND isoformCleaner-Test)
+add_test (NAME concatenatorTest COMMAND concatenator-Test)
+add_test (NAME gffStatisticsTest COMMAND gffStatistics-Test)
 
 SET(isoformCleanertests_src ./unitTests/isoformCleaner/isoformCleaner_tests.cpp ${BSDL_src} ../src/identifyName.cpp ../src/GFFParser.cpp 
 ../src/isoformCleaner.cpp ../src/GFFParser.cpp
