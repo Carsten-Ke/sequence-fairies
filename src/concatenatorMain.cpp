@@ -37,7 +37,7 @@
 // BSDL header
 #include "../libs/BioSeqDataLib/src/sequence/SequenceSet.hpp"
 #include "../libs/BioSeqDataLib/src/sequence/SeqSetIOManager.hpp"
-
+#include "../libs/BioSeqDataLib/src/utility/Output.hpp"
 
 #include "cmake_generated/project_version.h"
 #include "concatenator.hpp"

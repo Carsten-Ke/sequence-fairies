@@ -6,12 +6,12 @@ project(
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-#set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
 if (WITH_UNIT_TEST)
-FIND_PACKAGE(Boost 1.70 COMPONENTS log log_setup system program_options iostreams unit_test_framework REQUIRED)
+  FIND_PACKAGE(Boost 1.70 COMPONENTS log log_setup system program_options iostreams unit_test_framework REQUIRED)
 else (WITH_UNIT_TEST)
-FIND_PACKAGE(Boost 1.70 COMPONENTS log log_setup system program_options iostreams REQUIRED)
+  FIND_PACKAGE(Boost 1.70 COMPONENTS log log_setup system program_options iostreams REQUIRED)
 endif(WITH_UNIT_TEST)
 
 find_package(ZLIB REQUIRED)
@@ -26,11 +26,10 @@ include(FetchContent)
 FetchContent_Declare(
   BioSeqDataLib
   GIT_REPOSITORY https://zivgitlab.uni-muenster.de/domain-world/BioSeqDataLib.git
-  GIT_TAG        286548a9f93068ec2354f0a352f6a49158d96636
+  GIT_TAG        ac97ba15646e90c4ebf63487fe34ab5e7d528cbc
   SOURCE_DIR     ${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib
 )
 
-message("Downloading BioSeqDataLib")
 FetchContent_GetProperties(BioSeqDataLib)
 if(NOT BioSeqDataLib_POPULATED)
     FetchContent_MakeAvailable(BioSeqDataLib)
@@ -55,10 +54,9 @@ SET(CMAKE_SHARED_LINKER_FLAGS_COVERAGE
     FORCE )
 MARK_AS_ADVANCED(
     CMAKE_CXX_FLAGS_COVERAGE
-    #CMAKE_C_FLAGS_COVERAGE
     CMAKE_EXE_LINKER_FLAGS_COVERAGE
     CMAKE_SHARED_LINKER_FLAGS_COVERAGE )
-    #fmodules-ts
+    
 add_compile_options(-Wall -Wextra -Wpedantic)
 
 if( NOT CMAKE_BUILD_TYPE )
@@ -71,7 +69,6 @@ configure_file("${PROJECT_SOURCE_DIR}/src/cmake_generated/project_version.h.in"
                "${PROJECT_SOURCE_DIR}/src/cmake_generated/project_version.h"
 )
 
-#include_directories(${CMAKE_CURRENT_BINARY_DIR})
 set (BSDL_PATH ${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib/src/)
 set (BSDL_src 
     ${BSDL_PATH}utility/Input.cpp 
@@ -100,23 +97,33 @@ set (BSDL_src
 )
 
 ######## SEQEXTRACT #############
-add_library(seq)
+add_library(seq OBJECT)
 target_sources(seq
   PUBLIC
-    FILE_SET HEADERS FILES
-    ${BSDL_src}
     FILE_SET CXX_MODULES FILES
     ${PROJECT_SOURCE_DIR}/src/seqExtract.cpp 
 )
-set_property(TARGET seq PROPERTY CXX_STANDARD 20)
-set_property(TARGET seq PROPERTY CXX_STANDARD_REQUIRED ON)
-set_property(TARGET seq PROPERTY CXX_EXTENSIONS OFF)
 
-target_compile_features(seq PUBLIC cxx_std_20)
+add_library(seq-header OBJECT  ${BSDL_src})
+#target_sources(seq-header
+#  PUBLIC
+#    FILE_SET HEADERS FILES
+#    ${BSDL_src}
+#)
+
+
+#set_property(TARGET seq PROPERTY CXX_STANDARD 20)
+#set_property(TARGET seq PROPERTY CXX_STANDARD_REQUIRED ON)
+#set_property(TARGET seq PROPERTY CXX_EXTENSIONS OFF)
+set_property(TARGET seq-header PROPERTY CXX_STANDARD 20)
+set_property(TARGET seq-header PROPERTY CXX_STANDARD_REQUIRED ON)
+set_property(TARGET seq-header PROPERTY CXX_EXTENSIONS OFF)
+
+#target_compile_features(seq PUBLIC cxx_std_20)
 
 SET(seqExtract_exe seqExtract )
 ADD_EXECUTABLE(${seqExtract_exe} ${PROJECT_SOURCE_DIR}/src/seqExtractMain.cpp )
-target_link_libraries(${seqExtract_exe} PRIVATE seq
+target_link_libraries(${seqExtract_exe} PRIVATE seq $<TARGET_OBJECTS:seq-header>
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
@@ -127,12 +134,15 @@ SET(isoformCleaner_src
     ${PROJECT_SOURCE_DIR}/src/GFFParser.cpp
     ${PROJECT_SOURCE_DIR}/src/identifyName.cpp 
     ${PROJECT_SOURCE_DIR}/src/isoformCleaner.cpp 
-    ${PROJECT_SOURCE_DIR}/src/isoformCleanerMain.cpp ${BSDL_src}
+    ${PROJECT_SOURCE_DIR}/src/isoformCleanerMain.cpp 
 )
+
 
 
 SET(isoformCleaner_exe isoformCleaner )
 ADD_EXECUTABLE(${isoformCleaner_exe} ${isoformCleaner_src})
+target_sources(${isoformCleaner_exe} PRIVATE $<TARGET_OBJECTS:seq-header>)
+
 target_link_libraries(${isoformCleaner_exe}
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
@@ -141,27 +151,27 @@ target_link_libraries(${isoformCleaner_exe}
 
 SET(concatenator_src 
     ${PROJECT_SOURCE_DIR}/src/concatenator.cpp 
-    ${PROJECT_SOURCE_DIR}/src/concatenatorMain.cpp ${BSDL_src}
+    ${PROJECT_SOURCE_DIR}/src/concatenatorMain.cpp
 )
 
 
 SET(concatenator_exe concatenator)
 ADD_EXECUTABLE(${concatenator_exe} ${concatenator_src})
-target_link_libraries(${concatenator_exe}
+target_link_libraries(${concatenator_exe}  $<TARGET_OBJECTS:seq-header>
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
 ######## SEQCHECK #############
 
 SET(seqCheck_src 
-    ${PROJECT_SOURCE_DIR}/src/seqCheck.cpp 
-    ${PROJECT_SOURCE_DIR}/src/seqCheckMain.cpp ${BSDL_src}
+    ${PROJECT_SOURCE_DIR}/src/seqCheck.cpp  
+    ${PROJECT_SOURCE_DIR}/src/seqCheckMain.cpp
 )
 
 
 SET(seqCheck_exe seqCheck)
 ADD_EXECUTABLE(${seqCheck_exe} ${seqCheck_src})
-target_link_libraries(${seqCheck_exe}
+target_link_libraries(${seqCheck_exe}  $<TARGET_OBJECTS:seq-header>
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
@@ -170,13 +180,13 @@ target_link_libraries(${seqCheck_exe}
 
 SET(extractDomains_src 
     ${PROJECT_SOURCE_DIR}/src/extractDomains.cpp 
-    ${PROJECT_SOURCE_DIR}/src/extractDomainsMain.cpp ${BSDL_src}
+    ${PROJECT_SOURCE_DIR}/src/extractDomainsMain.cpp
 )
 
 
 SET(extractDomains_exe extractDomains)
 ADD_EXECUTABLE(${extractDomains_exe} ${extractDomains_src})
-target_link_libraries(${extractDomains_exe}
+target_link_libraries(${extractDomains_exe}  $<TARGET_OBJECTS:seq-header>
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
@@ -202,7 +212,7 @@ install(
     extractDomains
     isoformCleaner
     seqCheck
-    seqExtract
+ #   seqExtract
   DESTINATION
     bin
   )
