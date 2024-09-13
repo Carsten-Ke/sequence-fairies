@@ -23,14 +23,14 @@ include(FetchContent)
 FetchContent_Declare(
   BioSeqDataLib
   GIT_REPOSITORY https://zivgitlab.uni-muenster.de/domain-world/BioSeqDataLib.git
-  GIT_TAG        5b56e9b56e488898d2de387d13bdbe4aad5da8bd
+  GIT_TAG        ac97ba15646e90c4ebf63487fe34ab5e7d528cbc
   SOURCE_DIR     ${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib
 )
 
 message("Downloading BioSeqDataLib")
 FetchContent_GetProperties(BioSeqDataLib)
 if(NOT BioSeqDataLib_POPULATED)
-    FetchContent_Populate(BioSeqDataLib)
+    FetchContent_MakeAvailable(BioSeqDataLib)
 endif()
 message("Done")
 
