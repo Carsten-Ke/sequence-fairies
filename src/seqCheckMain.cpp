@@ -39,7 +39,7 @@
 #include "../libs/BioSeqDataLib/src/bio/Alphabet.hpp"
 #include "../libs/BioSeqDataLib/src/sequence/SequenceSet.hpp"
 #include "../libs/BioSeqDataLib/src/sequence/SeqSetIOManager.hpp"
-
+#include "../libs/BioSeqDataLib/src/utility/Output.hpp"
 // other
 #include "cmake_generated/project_version.h"
 #include "seqCheck.hpp"

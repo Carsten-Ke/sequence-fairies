@@ -28,13 +28,15 @@ module;
 #include <functional>
 #include <random>
 #include <set>
-#include "seqExtract.hpp"
+#include "../libs/BioSeqDataLib/src/sequence/Sequence.hpp"
+#include "../libs/BioSeqDataLib/src/sequence/SequenceSet.hpp"
+#include "../libs/BioSeqDataLib/src/sequence/SeqSetIOManager.hpp"
 #include "../libs/BioSeqDataLib/src/bio/GeneticCode.hpp"
 #include "../libs/BioSeqDataLib/src/utility/utility.hpp"
 
 export module seqExtract;
 
-typedef	std::multimap<std::string, std::vector< std::pair<size_t, size_t> > > Targets;
+export typedef	std::multimap<std::string, std::vector< std::pair<size_t, size_t> > > Targets;
 
 namespace fs = std::filesystem;
 namespace BSDL = BioSeqDataLib;

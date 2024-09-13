@@ -9,9 +9,19 @@
  * 
  */
 
+//module;
+
+#include <regex>
+#include <set>
+#include <string>
 #include <utility>
 
+#include "../libs/BioSeqDataLib/src/sequence/Sequence.hpp"
 #include "identifyName.hpp"
+
+//#export module isoformCleaner;
+
+//enum class ISOFORM_STATUS{MATCH, NOMATCH, KEEP, REMOVE};
 
 namespace BSDL = BioSeqDataLib;
 

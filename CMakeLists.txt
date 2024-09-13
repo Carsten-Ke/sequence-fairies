@@ -6,7 +6,8 @@ project(
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_SCAN_FOR_MODULES ON)
+#set(CMAKE_CXX_SCAN_FOR_MODULES ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 if (WITH_UNIT_TEST)
 FIND_PACKAGE(Boost 1.70 COMPONENTS log log_setup system program_options iostreams unit_test_framework REQUIRED)
 else (WITH_UNIT_TEST)
@@ -57,8 +58,8 @@ MARK_AS_ADVANCED(
     #CMAKE_C_FLAGS_COVERAGE
     CMAKE_EXE_LINKER_FLAGS_COVERAGE
     CMAKE_SHARED_LINKER_FLAGS_COVERAGE )
-
-add_compile_options(-Wall -fmodules-ts -Wextra -Wpedantic)
+    #fmodules-ts
+add_compile_options(-Wall -Wextra -Wpedantic)
 
 if( NOT CMAKE_BUILD_TYPE )
   set( CMAKE_BUILD_TYPE Release CACHE STRING
@@ -72,7 +73,8 @@ configure_file("${PROJECT_SOURCE_DIR}/src/cmake_generated/project_version.h.in"
 
 #include_directories(${CMAKE_CURRENT_BINARY_DIR})
 set (BSDL_PATH ${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib/src/)
-set (BSDL_src ${BSDL_PATH}utility/Input.cpp 
+set (BSDL_src 
+    ${BSDL_PATH}utility/Input.cpp 
     ${BSDL_PATH}utility/Output.cpp
     ${BSDL_PATH}gff/GFFRecord.cpp
     ${BSDL_PATH}domain/Domain.cpp
@@ -101,9 +103,9 @@ set (BSDL_src ${BSDL_PATH}utility/Input.cpp
 add_library(seq)
 target_sources(seq
   PUBLIC
-    FILE_SET CXX_MODULES FILES
+    FILE_SET HEADERS FILES
     ${BSDL_src}
-    ${PROJECT_SOURCE_DIR}/src/identifyName.cpp 
+    FILE_SET CXX_MODULES FILES
     ${PROJECT_SOURCE_DIR}/src/seqExtract.cpp 
 )
 set_property(TARGET seq PROPERTY CXX_STANDARD 20)
