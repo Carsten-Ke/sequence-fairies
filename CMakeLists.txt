@@ -1,9 +1,12 @@
-cmake_minimum_required(VERSION 3.15.0)
-project(sequence-fairies VERSION 1.0.0 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.30.0)
+project(
+  sequence-fairies 
+  VERSION 1.0.0 
+  LANGUAGES CXX)
 
-### FIND BOOST LIBRARY COMPONENTS
-
-
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 if (WITH_UNIT_TEST)
 FIND_PACKAGE(Boost 1.70 COMPONENTS log log_setup system program_options iostreams unit_test_framework REQUIRED)
 else (WITH_UNIT_TEST)
@@ -18,19 +21,18 @@ link_directories(${Boost_LIBRARY_DIRS})
 ADD_DEFINITIONS( "-DHAS_BOOST" )
 
 
-
 include(FetchContent)
 FetchContent_Declare(
   BioSeqDataLib
   GIT_REPOSITORY https://zivgitlab.uni-muenster.de/domain-world/BioSeqDataLib.git
-  GIT_TAG        5b56e9b56e488898d2de387d13bdbe4aad5da8bd
+  GIT_TAG        286548a9f93068ec2354f0a352f6a49158d96636
   SOURCE_DIR     ${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib
 )
 
 message("Downloading BioSeqDataLib")
 FetchContent_GetProperties(BioSeqDataLib)
 if(NOT BioSeqDataLib_POPULATED)
-    FetchContent_Populate(BioSeqDataLib)
+    FetchContent_MakeAvailable(BioSeqDataLib)
 endif()
 message("Done")
 
@@ -56,8 +58,7 @@ MARK_AS_ADVANCED(
     CMAKE_EXE_LINKER_FLAGS_COVERAGE
     CMAKE_SHARED_LINKER_FLAGS_COVERAGE )
 
-
-set(CMAKE_CXX_FLAGS "-std=c++20 -Wall -Wextra -Wunused -pedantic")
+add_compile_options(-Wall -fmodules-ts -Wextra -Wpedantic)
 
 if( NOT CMAKE_BUILD_TYPE )
   set( CMAKE_BUILD_TYPE Release CACHE STRING
@@ -97,17 +98,23 @@ set (BSDL_src ${BSDL_PATH}utility/Input.cpp
 )
 
 ######## SEQEXTRACT #############
-
-SET(seqExtract_src 
+add_library(seq)
+target_sources(seq
+  PUBLIC
+    FILE_SET CXX_MODULES FILES
+    ${BSDL_src}
     ${PROJECT_SOURCE_DIR}/src/identifyName.cpp 
     ${PROJECT_SOURCE_DIR}/src/seqExtract.cpp 
-    ${PROJECT_SOURCE_DIR}/src/seqExtractMain.cpp ${BSDL_src}
 )
+set_property(TARGET seq PROPERTY CXX_STANDARD 20)
+set_property(TARGET seq PROPERTY CXX_STANDARD_REQUIRED ON)
+set_property(TARGET seq PROPERTY CXX_EXTENSIONS OFF)
 
+target_compile_features(seq PUBLIC cxx_std_20)
 
 SET(seqExtract_exe seqExtract )
-ADD_EXECUTABLE(${seqExtract_exe} ${seqExtract_src})
-target_link_libraries(${seqExtract_exe}
+ADD_EXECUTABLE(${seqExtract_exe} ${PROJECT_SOURCE_DIR}/src/seqExtractMain.cpp )
+target_link_libraries(${seqExtract_exe} PRIVATE seq
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 

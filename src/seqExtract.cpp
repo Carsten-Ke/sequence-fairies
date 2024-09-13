@@ -23,6 +23,8 @@
  * along with BioSeqDataLib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+module;
+
 #include <functional>
 #include <random>
 #include <set>
@@ -30,23 +32,27 @@
 #include "../libs/BioSeqDataLib/src/bio/GeneticCode.hpp"
 #include "../libs/BioSeqDataLib/src/utility/utility.hpp"
 
+export module seqExtract;
+
 typedef	std::multimap<std::string, std::vector< std::pair<size_t, size_t> > > Targets;
 
 namespace fs = std::filesystem;
 namespace BSDL = BioSeqDataLib;
 
-bool
+export bool
 minLength(size_t length, const BSDL::Sequence &seq)
 {
 	return (seq.size() > length);
 }
 
+export
 bool
 maxLength(size_t length, const BSDL::Sequence &seq)
 {
 	return (seq.size() < length);
 }
 
+export 
 bool
 exactLength(size_t length, const BSDL::Sequence &seq)
 {
@@ -54,7 +60,7 @@ exactLength(size_t length, const BSDL::Sequence &seq)
 }
 
 
-
+export
 bool
 parseExtractionLine(const std::vector<std::string> &extractLine, std::vector<std::string> &names, std::map<std::string, size_t> &order, Targets &targets, bool extractSegments, std::string delimiter)
 {
@@ -100,7 +106,7 @@ parseExtractionLine(const std::vector<std::string> &extractLine, std::vector<std
 	return subsection;
 }
 
-
+export
 void
 randExtract(BSDL::SequenceSet &set, BSDL::SequenceSet &newSet, size_t nSeqs, const std::string &seed)
 {
@@ -127,7 +133,7 @@ randExtract(BSDL::SequenceSet &set, BSDL::SequenceSet &newSet, size_t nSeqs, con
     }
 }
 
-
+export
 void
 revComp(BSDL::SequenceSet &set)
 {
@@ -139,7 +145,7 @@ revComp(BSDL::SequenceSet &set)
 	}
 }
 
-
+export
 void
 translate(BSDL::SequenceSet &set, const std::string &translationTable)
 {
@@ -154,6 +160,7 @@ translate(BSDL::SequenceSet &set, const std::string &translationTable)
 	}
 }
 
+export
 void
 lengthExtract(BSDL::SequenceSet &set, BSDL::SequenceSet &newSet, const std::vector<std::string> &lengthStrings)
 {
@@ -195,7 +202,7 @@ lengthExtract(BSDL::SequenceSet &set, BSDL::SequenceSet &newSet, const std::vect
 	}
 }
 
-
+export
 void
 extractNamesFromFasta(const fs::path &namesFile, std::vector<std::string> &names)
 {
@@ -211,6 +218,7 @@ extractNamesFromFasta(const fs::path &namesFile, std::vector<std::string> &names
 	}
 }
 
+export
 void
 readNamesFile(const fs::path &namesFile, std::vector<std::string> &extractLines, char delimiter, size_t column)
 {
@@ -229,7 +237,7 @@ readNamesFile(const fs::path &namesFile, std::vector<std::string> &extractLines,
 	}
 }
 
-
+export
 void
 readInputFile(const fs::path &extractFile, std::vector<fs::path> &seqFiles, std::vector<fs::path> &indexFiles)
 {

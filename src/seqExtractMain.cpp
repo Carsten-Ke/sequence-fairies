@@ -42,7 +42,8 @@
 
 #include "cmake_generated/project_version.h"
 
-#include "seqExtract.hpp"
+import seqExtract;
+//#include "seqExtract.hpp"
 
 
 namespace po = boost::program_options;
