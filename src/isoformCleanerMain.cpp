@@ -27,10 +27,9 @@
 
 
 #include "cmake_generated/project_version.h"
-#include "isoformCleaner.hpp"
-#include "identifyName.hpp"
-#include "GFFParser.hpp"
+import isoformCleaner;
 
+namespace BSDL = BioSeqDataLib;
 namespace fs = std::filesystem;
 namespace po = boost::program_options;
 

@@ -1,12 +1,73 @@
-#include "GFFParser.hpp"
+
+
+module;
 
 #include <iostream>
+#include <filesystem>
+#include <map>
+#include <set>
+#include <string>
 
 #include "../libs/BioSeqDataLib/src/utility/Input.hpp"
 #include "../libs/BioSeqDataLib/src/gff/GFFRecord.hpp"
+#include "../libs/BioSeqDataLib/src/gff/GFFRecord.hpp"
 
 
-std::map<std::string, Gene>
+
+export module isoformCleaner:GFFParser;
+
+export struct Gene
+{
+public: 
+
+    Gene(const std::string &identifier) : id(identifier)
+    {}
+
+    auto
+    addTranscript(const BioSeqDataLib::GFFRecord &record)
+    {
+        return transcripts.emplace(record.attributes.at("ID"), 0);
+    }
+
+
+    bool
+    addTranscriptLength(const std::string &transcriptID, size_t l)
+    {
+        auto res = transcripts.find(transcriptID);
+        if (res != transcripts.end())
+        {
+            res->second += l;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
+    std::string
+    longestTranscript() const
+    {
+        size_t maxLength = 0;
+        std::string id = "";
+        for (auto &elem : transcripts)
+        {
+            if (elem.second > maxLength)
+            {
+                maxLength = elem.second;
+                id = elem.first;
+            }
+        }
+        return id;
+    }
+
+    private:
+        std::string id;
+        std::map<std::string, size_t> transcripts;
+};
+
+export std::map<std::string, Gene>
 readGFF(const std::filesystem::path &fileName, std::string level1, std::string level2, std::string level3)
 {
     std::transform(level1.begin(), level1.end(), level1.begin(), ::toupper);
@@ -102,7 +163,7 @@ readGFF(const std::filesystem::path &fileName, std::string level1, std::string l
 }
 
 
-std::set<std::string> 
+export std::set<std::string> 
 longest(const std::map<std::string, Gene> &genes)
 {
     std::set<std::string> longestTranscripts;

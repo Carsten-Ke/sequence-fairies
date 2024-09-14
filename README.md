@@ -17,9 +17,9 @@ Requirements
 ------------
 
 We try to keep the dependencies as little as possible. Current dependencies are:
-- cmake
+- cmake (version 3.30 or greater)
 - boost (http://www.boost.org)
-- compiler with c++20 support
+- compiler with c++20 and modules support
 - zlib
 - libbz2
 
@@ -42,11 +42,9 @@ Installation
 Change into the sequence-fairies directory and run the commands listed below. It will automatically download the necessary submodules, so an internet connection and git are necessary.
 
 ```bash
-mkdir build && cd build
-cmake ..
-make
+cmake -G Ninja -S . -B build
+cmake --build build
 ```
-
 
 Usage
 -----

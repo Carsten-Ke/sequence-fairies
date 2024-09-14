@@ -96,54 +96,44 @@ set (BSDL_src
     ${BSDL_PATH}utility/WeightedInterval_util.cpp
 )
 
+add_library(BSDL OBJECT  ${BSDL_src})
+
+set_property(TARGET BSDL PROPERTY CXX_STANDARD 20)
+set_property(TARGET BSDL PROPERTY CXX_STANDARD_REQUIRED ON)
+set_property(TARGET BSDL PROPERTY CXX_EXTENSIONS OFF)
+
+
 ######## SEQEXTRACT #############
-add_library(seq OBJECT)
-target_sources(seq
+
+add_library(seqExtract-lib OBJECT)
+target_sources(seqExtract-lib
   PUBLIC
     FILE_SET CXX_MODULES FILES
     ${PROJECT_SOURCE_DIR}/src/seqExtract.cpp 
 )
 
-add_library(seq-header OBJECT  ${BSDL_src})
-#target_sources(seq-header
-#  PUBLIC
-#    FILE_SET HEADERS FILES
-#    ${BSDL_src}
-#)
-
-
-#set_property(TARGET seq PROPERTY CXX_STANDARD 20)
-#set_property(TARGET seq PROPERTY CXX_STANDARD_REQUIRED ON)
-#set_property(TARGET seq PROPERTY CXX_EXTENSIONS OFF)
-set_property(TARGET seq-header PROPERTY CXX_STANDARD 20)
-set_property(TARGET seq-header PROPERTY CXX_STANDARD_REQUIRED ON)
-set_property(TARGET seq-header PROPERTY CXX_EXTENSIONS OFF)
-
-#target_compile_features(seq PUBLIC cxx_std_20)
-
 SET(seqExtract_exe seqExtract )
 ADD_EXECUTABLE(${seqExtract_exe} ${PROJECT_SOURCE_DIR}/src/seqExtractMain.cpp )
-target_link_libraries(${seqExtract_exe} PRIVATE seq $<TARGET_OBJECTS:seq-header>
+target_link_libraries(${seqExtract_exe} PRIVATE seqExtract-lib $<TARGET_OBJECTS:BSDL>
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
 
 ######## ISOFORMCLEANER #############
 
-SET(isoformCleaner_src 
+add_library(isoformCleaner-lib OBJECT)
+target_sources(isoformCleaner-lib
+  PUBLIC
+    FILE_SET CXX_MODULES FILES
     ${PROJECT_SOURCE_DIR}/src/GFFParser.cpp
     ${PROJECT_SOURCE_DIR}/src/identifyName.cpp 
     ${PROJECT_SOURCE_DIR}/src/isoformCleaner.cpp 
-    ${PROJECT_SOURCE_DIR}/src/isoformCleanerMain.cpp 
 )
 
+SET(isoformCleaner_exe isoformCleaner)
+ADD_EXECUTABLE(${isoformCleaner_exe}  ${PROJECT_SOURCE_DIR}/src/isoformCleanerMain.cpp )
 
-
-SET(isoformCleaner_exe isoformCleaner )
-ADD_EXECUTABLE(${isoformCleaner_exe} ${isoformCleaner_src})
-target_sources(${isoformCleaner_exe} PRIVATE $<TARGET_OBJECTS:seq-header>)
-
-target_link_libraries(${isoformCleaner_exe}
+target_link_libraries(${isoformCleaner_exe} PRIVATE isoformCleaner-lib $<TARGET_OBJECTS:BSDL>
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
@@ -157,7 +147,7 @@ SET(concatenator_src
 
 SET(concatenator_exe concatenator)
 ADD_EXECUTABLE(${concatenator_exe} ${concatenator_src})
-target_link_libraries(${concatenator_exe}  $<TARGET_OBJECTS:seq-header>
+target_link_libraries(${concatenator_exe}  $<TARGET_OBJECTS:BSDL>
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
@@ -171,7 +161,7 @@ SET(seqCheck_src
 
 SET(seqCheck_exe seqCheck)
 ADD_EXECUTABLE(${seqCheck_exe} ${seqCheck_src})
-target_link_libraries(${seqCheck_exe}  $<TARGET_OBJECTS:seq-header>
+target_link_libraries(${seqCheck_exe}  $<TARGET_OBJECTS:BSDL>
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
@@ -186,7 +176,7 @@ SET(extractDomains_src
 
 SET(extractDomains_exe extractDomains)
 ADD_EXECUTABLE(${extractDomains_exe} ${extractDomains_src})
-target_link_libraries(${extractDomains_exe}  $<TARGET_OBJECTS:seq-header>
+target_link_libraries(${extractDomains_exe}  $<TARGET_OBJECTS:BSDL>
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
@@ -212,7 +202,7 @@ install(
     extractDomains
     isoformCleaner
     seqCheck
- #   seqExtract
+    seqExtract
   DESTINATION
     bin
   )

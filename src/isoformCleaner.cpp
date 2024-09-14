@@ -1,9 +1,43 @@
-#include "isoformCleaner.hpp"
+
+module;
 
 #include <map>
+#include <functional>
+#include <string>
+
+#include "../libs/BioSeqDataLib/src/sequence/Sequence.hpp"
+#include "../libs/BioSeqDataLib/src/sequence/SequenceSet.hpp"
+
+export module isoformCleaner;
+export import :GFFParser;
+export import :identifyName;
+namespace BSDL = BioSeqDataLib;
+
+export 
+class IsoformCleaner
+{
+
+private:
+   
+
+    struct Isoform
+    {
+        Isoform(size_t n, size_t val) : seqId(n), value(val)
+        {}
+        size_t seqId;
+        size_t value;
+    };
+
+    std::function<std::pair<std::string, ISOFORM_STATUS>(BSDL::Sequence)> geneNameIdenification_;
+    std::map<std::string, Isoform> isoformMap_;
+
+    size_t warningCounter_;
+    size_t nSeqsBeforeCleaning_;
+    size_t nSeqsAfterCleaning_;
+
 
 void 
-IsoformCleaner::identifyIsoforms_(const BSDL::SequenceSet &seqSet)
+identifyIsoforms_(const BSDL::SequenceSet &seqSet)
 {
     isoformMap_.clear();
     warningCounter_ = 0;
@@ -40,7 +74,7 @@ IsoformCleaner::identifyIsoforms_(const BSDL::SequenceSet &seqSet)
 
 
 BSDL::SequenceSet 
-IsoformCleaner::createNewSeqSet_(BSDL::SequenceSet &seqSet)
+createNewSeqSet_(BSDL::SequenceSet &seqSet)
 {
     nSeqsBeforeCleaning_ = seqSet.size();
     BSDL::SequenceSet outSet;
@@ -52,11 +86,80 @@ IsoformCleaner::createNewSeqSet_(BSDL::SequenceSet &seqSet)
     return outSet;
 }
 
+public:
+
+    /**
+     * @brief Construct a new IsoformCleaner object
+     * 
+     */
+    IsoformCleaner() : warningCounter_(0), nSeqsBeforeCleaning_(0), nSeqsAfterCleaning_(0)
+    {
+    }
+
+    /**
+     * @brief Returns the number of warnings
+     * 
+     * @return size_t 
+     */
+    size_t
+    warnings()
+    {
+        return warningCounter_;
+    }
+
+    /**
+     * @brief Returns the number of sequences before cleaning
+     * 
+     * @return size_t 
+     */
+    size_t
+    nSeqsBeforeCleaning()
+    {
+        return nSeqsBeforeCleaning_;
+    }
+
+
+    /**
+     * @brief returns the number of sequences after cleaning
+     * 
+     * @return size_t 
+     */
+    size_t
+    nSeqsAfterCleaning()
+    {
+        return nSeqsAfterCleaning_;
+    }
+
+    /**
+     * @brief Returns the number of sequences removed
+     * 
+     * @return size_t 
+     */
+    size_t
+    nSeqsRemoved()
+    {
+        return nSeqsBeforeCleaning_ - nSeqsAfterCleaning_;
+    }
+
+    /**
+     * @brief Set the Gene Name Identifcator function
+     * 
+     * @param geneNameID The function to use for geneName identification
+     */
+    void setGeneNameIdentifcator(std::function<std::pair<std::string, ISOFORM_STATUS>(BSDL::Sequence)> geneNameID)
+    {
+        geneNameIdenification_ = geneNameID;
+    }
 
 BSDL::SequenceSet
-IsoformCleaner::clean(BSDL::SequenceSet &seqSet)
+clean(BSDL::SequenceSet &seqSet)
 {
     identifyIsoforms_(seqSet);
     return createNewSeqSet_(seqSet);
 }
+
+
+};
+
+
 
