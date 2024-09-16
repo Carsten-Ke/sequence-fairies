@@ -40,7 +40,8 @@
 #include "../libs/BioSeqDataLib/src/utility/Output.hpp"
 
 #include "cmake_generated/project_version.h"
-#include "concatenator.hpp"
+
+import concatenator;
 
 namespace fs = std::filesystem;
 namespace po = boost::program_options;

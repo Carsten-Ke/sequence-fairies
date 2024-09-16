@@ -22,17 +22,27 @@
  * You should have received a copy of the GNU General Public License
  * along with BioSeqDataLib.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "concatenator.hpp"
+
+module;
 
 #include <algorithm>
+#include <filesystem>
+#include <map>
 #include <set>
 
+#include "../libs/BioSeqDataLib/src/sequence/SequenceSet.hpp"
+
+export module concatenator;
+
+export
 void
 throw_duplicate(const std::string &seqName, const std::filesystem::path &fileName)
 {
     throw std::runtime_error("Error! Duplicated sequence name '" + seqName + "' in file '" + fileName.string() + "' found!");
 }
 
+
+export
 std::map<std::string, int>
 createNamesIndex(const BioSeqDataLib::SequenceSet &seqSet, const std::vector<std::string> &patterns)
 {
@@ -70,6 +80,8 @@ createNamesIndex(const BioSeqDataLib::SequenceSet &seqSet, const std::vector<std
     return namesIndex;
 }
 
+
+export
 std::map<std::string, int>
 createNamesIndex(const BioSeqDataLib::SequenceSet &seqSet, std::string delimiter)
 {
@@ -88,6 +100,7 @@ createNamesIndex(const BioSeqDataLib::SequenceSet &seqSet, std::string delimiter
 }
 
 
+export
 std::set<std::pair<int, int> >
 createMatches(const std::map<std::string, int> &names1, const fs::path &seqFile1, const std::map<std::string, int> &names2, const fs::path &seqFile2, bool lenient)
 {
@@ -131,7 +144,9 @@ createMatches(const std::map<std::string, int> &names1, const fs::path &seqFile1
 }
 
 
-void concatenate(BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::SequenceSet &seqSet2, const std::set<std::pair<int, int> > &matches)
+export
+void
+concatenate(BioSeqDataLib::SequenceSet &seqSet1, const BioSeqDataLib::SequenceSet &seqSet2, const std::set<std::pair<int, int> > &matches)
 {
     auto currentLength = seqSet1[0].length();
     size_t max_size = 0;

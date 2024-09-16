@@ -42,7 +42,8 @@
 #include "../libs/BioSeqDataLib/src/utility/Output.hpp"
 // other
 #include "cmake_generated/project_version.h"
-#include "seqCheck.hpp"
+
+import seqCheck;
 
 using namespace std;
 namespace po = boost::program_options;

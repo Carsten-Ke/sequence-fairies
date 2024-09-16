@@ -43,8 +43,6 @@
 #include "cmake_generated/project_version.h"
 
 import seqExtract;
-//#include "seqExtract.hpp"
-
 
 namespace po = boost::program_options;
 namespace fs = std::filesystem;

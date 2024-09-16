@@ -23,6 +23,8 @@
  * along with BioSeqDataLib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+module;
+
 #include <algorithm>
 #include <map>
 #include <string>
@@ -42,15 +44,34 @@
 
 // other
 #include "cmake_generated/project_version.h"
-#include "seqCheck.hpp"
+
+export module seqCheck;
 
 using namespace std;
-namespace po = boost::program_options;
 namespace fs = std::filesystem;
 namespace BSDL = BioSeqDataLib;
 
 
+export
+struct Problems
+{
+	Problems(const std::string &seq_name) : name(seq_name), hasProblem(false), stopCodons(false), problemChars(""), duplicate(false), fixed(false), removed(false)
+	{}
 
+	virtual ~Problems()
+	{}
+
+	std::string name;
+	bool hasProblem;
+	bool stopCodons;
+	std::string problemChars;
+	bool duplicate;
+	bool fixed;
+	bool removed;
+};
+
+
+export
 void
 printReport(const std::vector<Problems> &problems, size_t nSeqs, BSDL::Output &outF)
 {

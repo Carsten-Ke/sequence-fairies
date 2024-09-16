@@ -17,11 +17,6 @@ endif(WITH_UNIT_TEST)
 find_package(ZLIB REQUIRED)
 find_package(BZip2 REQUIRED)
 
-INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIR})
-link_directories(${Boost_LIBRARY_DIRS})
-ADD_DEFINITIONS( "-DHAS_BOOST" )
-
-
 include(FetchContent)
 FetchContent_Declare(
   BioSeqDataLib
@@ -115,7 +110,7 @@ target_sources(seqExtract-lib
 SET(seqExtract_exe seqExtract )
 ADD_EXECUTABLE(${seqExtract_exe} ${PROJECT_SOURCE_DIR}/src/seqExtractMain.cpp )
 target_link_libraries(${seqExtract_exe} PRIVATE seqExtract-lib $<TARGET_OBJECTS:BSDL>
-	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
+	Boost::program_options Boost::iostreams ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
 
@@ -134,21 +129,27 @@ SET(isoformCleaner_exe isoformCleaner)
 ADD_EXECUTABLE(${isoformCleaner_exe}  ${PROJECT_SOURCE_DIR}/src/isoformCleanerMain.cpp )
 
 target_link_libraries(${isoformCleaner_exe} PRIVATE isoformCleaner-lib $<TARGET_OBJECTS:BSDL>
-	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
+    Boost::program_options Boost::iostreams ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
 ######## CONCATENATOR #############
 
-SET(concatenator_src 
+add_library(concatenator-lib OBJECT)
+target_sources(concatenator-lib
+  PUBLIC
+    FILE_SET CXX_MODULES FILES
     ${PROJECT_SOURCE_DIR}/src/concatenator.cpp 
+)
+
+SET(concatenator_src 
     ${PROJECT_SOURCE_DIR}/src/concatenatorMain.cpp
 )
 
 
 SET(concatenator_exe concatenator)
 ADD_EXECUTABLE(${concatenator_exe} ${concatenator_src})
-target_link_libraries(${concatenator_exe}  $<TARGET_OBJECTS:BSDL>
-	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
+target_link_libraries(${concatenator_exe} PRIVATE concatenator-lib $<TARGET_OBJECTS:BSDL>
+    Boost::program_options Boost::iostreams ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
 ######## SEQCHECK #############
@@ -162,7 +163,7 @@ SET(seqCheck_src
 SET(seqCheck_exe seqCheck)
 ADD_EXECUTABLE(${seqCheck_exe} ${seqCheck_src})
 target_link_libraries(${seqCheck_exe}  $<TARGET_OBJECTS:BSDL>
-	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
+    Boost::program_options Boost::iostreams ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
 
@@ -177,7 +178,7 @@ SET(extractDomains_src
 SET(extractDomains_exe extractDomains)
 ADD_EXECUTABLE(${extractDomains_exe} ${extractDomains_src})
 target_link_libraries(${extractDomains_exe}  $<TARGET_OBJECTS:BSDL>
-	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
+    Boost::program_options Boost::iostreams ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
 
