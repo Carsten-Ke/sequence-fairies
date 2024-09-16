@@ -8,9 +8,9 @@ module;
 #include <set>
 #include <string>
 
-#include "../libs/BioSeqDataLib/src/utility/Input.hpp"
-#include "../libs/BioSeqDataLib/src/gff/GFFRecord.hpp"
-#include "../libs/BioSeqDataLib/src/gff/GFFRecord.hpp"
+#include "../../libs/BioSeqDataLib/src/utility/Input.hpp"
+#include "../../libs/BioSeqDataLib/src/gff/GFFRecord.hpp"
+#include "../../libs/BioSeqDataLib/src/gff/GFFRecord.hpp"
 
 
 

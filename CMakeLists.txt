@@ -23,42 +23,19 @@ FetchContent_Declare(
   GIT_REPOSITORY https://zivgitlab.uni-muenster.de/domain-world/BioSeqDataLib.git
   GIT_TAG        ac97ba15646e90c4ebf63487fe34ab5e7d528cbc
   SOURCE_DIR     ${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib
+  EXCLUDE_FROM_ALL
 )
 
 FetchContent_GetProperties(BioSeqDataLib)
 if(NOT BioSeqDataLib_POPULATED)
     FetchContent_MakeAvailable(BioSeqDataLib)
 endif()
-message("Done")
-
-SET(CMAKE_CXX_FLAGS_COVERAGE
-    "-g -O0 --coverage -fprofile-arcs -ftest-coverage -fno-inline -fno-inline-small-functions -fno-default-inline"
-    CACHE STRING "Flags used by the C++ compiler during coverage builds."
-    FORCE )
-SET(CMAKE_CXX_FLAGS_PROFILE
-    "-O3 -pg"
-    CACHE STRING "Flags used by the C++ compiler during coverage builds."
-    FORCE )
-SET(CMAKE_EXE_LINKER_FLAGS_COVERAGE
-    "--coverage"
-    CACHE STRING "Flags used for linking binaries during coverage builds."
-    FORCE )
-SET(CMAKE_SHARED_LINKER_FLAGS_COVERAGE
-    "--coverage"
-    CACHE STRING "Flags used by the shared libraries linker during coverage builds."
-    FORCE )
-MARK_AS_ADVANCED(
-    CMAKE_CXX_FLAGS_COVERAGE
-    CMAKE_EXE_LINKER_FLAGS_COVERAGE
-    CMAKE_SHARED_LINKER_FLAGS_COVERAGE )
-    
 add_compile_options(-Wall -Wextra -Wpedantic)
 
 if( NOT CMAKE_BUILD_TYPE )
   set( CMAKE_BUILD_TYPE Release CACHE STRING
        "Choose the type of build, options are: Debug Coverage Release RelWithDebInfo MinSizeRel." FORCE )
 endif()
-
 
 configure_file("${PROJECT_SOURCE_DIR}/src/cmake_generated/project_version.h.in" 
                "${PROJECT_SOURCE_DIR}/src/cmake_generated/project_version.h"
@@ -93,109 +70,25 @@ set (BSDL_src
 
 add_library(BSDL OBJECT  ${BSDL_src})
 
-set_property(TARGET BSDL PROPERTY CXX_STANDARD 20)
-set_property(TARGET BSDL PROPERTY CXX_STANDARD_REQUIRED ON)
-set_property(TARGET BSDL PROPERTY CXX_EXTENSIONS OFF)
 
-
-######## SEQEXTRACT #############
-
-add_library(seqExtract-lib OBJECT)
-target_sources(seqExtract-lib
-  PUBLIC
-    FILE_SET CXX_MODULES FILES
-    ${PROJECT_SOURCE_DIR}/src/seqExtract.cpp 
-)
-
-SET(seqExtract_exe seqExtract )
-ADD_EXECUTABLE(${seqExtract_exe} ${PROJECT_SOURCE_DIR}/src/seqExtractMain.cpp )
-target_link_libraries(${seqExtract_exe} PRIVATE seqExtract-lib $<TARGET_OBJECTS:BSDL>
-	Boost::program_options Boost::iostreams ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
-)
-
-
-######## ISOFORMCLEANER #############
-
-add_library(isoformCleaner-lib OBJECT)
-target_sources(isoformCleaner-lib
-  PUBLIC
-    FILE_SET CXX_MODULES FILES
-    ${PROJECT_SOURCE_DIR}/src/GFFParser.cpp
-    ${PROJECT_SOURCE_DIR}/src/identifyName.cpp 
-    ${PROJECT_SOURCE_DIR}/src/isoformCleaner.cpp 
-)
-
-SET(isoformCleaner_exe isoformCleaner)
-ADD_EXECUTABLE(${isoformCleaner_exe}  ${PROJECT_SOURCE_DIR}/src/isoformCleanerMain.cpp )
-
-target_link_libraries(${isoformCleaner_exe} PRIVATE isoformCleaner-lib $<TARGET_OBJECTS:BSDL>
-    Boost::program_options Boost::iostreams ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
-)
-
-######## CONCATENATOR #############
-
-add_library(concatenator-lib OBJECT)
-target_sources(concatenator-lib
-  PUBLIC
-    FILE_SET CXX_MODULES FILES
-    ${PROJECT_SOURCE_DIR}/src/concatenator.cpp 
-)
-
-SET(concatenator_src 
-    ${PROJECT_SOURCE_DIR}/src/concatenatorMain.cpp
-)
-
-
-SET(concatenator_exe concatenator)
-ADD_EXECUTABLE(${concatenator_exe} ${concatenator_src})
-target_link_libraries(${concatenator_exe} PRIVATE concatenator-lib $<TARGET_OBJECTS:BSDL>
-    Boost::program_options Boost::iostreams ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
-)
-
-######## SEQCHECK #############
-
-SET(seqCheck_src 
-    ${PROJECT_SOURCE_DIR}/src/seqCheck.cpp  
-    ${PROJECT_SOURCE_DIR}/src/seqCheckMain.cpp
-)
-
-
-SET(seqCheck_exe seqCheck)
-ADD_EXECUTABLE(${seqCheck_exe} ${seqCheck_src})
-target_link_libraries(${seqCheck_exe}  $<TARGET_OBJECTS:BSDL>
-    Boost::program_options Boost::iostreams ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
-)
-
-
-######## domainExtract #############
-
-SET(extractDomains_src 
-    ${PROJECT_SOURCE_DIR}/src/extractDomains.cpp 
-    ${PROJECT_SOURCE_DIR}/src/extractDomainsMain.cpp
-)
-
-
-SET(extractDomains_exe extractDomains)
-ADD_EXECUTABLE(${extractDomains_exe} ${extractDomains_src})
-target_link_libraries(${extractDomains_exe}  $<TARGET_OBJECTS:BSDL>
-    Boost::program_options Boost::iostreams ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
-)
-
-
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+add_subdirectory(src)
 
 ######## TESTING #############
 
 
 if (WITH_UNIT_TEST)
-    include(CTest)
-    enable_testing()
+  include(CTest)
+  enable_testing()
 	add_subdirectory (tests)
 	enable_testing ()
 	add_test (NAME isoformCleanerTest COMMAND isoformCleaner-Test)
-    add_test (NAME concatenatorTest COMMAND concatenator-Test)
+  add_test (NAME concatenatorTest COMMAND concatenator-Test)
 endif ()
 
 
+
+######## INSTALLING #############
 
 install(
   TARGETS

@@ -5,8 +5,8 @@ module;
 #include <functional>
 #include <string>
 
-#include "../libs/BioSeqDataLib/src/sequence/Sequence.hpp"
-#include "../libs/BioSeqDataLib/src/sequence/SequenceSet.hpp"
+#include "../../libs/BioSeqDataLib/src/sequence/Sequence.hpp"
+#include "../../libs/BioSeqDataLib/src/sequence/SequenceSet.hpp"
 
 export module isoformCleaner;
 export import :GFFParser;

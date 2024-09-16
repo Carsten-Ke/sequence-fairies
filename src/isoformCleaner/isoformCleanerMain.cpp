@@ -22,11 +22,11 @@
 #include <boost/program_options.hpp>
 
 // BSDL header
-#include "../libs/BioSeqDataLib/src/sequence/SequenceSet.hpp"
-#include "../libs/BioSeqDataLib/src/sequence/SeqSetIOManager.hpp"
+#include "../../libs/BioSeqDataLib/src/sequence/SequenceSet.hpp"
+#include "../../libs/BioSeqDataLib/src/sequence/SeqSetIOManager.hpp"
 
 
-#include "cmake_generated/project_version.h"
+#include "../cmake_generated/project_version.h"
 import isoformCleaner;
 
 namespace BSDL = BioSeqDataLib;

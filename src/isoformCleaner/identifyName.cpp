@@ -16,7 +16,7 @@ module;
 #include <string>
 #include <utility>
 
-#include "../libs/BioSeqDataLib/src/sequence/Sequence.hpp"
+#include "../../libs/BioSeqDataLib/src/sequence/Sequence.hpp"
 
 
 
