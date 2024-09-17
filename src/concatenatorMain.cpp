@@ -47,16 +47,15 @@ namespace fs = std::filesystem;
 namespace po = boost::program_options;
 
 
-bool hasEnding (std::string const &fullString, std::string const &ending) {
+auto hasEnding (std::string const &fullString, std::string const &ending) -> bool {
     if (fullString.length() >= ending.length()) {
         return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
-    } else {
-        return false;
-    }
+	}
+    return false;
 }
 
-int 
-main (int argc, char *argv[])
+auto 
+main (int argc, char *argv[]) -> int
 {
 	std::vector<fs::path> sequence_files;
 	fs::path input_directory;

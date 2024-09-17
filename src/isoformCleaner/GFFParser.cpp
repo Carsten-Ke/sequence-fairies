@@ -30,8 +30,8 @@ public:
     }
 
 
-    bool
-    addTranscriptLength(const std::string &transcriptID, size_t l)
+    auto
+    addTranscriptLength(const std::string &transcriptID, size_t l) -> bool
     {
         auto res = transcripts.find(transcriptID);
         if (res != transcripts.end())
@@ -46,8 +46,9 @@ public:
     }
 
 
-    std::string
-    longestTranscript() const
+    
+    auto
+    longestTranscript() const -> std::string
     {
         size_t maxLength = 0;
         std::string id = "";
@@ -67,8 +68,9 @@ public:
         std::map<std::string, size_t> transcripts;
 };
 
-export std::map<std::string, Gene>
-readGFF(const std::filesystem::path &fileName, std::string level1, std::string level2, std::string level3)
+export
+auto
+readGFF(const std::filesystem::path &fileName, std::string level1, std::string level2, std::string level3) ->  std::map<std::string, Gene>
 {
     std::transform(level1.begin(), level1.end(), level1.begin(), ::toupper);
     std::transform(level2.begin(), level2.end(), level2.begin(), ::toupper);
@@ -93,7 +95,7 @@ readGFF(const std::filesystem::path &fileName, std::string level1, std::string l
             auto result = genes.emplace(record.attributes["ID"], Gene(record.attributes["ID"]));
             if (!result.second)
             {
-                std::cerr << "Error! " << level1 << " with ID " << record.attributes["ID"] << " occurred twice!" << std::endl;
+                std::cerr << "Error! " << level1 << " with ID " << record.attributes["ID"] << " occurred twice!\n";
                 exit(EXIT_FAILURE);
             }
         }
@@ -147,7 +149,7 @@ readGFF(const std::filesystem::path &fileName, std::string level1, std::string l
         }
     }
 
-    for (auto &elem : tmpLevel3)
+    for (const auto &elem : tmpLevel3)
     {
         auto res = entered.find(elem.first);
         if (res != entered.end())
@@ -163,8 +165,8 @@ readGFF(const std::filesystem::path &fileName, std::string level1, std::string l
 }
 
 
-export std::set<std::string> 
-longest(const std::map<std::string, Gene> &genes)
+export auto
+longest(const std::map<std::string, Gene> &genes) -> std::set<std::string> 
 {
     std::set<std::string> longestTranscripts;
     for (const auto &gene : genes)
