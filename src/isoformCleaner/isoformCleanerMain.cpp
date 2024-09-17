@@ -34,12 +34,13 @@ namespace fs = std::filesystem;
 namespace po = boost::program_options;
 
 
-int main (int argc, char *argv[])
+auto
+main (int argc, char *argv[]) -> int
 {
 	fs::path sequenceFile;
     fs::path outFile;
-    char splitChar;
-	bool summary;
+    char splitChar ='\0';
+	bool summary = false;
 	po::options_description general("General options");
 	general.add_options()
 		("help,h", "Produces this help message")
@@ -50,7 +51,9 @@ int main (int argc, char *argv[])
 	;
 
 	fs::path gffFile;
-	std::string level1,level2,level3;
+	std::string level1;
+	std::string level2;
+	std::string level3;
 	po::options_description gffOpts("GFF options");
 	gffOpts.add_options()
 		("gffFile,g", po::value<fs::path>(&gffFile)->value_name("FILE"), "A GFF file")
@@ -60,8 +63,10 @@ int main (int argc, char *argv[])
 	;
 
 
-	std::string regex, preset;
-	bool searchComment, searchName;
+	std::string regex;
+	std::string preset;
+	bool searchComment = false;
+	bool searchName = false;
 	po::options_description regexOpts("Regex options");
 	regexOpts.add_options()
 		("regular,r", po::value<std::string>(&regex), "Regular expression")
@@ -139,8 +144,8 @@ int main (int argc, char *argv[])
 	}
 	else
 	{
-		const std::regex e(regex);
-		std::function<std::pair<std::string, ISOFORM_STATUS>(BSDL::Sequence)> nameFunc =  std::bind(regexIdentifier, std::placeholders::_1, e, searchComment, searchName);
+		const std::regex expression(regex);
+		std::function<std::pair<std::string, ISOFORM_STATUS>(BSDL::Sequence)> nameFunc =  std::bind(regexIdentifier, std::placeholders::_1, expression, searchComment, searchName);
 		isocleaner.setGeneNameIdentifcator(nameFunc);
 	}
 
@@ -155,9 +160,13 @@ int main (int argc, char *argv[])
 	try
 	{
 		if (outFile.empty())
+		{
 			seqSetIO.write(outSet, "fasta", "");
+		}
 		else
+		{
 			seqSetIO.write(outSet, "fasta", outFile);
+		}			
 	}
 	catch (std::ios_base::failure &exception)
 	{
