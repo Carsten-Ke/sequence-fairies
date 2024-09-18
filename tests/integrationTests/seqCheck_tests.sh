@@ -3,7 +3,7 @@ bats_require_minimum_version 1.5.0
 
 
 @test "stop1-cleaning" {
-    run ../../build/seqCheck --fix-end --remove-stop -i ./data/seqCheck/input.fasta --set-alphabet DNA -o stop1.fasta
+    run ../../build/bin/seqCheck --fix-end --remove-stop -i ./data/seqCheck/input.fasta --set-alphabet DNA -o stop1.fasta
 	[ $status == 0 ]
 	
 	run diff stop1.fasta ./data/seqCheck/stop1-result.fasta
@@ -13,7 +13,7 @@ bats_require_minimum_version 1.5.0
 }
 
 @test "stop2-cleaning" {
-    run ../../build/seqCheck --remove-stop -i ./data/seqCheck/input.fasta --set-alphabet DNA -o stop2.fasta
+    run ../../build/bin/seqCheck --remove-stop -i ./data/seqCheck/input.fasta --set-alphabet DNA -o stop2.fasta
 	[ $status == 0 ]
 	
 	run diff stop2.fasta ./data/seqCheck/stop2-result.fasta
@@ -24,7 +24,7 @@ bats_require_minimum_version 1.5.0
 
 
 @test "fix-remove" {
-    run ../../build/seqCheck --fix-and-remove -i ./data/seqCheck/input.fasta --set-alphabet DNA -o fix-remove.fasta -r fix-keep-report.txt 
+    run ../../build/bin/seqCheck --fix-and-remove -i ./data/seqCheck/input.fasta --set-alphabet DNA -o fix-remove.fasta -r fix-keep-report.txt 
 	[ $status == 0 ]
 	
 	run diff fix-remove.fasta ./data/seqCheck/fix-remove-result.fasta
@@ -37,7 +37,7 @@ bats_require_minimum_version 1.5.0
 }
 
 @test "fix-keep" {
-    run ../../build/seqCheck --fix-and-keep -i ./data/seqCheck/input.fasta --set-alphabet DNA -o fix-keep.fasta
+    run ../../build/bin/seqCheck --fix-and-keep -i ./data/seqCheck/input.fasta --set-alphabet DNA -o fix-keep.fasta
 	run diff fix-keep.fasta ./data/seqCheck/fix-keep-result.fasta
 	[ $status == 0 ]
 
@@ -45,11 +45,11 @@ bats_require_minimum_version 1.5.0
 }
 
 @test "replace-char" {
-	run -0 ../../build/seqCheck -i ./data/seqCheck/nt.fa --replace-char --set-alphabet DNA
+	run -0 ../../build/bin/seqCheck -i ./data/seqCheck/nt.fa --replace-char --set-alphabet DNA
 	[ ${lines[0]} = ">seq1" ]
 	[ ${lines[1]} = "ACGCTCATCTN" ]
 
-	run -0 ../../build/seqCheck -i ./data/seqCheck/aa.fa --replace-char
+	run -0 ../../build/bin/seqCheck -i ./data/seqCheck/aa.fa --replace-char
 	[ ${lines[0]} = ">seq1" ]
 	[ ${lines[1]} = "AAXT" ]
 
@@ -57,25 +57,25 @@ bats_require_minimum_version 1.5.0
 
 
 @test "simple messages and errors" {
-    run -0 ../../build/seqCheck -h
+    run -0 ../../build/bin/seqCheck -h
 
-    run -1 ../../build/seqCheck --doesnotexist
+    run -1 ../../build/bin/seqCheck --doesnotexist
     [[ ${lines[0]} = "An error occurred parsing the command line: unrecognised option '--doesnotexist'" ]]
 	[[ ${lines[1]} = "Please use -h/--help for more information." ]]
 
-	run -1 ../../build/seqCheck -i x
+	run -1 ../../build/bin/seqCheck -i x
     [ "$output" = "Error opening file 'x': No such file or directory: iostream error" ]
 
-    run -1 ../../build/seqCheck -i x --rename-duplicates --remove-duplicates
+    run -1 ../../build/bin/seqCheck -i x --rename-duplicates --remove-duplicates
     [ "$output" = "Error! The options remove-duplicates and rename-duplicates are mutually exclusive!" ]
 
-    run -1 ../../build/seqCheck -i x --fix-and-keep --fix-and-remove
+    run -1 ../../build/bin/seqCheck -i x --fix-and-keep --fix-and-remove
     [ "$output" = "Error! The options fix-and-keep and fix-and-remove are mutually exclusive!" ]
 
-	run -1 ../../build/seqCheck -i x --replace-char --remove-alpha
+	run -1 ../../build/bin/seqCheck -i x --replace-char --remove-alpha
     [ "$output" = "Error! The options replace-char and remove-alpha are mutually exclusive!" ]
 
-	run -1 ../../build/seqCheck -i x --remove-stop-genes --replace-stop
+	run -1 ../../build/bin/seqCheck -i x --remove-stop-genes --replace-stop
     [ "$output" = "Error! The options remove-stop-genes and replaceStop are mutually exclusive!" ]
  
 }

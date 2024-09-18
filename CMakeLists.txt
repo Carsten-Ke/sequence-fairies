@@ -9,11 +9,17 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+
+set (CMAKE_EXPORT_COMPILE_COMMANDS true)
+
 find_package(
   Boost 1.70
   COMPONENTS log log_setup system program_options iostreams unit_test_framework
   REQUIRED
 )
+
+#add_compile_options(-fsanitize=address)
+#add_link_options(-fsanitize=address)
 
 find_package(ZLIB REQUIRED)
 find_package(BZip2 REQUIRED)

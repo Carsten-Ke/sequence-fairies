@@ -29,8 +29,8 @@ export enum class ISOFORM_STATUS{MATCH, NOMATCH, KEEP, REMOVE};
 
 
 
-export std::pair<std::string, ISOFORM_STATUS>
-splitCharIdentifier(const BSDL::Sequence &seq, char splitChar)
+export auto
+splitCharIdentifier(const BSDL::Sequence &seq, char splitChar) -> std::pair<std::string, ISOFORM_STATUS>
 {
 	std::string seqName = seq.name();
 	size_t pos = seqName.rfind(splitChar);
@@ -43,20 +43,21 @@ splitCharIdentifier(const BSDL::Sequence &seq, char splitChar)
 }
 
 export
-std::pair<std::string, ISOFORM_STATUS>
-regexIdentifier(const BSDL::Sequence &seq, const std::regex regEx, bool searchComment, bool searchName)
+auto
+regexIdentifier(const BSDL::Sequence &seq, const std::regex& regEx, bool searchComment, bool searchName) -> std::pair<std::string, ISOFORM_STATUS>
 {
 	std::smatch what;
 	const std::string seqName = seq.name();
 	std::string target;
-	if (searchComment)
+	if (searchComment) {
 		target = seq.comment();
-	else
+	} else
 	{
-		if (searchName)
+		if (searchName) {
 			target = seqName;
-		else
+		} else {
 			target = seqName + " " + seq.comment();
+}
 	}
 	ISOFORM_STATUS status = regex_search(target, what, regEx) ? ISOFORM_STATUS::MATCH : ISOFORM_STATUS::NOMATCH;
 	std::string geneName;
@@ -72,8 +73,8 @@ regexIdentifier(const BSDL::Sequence &seq, const std::regex regEx, bool searchCo
 }
 
 export
-std::pair<std::string, ISOFORM_STATUS>
-nameIdentifier(const BSDL::Sequence &seq, const std::set<std::string> &names)
+auto
+nameIdentifier(const BSDL::Sequence &seq, const std::set<std::string> &names) -> std::pair<std::string, ISOFORM_STATUS>
 {
 	std::string seqName = seq.name();
 	auto itEnd = names.end();

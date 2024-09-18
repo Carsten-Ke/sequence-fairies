@@ -7,9 +7,9 @@ module;
 #include <map>
 #include <set>
 #include <string>
+#include <utility>
 
 #include "../../libs/BioSeqDataLib/src/utility/Input.hpp"
-#include "../../libs/BioSeqDataLib/src/gff/GFFRecord.hpp"
 #include "../../libs/BioSeqDataLib/src/gff/GFFRecord.hpp"
 
 
@@ -20,7 +20,7 @@ export struct Gene
 {
 public: 
 
-    Gene(const std::string &identifier) : id(identifier)
+    Gene(std::string identifier) : id(std::move(identifier))
     {}
 
     auto
@@ -31,36 +31,35 @@ public:
 
 
     auto
-    addTranscriptLength(const std::string &transcriptID, size_t l) -> bool
+    addTranscriptLength(const std::string &transcriptID, size_t length) -> bool
     {
         auto res = transcripts.find(transcriptID);
         if (res != transcripts.end())
         {
-            res->second += l;
+            res->second += length;
             return true;
         }
-        else
-        {
-            return false;
-        }
+        
+                    return false;
+       
     }
 
 
     
-    auto
+    [[nodiscard]] auto
     longestTranscript() const -> std::string
     {
         size_t maxLength = 0;
-        std::string id = "";
-        for (auto &elem : transcripts)
+        std::string transcriptID;
+        for (const auto &elem : transcripts)
         {
             if (elem.second > maxLength)
             {
                 maxLength = elem.second;
-                id = elem.first;
+                transcriptID = elem.first;
             }
         }
-        return id;
+        return transcriptID;
     }
 
     private:

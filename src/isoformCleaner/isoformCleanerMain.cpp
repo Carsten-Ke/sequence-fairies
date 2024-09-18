@@ -83,7 +83,7 @@ main (int argc, char *argv[]) -> int
 	{
 		po::variables_map vm;
 		po::store(po::command_line_parser(argc, argv).options(visibleOpts).run(), vm);
-		if (vm.count("help"))
+		if (vm.count("help") != 0U)
 		{
 			std::cout << visibleOpts<< "\n";
 			return EXIT_SUCCESS;
@@ -108,7 +108,7 @@ main (int argc, char *argv[]) -> int
 	}
 	catch(std::ios_base::failure &exception)
 	{
-		std::cerr << exception.what() << std::endl;
+		std::cerr << exception.what() << '\n';
 		exit(EXIT_FAILURE);
 	}
 
@@ -123,7 +123,7 @@ main (int argc, char *argv[]) -> int
 
 	if (!preset.empty())
 	{
-		std::map<std::string, std::string> presetRegex = {{"flybase","parent=(FBgn[^ ,]+,)"}, {"gene"," gene[:=]\\s*([\\S]+)[\\s]*"}};
+		std::map<std::string, std::string> presetRegex = {{"flybase","parent=(FBgn[^ ,]+,)"}, {"gene",R"( gene[:=]\s*([\S]+)[\s]*)"}};
 		regex = presetRegex[preset];
 		if (regex.empty())
 		{
@@ -134,18 +134,18 @@ main (int argc, char *argv[]) -> int
 
 	if (!gffFile.empty())
 	{
-		std::function<std::pair<std::string, ISOFORM_STATUS>(BSDL::Sequence)> nameFunc =  std::bind(nameIdentifier, std::placeholders::_1, names);
+		std::function<std::pair<std::string, ISOFORM_STATUS>(BSDL::Sequence)> nameFunc =  [names](auto && PH1) { return nameIdentifier(std::forward<decltype(PH1)>(PH1), names); };
 		isocleaner.setGeneNameIdentifcator(nameFunc);
 	} 
 	else if (regex.empty())
 	{
-		std::function<std::pair<std::string, ISOFORM_STATUS>(BSDL::Sequence)> nameFunc =  std::bind(splitCharIdentifier, std::placeholders::_1, splitChar);
+		std::function<std::pair<std::string, ISOFORM_STATUS>(BSDL::Sequence)> nameFunc =  [splitChar](auto && PH1) { return splitCharIdentifier(std::forward<decltype(PH1)>(PH1), splitChar); };
 		isocleaner.setGeneNameIdentifcator(nameFunc);
 	}
 	else
 	{
 		const std::regex expression(regex);
-		std::function<std::pair<std::string, ISOFORM_STATUS>(BSDL::Sequence)> nameFunc =  std::bind(regexIdentifier, std::placeholders::_1, expression, searchComment, searchName);
+		std::function<std::pair<std::string, ISOFORM_STATUS>(BSDL::Sequence)> nameFunc =  [expression, searchComment, searchName](auto && PH1) { return regexIdentifier(std::forward<decltype(PH1)>(PH1), expression, searchComment, searchName); };
 		isocleaner.setGeneNameIdentifcator(nameFunc);
 	}
 
@@ -170,7 +170,7 @@ main (int argc, char *argv[]) -> int
 	}
 	catch (std::ios_base::failure &exception)
 	{
-		std::cout << exception.what() << std::endl;
+		std::cout << exception.what() << '\n';
 		exit(EXIT_FAILURE);
 	}
 
