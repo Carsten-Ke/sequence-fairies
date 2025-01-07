@@ -15,5 +15,6 @@ echo "Test-4: seqCheck"
 echo "Test-5: seqExtract"
 ./seqExract_tests.sh  
 
-#echo "Test-6: dsmReader"
-#./dsmReader.sh
+echo "Test-6: fileMerger"
+./fileMerger_tests.sh
+
