@@ -120,11 +120,12 @@ main (int argc, char *argv[])
 	BioSeqDataLib::SequenceSet outSet;
     try
 	{
+		auto strategy = rename ? BioSeqDataLib::SequenceSet::ConflictResolutionStrategy::Rename : BioSeqDataLib::SequenceSet::ConflictResolutionStrategy::ThrowException;
 		for (const auto &fileName : sequence_files)
 		{
 			std::map<std::string, int> names1, names2;
         	BioSeqDataLib::SequenceSet seqSet = seqSetIO.read(fileName);
-			outSet.merge(seqSet, rename);
+			outSet.merge(seqSet, strategy);
 		}
 	}
 	catch(std::ios_base::failure &exception)

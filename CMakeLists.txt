@@ -22,7 +22,7 @@ include(FetchContent)
 FetchContent_Declare(
   BioSeqDataLib
   GIT_REPOSITORY https://zivgitlab.uni-muenster.de/domain-world/BioSeqDataLib.git
-  GIT_TAG        6824489cecd127041b05ee3e4c870d4b8699b5fd
+  GIT_TAG        0cd2eca2f7dcb4e86e358985a443a91361d7a988
   SOURCE_DIR     ${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib
 )
 
