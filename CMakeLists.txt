@@ -18,12 +18,11 @@ link_directories(${Boost_LIBRARY_DIRS})
 ADD_DEFINITIONS( "-DHAS_BOOST" )
 
 
-
 include(FetchContent)
 FetchContent_Declare(
   BioSeqDataLib
   GIT_REPOSITORY https://zivgitlab.uni-muenster.de/domain-world/BioSeqDataLib.git
-  GIT_TAG        ac97ba15646e90c4ebf63487fe34ab5e7d528cbc
+  GIT_TAG        6824489cecd127041b05ee3e4c870d4b8699b5fd
   SOURCE_DIR     ${PROJECT_SOURCE_DIR}/libs/BioSeqDataLib
 )
 
@@ -142,6 +141,22 @@ target_link_libraries(${concatenator_exe}
 	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
 )
 
+
+######## CONCATENATOR #############
+
+SET(fileMerger_src 
+    ${PROJECT_SOURCE_DIR}/src/fileMerger.cpp 
+    ${PROJECT_SOURCE_DIR}/src/fileMergerMain.cpp ${BSDL_src}
+)
+
+
+SET(fileMerger_exe fileMerger)
+ADD_EXECUTABLE(${fileMerger_exe} ${fileMerger_src})
+target_link_libraries(${fileMerger_exe}
+	${Boost_LIBRARIES} ${ZLIB_LIBRARIES} ${BZIP2_LIBRARIES}
+)
+
+
 ######## SEQCHECK #############
 
 SET(seqCheck_src 
@@ -191,6 +206,7 @@ install(
   TARGETS
     concatenator
     extractDomains
+    fileMerger
     isoformCleaner
     seqCheck
     seqExtract
