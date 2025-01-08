@@ -38,7 +38,7 @@ test programs:
       - cd tests/integrationTests
       - ./run_all_tests.sh
       - cd ../..
-      - gcovr --filter src --exclude-directories BioSeqDataLib
+      - gcovr --filter src --exclude-directories libs/BioSeqDataLib
   coverage: '/\d*\.*\d+%/'
 
 ### GITLAB SECURITY TESTS ###
