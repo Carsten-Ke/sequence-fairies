@@ -1,0 +1,18 @@
+---
+BasedOnStyle: GNU
+AlignArrayOfStructures: Right
+AlignConsecutiveAssignments:
+  Enabled: true
+BreakBeforeBraces: Allman
+ColumnLimit: 120
+Cpp11BracedListStyle: true
+IncludeBlocks: Regroup
+IndentWidth: 4
+InsertBraces: true
+InsertNewlineAtEOF: true
+SpaceBeforeParens: Custom
+SpaceBeforeParensOptions:
+  AfterPlacementOperator: false
+Standard: c++20
+TabWidth: 4
+BracedInitializerIndentWidth: 4

@@ -14,6 +14,7 @@ Programs
 
 * :ref:`concatenator` - A program to concatenate alignments
 * :ref:`extractDomains` - Can extract the domain sequences from proteins sequences
+* :ref:`fileMerger` - Program to merge sequence files
 * :ref:`seqCheck` - Cleans your data set. For example it can remove stop codons from protein sequences
 * :ref:`isoformCleaner` - Removes isoforms from a sequence set and keeps only the longest one.
 * :ref:`seqExtract` -   Program to extract sequences and sequence segments

@@ -1,10 +1,9 @@
 #include "GFFParser.hpp"
 
-#include <iostream>
-
-#include "../libs/BioSeqDataLib/src/utility/Input.hpp"
 #include "../libs/BioSeqDataLib/src/gff/GFFRecord.hpp"
+#include "../libs/BioSeqDataLib/src/utility/Input.hpp"
 
+#include <iostream>
 
 std::map<std::string, Gene>
 readGFF(const std::filesystem::path &fileName, std::string level1, std::string level2, std::string level3)
@@ -17,8 +16,8 @@ readGFF(const std::filesystem::path &fileName, std::string level1, std::string l
     BioSeqDataLib::Input gffFile(fileName);
     std::map<std::string, Gene> genes;
     std::map<std::string, BioSeqDataLib::GFFRecord> tmpLevel2;
-    std::set<std::pair<std::string, size_t> > tmpLevel3;
-    std::map<std::string, Gene*> entered;
+    std::set<std::pair<std::string, size_t>> tmpLevel3;
+    std::map<std::string, Gene *> entered;
     while (BioSeqDataLib::getline(gffFile, line))
     {
         if (line.empty() || (line[0] == '#'))
@@ -32,7 +31,8 @@ readGFF(const std::filesystem::path &fileName, std::string level1, std::string l
             auto result = genes.emplace(record.attributes["ID"], Gene(record.attributes["ID"]));
             if (!result.second)
             {
-                std::cerr << "Error! " << level1 << " with ID " << record.attributes["ID"] << " occurred twice!" << std::endl;
+                std::cerr << "Error! " << level1 << " with ID " << record.attributes["ID"] << " occurred twice!"
+                          << std::endl;
                 exit(EXIT_FAILURE);
             }
         }
@@ -43,7 +43,7 @@ readGFF(const std::filesystem::path &fileName, std::string level1, std::string l
                 auto it = genes.find(parent);
                 if (it != genes.end())
                 {
-                    auto res = it->second.addTranscript(record);
+                    auto res                  = it->second.addTranscript(record);
                     entered[res.first->first] = &(it->second);
                 }
                 else
@@ -60,7 +60,8 @@ readGFF(const std::filesystem::path &fileName, std::string level1, std::string l
                 if (res != entered.end())
                 {
                     res->second->addTranscriptLength(parent, record.length());
-                } else
+                }
+                else
                 {
                     tmpLevel3.emplace(parent, record.length());
                 }
@@ -75,7 +76,7 @@ readGFF(const std::filesystem::path &fileName, std::string level1, std::string l
             auto it = genes.find(parent);
             if (it != genes.end())
             {
-                auto res = it->second.addTranscript(elem.second);
+                auto res                  = it->second.addTranscript(elem.second);
                 entered[res.first->first] = &(it->second);
             }
             else
@@ -92,7 +93,8 @@ readGFF(const std::filesystem::path &fileName, std::string level1, std::string l
         if (res != entered.end())
         {
             res->second->addTranscriptLength(elem.first, elem.second);
-        } else
+        }
+        else
         {
             std::cerr << "Error! No parent found for " << elem.first << "!\n";
             exit(EXIT_FAILURE);
@@ -101,8 +103,7 @@ readGFF(const std::filesystem::path &fileName, std::string level1, std::string l
     return genes;
 }
 
-
-std::set<std::string> 
+std::set<std::string>
 longest(const std::map<std::string, Gene> &genes)
 {
     std::set<std::string> longestTranscripts;
@@ -112,4 +113,3 @@ longest(const std::map<std::string, Gene> &genes)
     }
     return longestTranscripts;
 }
-
