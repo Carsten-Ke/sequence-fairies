@@ -22,6 +22,7 @@ build tests and executable:
     name: "$CI_JOB_NAME"
     paths:
       - $CI_PROJECT_DIR/build
+      - $CI_PROJECT_DIR/libs
     expire_in: 1 day
 
 # run tests using the binary built before
