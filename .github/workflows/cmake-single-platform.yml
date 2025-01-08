@@ -24,7 +24,10 @@ jobs:
     
     # install dependencies
     - name: boost
-      run: sudo apt-get update && sudo apt-get install -yq libboost-filesystem-dev libboost-iostreams-dev libboost-program-options-dev libboost-test-dev libboost-system-dev libboost-log-dev bzip2
+      run: sudo apt-get update && sudo apt-get install -yq libboost-filesystem-dev libboost-iostreams-dev libboost-program-options-dev libboost-test-dev libboost-system-dev libboost-log-dev
+
+    - name: boost
+      run: sudo apt-get update && sudo apt-get install -yq libbz2-dev
 
     - name: bats
       run: |
