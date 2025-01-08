@@ -29,7 +29,7 @@ FetchContent_Declare(
 message("Downloading BioSeqDataLib")
 FetchContent_GetProperties(BioSeqDataLib)
 if(NOT BioSeqDataLib_POPULATED)
-    FetchContent_MakeAvailable(BioSeqDataLib)
+    FetchContent_Populate(BioSeqDataLib)
 endif()
 message("Done")
 
