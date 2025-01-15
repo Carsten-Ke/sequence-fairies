@@ -1,10 +1,11 @@
-.. _filerMerger:
+.. _fileMerger:
 
 **************
-filerMerger
+fileMerger
 **************
 
-The purpose of this program is to extract the protein sequences of domains. The input is a domain annotation and the sequences from which to extract the domains.
+The purpose of this program is to merge sequence files into a single file. It will automatically remove duplicate entries where name *and* sequence are the same. It will also throw an error if the same name occurs with 
+but having a different sequence.
 
 
 =======
@@ -15,9 +16,9 @@ Options
 General options
 ---------------
 
-The general options influence the general behaviour of filerMerger:
+The general options influence the general behaviour of fileMerger:
 
-.. program:: filerMerger
+.. program:: fileMerger
 
 .. option:: -h, --help
 
@@ -50,6 +51,6 @@ Simple Usage
 
 .. code-block:: bash
 
-    filerMerger -i seqs1.fasta seqs2.fasta -o merged.fa
+    fileMerger -i seqs1.fasta seqs2.fasta -o merged.fa
 
 

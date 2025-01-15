@@ -19,6 +19,7 @@ Welcome to Sequence-Fairies's documentation!
    
 
    content/concatenator.rst
+   content/fileMerger.rst
    content/extractDomains.rst
    content/isoformCleaner.rst
    content/seqCheck.rst
