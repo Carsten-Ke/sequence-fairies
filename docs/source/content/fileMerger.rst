@@ -4,7 +4,8 @@
 fileMerger
 **************
 
-The purpose of this program is to extract the protein sequences of domains. The input is a domain annotation and the sequences from which to extract the domains.
+The purpose of this program is to merge sequence files into a single file. It will automatically remove duplicate entries where name *and* sequence are the same. It will also throw an error if the same name occurs with 
+but having a different sequence.
 
 
 =======
