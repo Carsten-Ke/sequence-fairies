@@ -50,7 +50,7 @@ The general options influence the general behaviour of stopCleaner:
 
 .. option:: -o <FILE>, --out <FILE>
 
-    The output file. If none is provided, the sequences will be printet to the console.
+    The output file. If none is provided, the sequences will be printed to the console.
 
 .. option:: -r <FILE>, --report <FILE>
     

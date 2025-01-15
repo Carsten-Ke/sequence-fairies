@@ -5,7 +5,7 @@
 Overview
 ************
 
-DW-Helper (v1.1.0) is a small program suite containaing different applications to help you with domain and sequence data.
+DW-Helper (v1.1.0) is a small program suite containing different applications to help you with domain and sequence data.
 
 
 ===============

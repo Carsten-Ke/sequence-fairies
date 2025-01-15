@@ -25,7 +25,7 @@ The general options influence the general behaviour of seqExtract:
 
 .. option:: -h, --help
 
-    Prints a simple help message with a small description of all the available options.
+    Prints a simple help message with a short description of all the available options.
 
 .. option:: -i <FILE>, --in <FILE>
     
@@ -33,7 +33,7 @@ The general options influence the general behaviour of seqExtract:
     
 .. option:: -I, --index
 
-    An index file is used. If none exists it will be created. If :option:`-F` is not set the extension of the provides sequence file will be removed and replaced with '.sei'.
+    An index file is used. If none exists it will be created. If :option:`-F` is not set the extension of the provided sequence file will be removed and replaced with '.sei'.
     
 .. option:: -F <FILE>, --indexFile <FILE>
 
@@ -41,7 +41,7 @@ The general options influence the general behaviour of seqExtract:
     
     .. note::
 
-	If the sequence file is changed the index file will need to be deleted so that a new index file will be created. It will not be done automatically.
+	If the sequence file is changed, the index file will need to be deleted so that a new index file will be created. It will not be done automatically.
     
   
 .. option:: -l <FILE>, --inputList <FILE>
@@ -78,9 +78,9 @@ Here are the different options listed which influence which sequences (or subseq
 .. option:: -e <ARG> --extract <ARG>
 
    The (sub)sequence(s) to extract from the sequence file. Providing only the sequence name will extract the whole sequence. But you can also 
-   provide coordinates. For example ``-e mySeq:1-10`` will extract the first ten amino accids of the sequence with name "mySeq". You can
-   also mere several coodrinates together: ``-e mySeq:1-10,21-30`` will create a sequence of length 20 which contains both sequence parts.
-   ``-e mySeq:1-10 mySeq:21-30`` on the other hand will create to seperate sequences.
+   provide coordinates. For example ``-e mySeq:1-10`` will extract the first ten amino acids of the sequence with name "mySeq". You can
+   also merge several coordinates together: ``-e mySeq:1-10,21-30`` will create a sequence of length 20 which contains both sequence parts.
+   ``-e mySeq:1-10 mySeq:21-30`` on the other hand will create to separate sequences.
    
 .. option::  -N <FILE>, --namesFile <FILE>
    
@@ -96,12 +96,12 @@ Here are the different options listed which influence which sequences (or subseq
    
 .. option:: -D <ARG>, --delim-pos  <ARG> 
 
-   The delimiter to use to seperate name from positions (*default: ':'*). This might need to be changed
+   The delimiter to use to separate name from positions (*default: ':'*). This might need to be changed
    if you sequence names contain a ":" already.
    
 .. option:: -r, --remove
 
-   Removes the sequences with names provided in "-e" instead of extracting them. Always the whole sequence is removed even if subsection are provided.
+   Removes the sequences with names provided in "-e" instead of extracting them. The whole sequence is removed even if subsections are provided.
    
 .. option:: -n <ARG>, --numSeqs <ARG>
 
@@ -113,7 +113,7 @@ Here are the different options listed which influence which sequences (or subseq
    
 .. option:: -L <ARG>, --length <ARG>
 
-   Length based extraction. allowed values are '<NUM', '>NUM', '=NUM'. For example the code
+   Length based extraction. Allowed values are '<NUM', '>NUM', '=NUM'. For example the code
    ``-L '>3' '<7'`` would extract all sequences with length 4-6
    
 .. option:: -m <ARG>,  --ignore-missing <ARG>
