@@ -8,6 +8,12 @@ The purpose of this program is to merge sequence files into a single file. It wi
 but having a different sequence.
 
 
+.. image:: ../images/fileMerger.png
+  :width: 100%
+  :alt: Graphical representation of the program
+
+
+
 =======
 Options
 =======
