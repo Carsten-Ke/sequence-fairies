@@ -6,7 +6,9 @@ Sequence-Fairies contains several programs that can help with your analyses.
 
 Currently this program suite contains the following programs:
 
+* concatenator: Concatenates alignments
 * extractDomains: Can extract the domain sequences from proteins sequences
+* fileMerger: Can merge sequence files into one
 * isoformCleaner: Removes isoforms from a sequence set and keeps only the longest one.
 * seqCheck: Can identify and solve problems with sequence files (stops and other unexpected symbols, duplicated names)
 * seqExtract: Can extract sequences from files
