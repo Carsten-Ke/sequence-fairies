@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15.0)
-project(sequence-fairies VERSION 0.9.5 LANGUAGES CXX)
+project(sequence-fairies VERSION 0.9.2 LANGUAGES CXX)
 
 ### FIND BOOST LIBRARY COMPONENTS
 

@@ -20,13 +20,13 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Sequence-fairies'
-copyright = '2023, Carsten Kemena'
+copyright = '2023-2025, Carsten Kemena'
 author = 'Carsten Kemena'
 
 # The short X.Y version
-version = '0.9.1'
+version = '0.9.2'
 # The full version, including alpha/beta/rc tags
-release = '0.9.1'
+release = '0.9.2'
 
 
 # -- General configuration ---------------------------------------------------
