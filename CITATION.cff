@@ -9,12 +9,18 @@ message: >-
 type: software
 authors:
   - given-names: Carsten
-    family-names: Kemena
+    family-names: Kemena-Rinke
     email: c.kemena@uni-muenster.de
     affiliation: University Münster
     orcid: 'https://orcid.org/0000-0002-2416-9842'
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.14288255
+    description: DOI of alls sequence-fairies versions
 repository-code: >-
   https://zivgitlab.uni-muenster.de/domain-world/sequence-fairies
+url: >-
+  https://domainworld.uni-muenster.de/programs/sequence-fairies/index.html
 abstract: >-
   A software suite that contains a couple of small programs
   to help with sequence data:
